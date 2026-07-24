@@ -1,3 +1,20 @@
+<?php
+
+require 'config/database.php';
+
+$stmt = $conn->prepare("
+    SELECT *
+    FROM achievements
+    ORDER BY award_date DESC
+    LIMIT 6
+");
+
+$stmt->execute();
+
+$achievements = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -23,7 +40,7 @@
             <ul>
                 <li><a href="#">Home</a></li>
                 <li><a href="#">About</a></li>
-                <li><a href="#">Achievements</a></li>
+                <li><a href="achievements.php">Achievements</a></li>
                 <li><a href="#">Gallery</a></li>
                 <li><a href="#">Contact</a></li>
             </ul>
@@ -41,9 +58,9 @@
             and the journey of building a better future together.
         </p>
 
-        <a href="#" class="btn">
-            View Achievements
-        </a>
+        <a href="achievements.php" class="btn">
+    View Achievements
+</a>
 
     </section>
 
@@ -172,35 +189,47 @@
     </section>
 
     <!-- Achievement Section -->
-    <section class="achievement">
+<section class="achievement">
 
-        <h2>Latest Achievements</h2>
+    <h2>Latest Achievements</h2>
 
-        <div class="card-container">
+    <div class="card-container">
 
-            <div class="achievement-card">
+        <?php if(count($achievements) > 0): ?>
 
-                <img src="assets/images/member1.jpg" alt="Member">
+            <?php foreach($achievements as $achievement): ?>
 
-                <h3>Maria Santos</h3>
+                <div class="achievement-card">
 
-                <p>Top Seller - July 2026</p>
+                    <img
+                        src="uploads/achievements/<?= htmlspecialchars($achievement['image']) ?>"
+                        alt="<?= htmlspecialchars($achievement['title']) ?>">
 
-            </div>
+                    <h3>
+                        <?= htmlspecialchars($achievement['title']) ?>
+                    </h3>
 
-            <div class="achievement-card">
+                    <p>
+                        <?= htmlspecialchars($achievement['description']) ?>
+                    </p>
 
-                <img src="assets/images/member2.jpg" alt="Member">
+                    <small>
+                        <?= date('F d, Y', strtotime($achievement['award_date'])) ?>
+                    </small>
 
-                <h3>Juan Dela Cruz</h3>
+                </div>
 
-                <p>Top Recruiter - July 2026</p>
+            <?php endforeach; ?>
 
-            </div>
+        <?php else: ?>
 
-        </div>
+            <p>No achievements found.</p>
 
-    </section>
+        <?php endif; ?>
+
+    </div>
+
+</section>
 
     <!-- Footer -->
     <footer>
