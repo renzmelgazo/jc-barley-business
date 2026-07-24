@@ -7,22 +7,25 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
+include '../includes/header.php';
+include '../includes/navbar.php';
 ?>
 
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Dashboard</title>
-</head>
-<body>
+<div class="d-flex">
 
-<h1>Welcome, <?php echo htmlspecialchars($_SESSION['fullname']); ?>!</h1>
+<?php include '../includes/sidebar.php'; ?>
 
-<p>Username: <?php echo htmlspecialchars($_SESSION['username']); ?></p>
+<div class="container-fluid p-4">
 
-<p>Email: <?php echo htmlspecialchars($_SESSION['email']); ?></p>
+<h2>Dashboard</h2>
 
-<a href="../logout.php">Logout</a>
+<p>Welcome back,
+<strong><?= htmlspecialchars($_SESSION['fullname']) ?></strong>
 
-</body>
-</html>
+</p>
+
+</div>
+
+</div>
+
+<?php include '../includes/footer.php'; ?>
