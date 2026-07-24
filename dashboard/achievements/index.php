@@ -8,11 +8,16 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
-$stmt = $conn->query("
+$stmt = $conn->prepare("
     SELECT *
     FROM achievements
+    WHERE owner_id = :owner_id
     ORDER BY award_date DESC
 ");
+
+$stmt->execute([
+    ':owner_id' => $_SESSION['user_id']
+]);
 
 $achievements = $stmt->fetchAll(PDO::FETCH_ASSOC);
 

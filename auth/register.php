@@ -44,12 +44,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $theme = "light";
     $status = "active";
 
+    // Generate site slug
+$site_slug = "jcbarley" . strtolower($username);
+
     // Insert user
     $stmt = $conn->prepare("
         INSERT INTO users
 (
     fullname,
     username,
+    site_slug,
     email,
     password,
     profile_picture,
@@ -62,6 +66,7 @@ VALUES
 (
     :fullname,
     :username,
+    :site_slug,
     :email,
     :password,
     :profile_picture,
@@ -73,9 +78,10 @@ VALUES
     ");
 
     $stmt->execute([
-        ':fullname' => $fullname,
-        ':username' => $username,
-        ':email' => $email,
+    ':fullname' => $fullname,
+    ':username' => $username,
+    ':site_slug' => $site_slug,
+    ':email' => $email,
         ':password' => $hashedPassword,
         ':profile_picture' => $profile_picture,
         ':theme' => $theme,

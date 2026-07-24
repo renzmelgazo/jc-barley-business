@@ -60,23 +60,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     $stmt = $conn->prepare("
-        UPDATE achievements
-        SET
-            title = :title,
-            description = :description,
-            image = :image,
-            award_date = :award_date,
-            updated_at = NOW()
-        WHERE id = :id
-    ");
+    UPDATE achievements
+    SET
+        title = :title,
+        description = :description,
+        image = :image,
+        award_date = :award_date,
+        updated_at = NOW()
+    WHERE id = :id
+    AND owner_id = :owner_id
+");
 
     $stmt->execute([
-        ':title' => $title,
-        ':description' => $description,
-        ':image' => $image,
-        ':award_date' => $award_date,
-        ':id' => $id
-    ]);
+    ':title' => $title,
+    ':description' => $description,
+    ':image' => $image,
+    ':award_date' => $award_date,
+    ':id' => $id,
+    ':owner_id' => $_SESSION['user_id']
+]);
 
     header("Location: ../dashboard/achievements/index.php");
     exit;

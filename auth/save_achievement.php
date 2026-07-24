@@ -47,27 +47,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $stmt = $conn->prepare("
         INSERT INTO achievements
-        (
-            title,
-            description,
-            image,
-            award_date
-        )
+(
+    owner_id,
+    title,
+    description,
+    image,
+    award_date
+)
         VALUES
-        (
-            :title,
-            :description,
-            :image,
-            :award_date
-        )
+(
+    :owner_id,
+    :title,
+    :description,
+    :image,
+    :award_date
+)
     ");
 
     $stmt->execute([
-        ':title' => $title,
-        ':description' => $description,
-        ':image' => $filename,
-        ':award_date' => $award_date
-    ]);
+    ':owner_id' => $_SESSION['user_id'],
+    ':title' => $title,
+    ':description' => $description,
+    ':image' => $filename,
+    ':award_date' => $award_date
+]);
 
     header("Location: ../dashboard/achievements/index.php");
     exit;

@@ -16,10 +16,12 @@ $stmt = $conn->prepare("
     SELECT *
     FROM achievements
     WHERE id = :id
+    AND owner_id = :owner_id
 ");
 
 $stmt->execute([
-    ':id' => $_GET['id']
+    ':id' => $_GET['id'],
+    ':owner_id' => $_SESSION['user_id']
 ]);
 
 $achievement = $stmt->fetch(PDO::FETCH_ASSOC);
