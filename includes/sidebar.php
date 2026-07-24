@@ -1,32 +1,44 @@
-<div class="bg-dark text-white p-3 vh-100" style="width:250px;">
+<div class="bg-dark text-white d-flex flex-column p-3"
+     style="width:260px; min-height:100vh;">
 
-<h4>Menu</h4>
+    <h3 class="text-center mb-4">
+        JC Barley
+    </h3>
 
-<hr>
+    <hr class="text-secondary">
 
-<a class="text-white d-block mb-2"
-href="index.php">
+    <a href="index.php"
+       class="text-white text-decoration-none py-2 px-3 rounded mb-2">
 
-Dashboard
+        🏠 Dashboard
 
-</a>
+    </a>
 
-<a href="profile.php" class="nav-link text-white">
-    👤 My Profile
-</a>
+    <a href="profile.php"
+       class="text-white text-decoration-none py-2 px-3 rounded mb-2">
 
-<a class="text-white d-block mb-2"
-href="settings.php">
+        👤 My Profile
 
-Settings
+    </a>
 
-</a>
+    <a href="settings.php"
+       class="text-white text-decoration-none py-2 px-3 rounded mb-2">
 
-<a class="text-danger d-block"
-href="../logout.php">
+        ⚙ Settings
 
-Logout
+    </a>
 
-</a>
+    <div class="mt-auto">
+
+        <hr class="text-secondary">
+
+        <a href="../logout.php"
+           class="text-danger text-decoration-none py-2 px-3 d-block">
+
+            🚪 Logout
+
+        </a>
+
+    </div>
 
 </div>

@@ -1,44 +1,3 @@
-<?php
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
-    $fullname = trim($_POST['fullname']);
-    $username = trim($_POST['username']);
-    $email = trim($_POST['email']);
-    $password = $_POST['password'];
-    $confirm_password = $_POST['confirm_password'];
-
-    // Check empty fields
-    if (
-        empty($fullname) ||
-        empty($username) ||
-        empty($email) ||
-        empty($password) ||
-        empty($confirm_password)
-    ) {
-
-        echo "All fields are required.";
-
-    }
-
-    // Check password match
-    elseif ($password != $confirm_password) {
-
-        echo "Passwords do not match.";
-
-    }
-
-    else {
-
-        echo "Validation Passed!";
-
-    }
-
-}
-
-?>
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -46,41 +5,38 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
 </head>
-
 <body>
 
 <h1>Create Account</h1>
 
-<form action="" method="POST">
+<form action="auth/register.php" method="POST">
 
     <p>
         <label>Full Name</label><br>
-        <input type="text" name="fullname">
+        <input type="text" name="fullname" required>
     </p>
 
     <p>
         <label>Username</label><br>
-        <input type="text" name="username">
+        <input type="text" name="username" required>
     </p>
 
     <p>
         <label>Email</label><br>
-        <input type="email" name="email">
+        <input type="email" name="email" required>
     </p>
 
     <p>
         <label>Password</label><br>
-        <input type="password" name="password">
+        <input type="password" name="password" required>
     </p>
 
     <p>
         <label>Confirm Password</label><br>
-        <input type="password" name="confirm_password">
+        <input type="password" name="confirm_password" required>
     </p>
 
-    <button type="submit">
-        Create Account
-    </button>
+    <button type="submit">Create Account</button>
 
 </form>
 

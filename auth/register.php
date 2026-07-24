@@ -47,25 +47,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Insert user
     $stmt = $conn->prepare("
         INSERT INTO users
-        (
-            fullname,
-            username,
-            email,
-            password,
-            profile_picture,
-            theme,
-            status
-        )
-        VALUES
-        (
-            :fullname,
-            :username,
-            :email,
-            :password,
-            :profile_picture,
-            :theme,
-            :status
-        )
+(
+    fullname,
+    username,
+    email,
+    password,
+    profile_picture,
+    theme,
+    status,
+    created_at,
+    updated_at
+)
+VALUES
+(
+    :fullname,
+    :username,
+    :email,
+    :password,
+    :profile_picture,
+    :theme,
+    :status,
+    NOW(),
+    NOW()
+)
     ");
 
     $stmt->execute([

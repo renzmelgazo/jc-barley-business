@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JC Barley Business</title>
 
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
 
 <body>
@@ -15,7 +15,7 @@
     <header>
 
         <div class="logo">
-            <img src="images/logo.png" alt="Logo">
+            <img src="assets/images/logo.png" alt="Logo">
             <h2>JC Barley Business</h2>
         </div>
 
@@ -68,8 +68,7 @@
 
         <div class="about-image">
 
-            <img src="images/about.jpg" alt="About JC Barley">
-
+            <img src="assets/images/about.jpg" alt="About JC Barley">
         </div>
 
     </section>
@@ -111,12 +110,12 @@
 
         <div class="gallery-container">
 
-            <img src="images/gallery1.jpg" alt="Gallery Image 1">
-            <img src="images/gallery2.jpg" alt="Gallery Image 2">
-            <img src="images/gallery3.jpg" alt="Gallery Image 3">
-            <img src="images/gallery4.jpg" alt="Gallery Image 4">
-            <img src="images/gallery5.jpg" alt="Gallery Image 5">
-            <img src="images/gallery6.jpg" alt="Gallery Image 6">
+            <img src="assets/images/gallery1.jpg" alt="Gallery Image 1">
+            <img src="assets/images/gallery2.jpg" alt="Gallery Image 2">
+            <img src="assets/images/gallery3.jpg" alt="Gallery Image 3">
+            <img src="assets/images/gallery4.jpg" alt="Gallery Image 4">
+            <img src="assets/images/gallery5.jpg" alt="Gallery Image 5">
+            <img src="assets/images/gallery6.jpg" alt="Gallery Image 6">
 
         </div>
 
@@ -131,7 +130,7 @@
 
             <div class="testimonial-card">
 
-                <img src="images/person1.jpg" alt="Member">
+                <img src="assets/images/person1.jpg" alt="Member">
 
                 <h3>Maria Santos</h3>
 
@@ -144,7 +143,7 @@
 
             <div class="testimonial-card">
 
-                <img src="images/person2.jpg" alt="Member">
+                <img src="assets/images/person2.jpg" alt="Member">
 
                 <h3>Juan Dela Cruz</h3>
 
@@ -157,7 +156,7 @@
 
             <div class="testimonial-card">
 
-                <img src="images/person3.jpg" alt="Member">
+                <img src="assets/images/person3.jpg" alt="Member">
 
                 <h3>Ana Reyes</h3>
 
@@ -179,9 +178,9 @@
 
         <div class="card-container">
 
-            <div class="card">
+            <div class="achievement-card">
 
-                <img src="images/member1.jpg" alt="Member">
+                <img src="assets/images/member1.jpg" alt="Member">
 
                 <h3>Maria Santos</h3>
 
@@ -189,9 +188,9 @@
 
             </div>
 
-            <div class="card">
+            <div class="achievement-card">
 
-                <img src="images/member2.jpg" alt="Member">
+                <img src="assets/images/member2.jpg" alt="Member">
 
                 <h3>Juan Dela Cruz</h3>
 
@@ -212,7 +211,7 @@
 
     </footer>
 
-    <script src="js/script.js"></script>
+    <script src="assets/js/script.js"></script>
 
 </body>
 
