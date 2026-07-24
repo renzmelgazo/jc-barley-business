@@ -42,7 +42,7 @@ $achievements = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <li><a href="#">About</a></li>
                 <li><a href="achievements.php">Achievements</a></li>
                 <li><a href="#">Gallery</a></li>
-                <li><a href="#">Contact</a></li>
+                <li><a href="contact.php">Contact</a></li>
             </ul>
         </nav>
 
