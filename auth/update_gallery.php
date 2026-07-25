@@ -66,21 +66,19 @@ if (
 $stmt = $conn->prepare("
 UPDATE gallery
 SET
-
-title = :title,
-description = :description,
-image = :image
-
+    title = :title,
+    description = :description,
+    image = :image
 WHERE id = :id
+AND owner_id = :owner_id
 ");
 
 $stmt->execute([
-
-':title' => $title,
-':description' => $description,
-':image' => $imageName,
-':id' => $id
-
+    ':title' => $title,
+    ':description' => $description,
+    ':image' => $imageName,
+    ':id' => $id,
+    ':owner_id' => $_SESSION['user_id']
 ]);
 
 header("Location: ../dashboard/gallery/index.php");

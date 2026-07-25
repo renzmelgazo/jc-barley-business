@@ -17,10 +17,12 @@ $stmt = $conn->prepare("
     SELECT *
     FROM gallery
     WHERE id = :id
+    AND owner_id = :owner_id
 ");
 
 $stmt->execute([
-    ':id' => $_GET['id']
+    ':id' => $_GET['id'],
+    ':owner_id' => $_SESSION['user_id']
 ]);
 
 $gallery = $stmt->fetch(PDO::FETCH_ASSOC);

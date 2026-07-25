@@ -45,20 +45,23 @@ if (!move_uploaded_file($tmp, $destination)) {
 
 $stmt = $conn->prepare("
     INSERT INTO gallery
-    (
-        title,
-        description,
-        image
-    )
+(
+    owner_id,
+    title,
+    description,
+    image
+)
     VALUES
-    (
-        :title,
-        :description,
-        :image
-    )
+(
+    :owner_id,
+    :title,
+    :description,
+    :image
+)
 ");
 
 $stmt->execute([
+    ':owner_id' => $_SESSION['user_id'],
     ':title' => $title,
     ':description' => $description,
     ':image' => $newFilename

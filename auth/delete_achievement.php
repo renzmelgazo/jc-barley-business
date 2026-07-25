@@ -19,10 +19,12 @@ $stmt = $conn->prepare("
     SELECT image
     FROM achievements
     WHERE id = :id
+    AND owner_id = :owner_id
 ");
 
 $stmt->execute([
-    ':id' => $id
+    ':id' => $id,
+    ':owner_id' => $_SESSION['user_id']
 ]);
 
 $achievement = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -43,10 +45,12 @@ if (
 $delete = $conn->prepare("
     DELETE FROM achievements
     WHERE id = :id
+    AND owner_id = :owner_id
 ");
 
 $delete->execute([
-    ':id' => $id
+    ':id' => $id,
+    ':owner_id' => $_SESSION['user_id']
 ]);
 
 header("Location: ../dashboard/achievements/index.php");

@@ -25,10 +25,12 @@ $stmt = $conn->prepare("
     SELECT image
     FROM gallery
     WHERE id = :id
+    AND owner_id = :owner_id
 ");
 
 $stmt->execute([
-    ':id' => $id
+    ':id' => $id,
+    ':owner_id' => $_SESSION['user_id']
 ]);
 
 $gallery = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -58,10 +60,12 @@ if (file_exists($imagePath)) {
 $stmt = $conn->prepare("
     DELETE FROM gallery
     WHERE id = :id
+    AND owner_id = :owner_id
 ");
 
 $stmt->execute([
-    ':id' => $id
+    ':id' => $id,
+    ':owner_id' => $_SESSION['user_id']
 ]);
 
 header("Location: ../dashboard/gallery/index.php");
