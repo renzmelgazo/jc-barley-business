@@ -47,100 +47,11 @@ body{
     );
 }
 
-body::before{
+/* ===========================
+   GLOBAL JC WATERMARK
+=========================== */
 
-    content:"";
 
-    position:absolute;
-
-    inset:0;
-
-    background-image:
-
-    url("assets/images/logo.png"),
-
-    url("assets/images/logo.png"),
-
-    url("assets/images/logo.png"),
-
-    url("assets/images/logo.png"),
-
-    url("assets/images/logo.png"),
-
-    url("assets/images/logo.png"),
-
-    url("assets/images/logo.png"),
-
-    url("assets/images/logo.png"),
-
-    url("assets/images/logo.png"),
-
-    url("assets/images/logo.png");
-
-    background-repeat:
-
-    no-repeat,
-
-    no-repeat,
-
-    no-repeat,
-
-    no-repeat,
-
-    no-repeat,
-
-    no-repeat,
-
-    no-repeat,
-
-    no-repeat,
-
-    no-repeat,
-
-    no-repeat;
-
-    background-size:
-
-220px,
-130px,
-110px,
-90px,
-150px,
-120px,
-100px,
-130px,
-90px,
-120px;
-
-    background-position:
-
-    center center,
-
-    5% 10%,
-
-    18% 80%,
-
-    40% 15%,
-
-    80% 10%,
-
-    92% 65%,
-
-    70% 90%,
-
-    25% 45%,
-
-    60% 35%,
-
-    88% 30%;
-
-    opacity:.07;
-
-    pointer-events:none;
-
-    z-index:0;
-
-}
 
 body::after{
 
@@ -171,7 +82,7 @@ body::after{
     width:1000px;
     max-width:84%;
 
-    height:740px;
+    height:750px;
 
     display:flex;
 
@@ -182,6 +93,8 @@ body::after{
     overflow:hidden;
 
     position:relative;
+
+    z-index:2;
 
     box-shadow:
 
@@ -234,7 +147,7 @@ body::after{
 
     linear-gradient(
         180deg,
-        #A6D73B 0%,
+        #6b9415ff 0%,
         #6DBB38 38%,
         #2E7D32 100%
     );
@@ -285,7 +198,7 @@ body::after{
 
 }
 
-..form-control{
+.form-control{
 
     height:56px;
 
@@ -392,183 +305,33 @@ body::after{
 
 }
 
-.left-side::before{
 
-    content:"";
-
-    position:absolute;
-
-    inset:0;
-
-    opacity:.40;
-
-    background-image:
-        url("assets/images/logo.png"),
-        url("assets/images/logo.png"),
-        url("assets/images/logo.png"),
-        url("assets/images/logo.png"),
-        url("assets/images/logo.png"),
-        url("assets/images/logo.png"),
-        url("assets/images/logo.png"),
-        url("assets/images/logo.png"),
-        url("assets/images/logo.png"),
-        url("assets/images/logo.png"),
-        url("assets/images/logo.png"),
-        url("assets/images/logo.png");
-
-    background-repeat:no-repeat;
-
-    background-size:
-        90px,
-        70px,
-        110px,
-        80px,
-        130px,
-        75px,
-        100px,
-        60px,
-        120px,
-        80px,
-        100px,
-        90px;
-
-    background-position:
-        30px 30px,
-        280px 70px,
-        140px 180px,
-        330px 260px,
-        50px 340px,
-        240px 430px,
-        120px 560px,
-        330px 620px,
-        180px 720px,
-        20px 660px,
-        290px 520px,
-        60px 150px;
-
-    pointer-events:none;
-
-}
-
-.left-side::after{
-    display:none;
-}
 
 /* ============================= */
 /* LEAVES */
 /* ============================= */
 
-.leaf{
 
-position:fixed;
 
-z-index:0;
+/* PREMIUM RANDOM WATERMARKS */
+.watermarks{position:fixed;inset:0;pointer-events:none;z-index:1;overflow:hidden;}
+.watermarks img{position:absolute;filter:grayscale(100%);}
+.watermarks img:nth-child(1){width:100px;left:84%;bottom:10%;opacity:50;transform:rotate(38deg);}
+.watermarks img:nth-child(2){width:79px;right:90%;top:12%;opacity:40;transform:rotate(39deg);}
+.watermarks img:nth-child(3){width:77px;left:90%;top:27%;opacity:30;transform:rotate(41deg);}
+.watermarks img:nth-child(4){width:125px;right:90%;top:8%;opacity:20;transform:rotate(15deg);}
+.watermarks img:nth-child(5){width:140px;left:90%;top:7%;opacity:10;transform:rotate(27deg);}
+.watermarks img:nth-child(6){width:98px;left:80%;top:80%;opacity:50;transform:rotate(29deg);}
+.watermarks img:nth-child(7){width:143px;right:90%;top:50%;opacity:30;transform:rotate(39deg);}
+.watermarks img:nth-child(8){width:75px;left:90%;top:17%;opacity:40;transform:rotate(8deg);}
+.watermarks img:nth-child(9){width:88px;right:90%;top:15%;opacity:30;transform:rotate(28deg);}
+.watermarks img:nth-child(10){width:141px;right:90%;bottom:23%;opacity:20;transform:rotate(32deg);}
+.watermarks img:nth-child(13){width:96px;right:90%;bottom:87%;opacity:20;transform:rotate(23deg);}eg);}
+.watermarks img:nth-child(17){width:137px;left:90%%;bottom:43%;opacity:30;transform:rotate(12deg);}
+.watermarks img:nth-child(18){width:147px;left;90%top:15%;opacity:35;transform:rotate(20deg);}
+.watermarks img:nth-child(19){width:91px;left:90%;bottom:19%;opacity:35;transform:rotate(17deg);}
+.watermarks img:nth-child(20){width:75px;left:90%;top:9%;opacity:40;transform:rotate(26deg);}
 
-background-repeat:no-repeat;
-
-background-size:contain;
-
-pointer-events:none;
-
-opacity:.95;
-
-}
-
-.leaf-top-left{
-
-top:-40px;
-
-left:-50px;
-
-width:300px;
-
-height:300px;
-
-background-image:url("assets/images/leaves/leaf-top-left.png");
-
-}
-
-.leaf-top-right{
-
-top:-30px;
-
-right:-50px;
-
-width:280px;
-
-height:280px;
-
-background-image:url("assets/images/leaves/leaf-top-right.png");
-
-}
-
-.leaf-bottom-left{
-
-bottom:-60px;
-
-left:-40px;
-
-width:330px;
-
-height:330px;
-
-background-image:url("assets/images/leaves/leaf-bottom-left.png");
-
-}
-
-.leaf-bottom-right{
-
-bottom:-60px;
-
-right:-50px;
-
-width:340px;
-
-height:340px;
-
-background-image:url("assets/images/leaves/leaf-bottom-right.png");
-
-}
-
-/* =======================
-   GLASS OVERLAY
-======================= */
-
-.left-side::after{
-
-content:"";
-
-position:absolute;
-
-left:25px;
-
-top:25px;
-
-right:25px;
-
-bottom:25px;
-
-border-radius:25px;
-
-border:1px solid rgba(255,255,255,.15);
-
-background:
-
-linear-gradient(
-
-135deg,
-
-rgba(255,255,255,.10),
-
-rgba(255,255,255,.02)
-
-);
-
-backdrop-filter:blur(6px);
-
-pointer-events:none;
-
-}
 
 </style>
 
@@ -580,6 +343,27 @@ pointer-events:none;
 <div class="leaf leaf-top-right"></div>
 <div class="leaf leaf-bottom-left"></div>
 <div class="leaf leaf-bottom-right"></div>
+
+<div class="watermarks">
+    <img src="assets/images/logo.png" alt="">
+    <img src="assets/images/logo.png" alt="">
+    <img src="assets/images/logo.png" alt="">
+    <img src="assets/images/logo.png" alt="">
+    <img src="assets/images/logo.png" alt="">
+    <img src="assets/images/logo.png" alt="">
+    <img src="assets/images/logo.png" alt="">
+    <img src="assets/images/logo.png" alt="">
+    <img src="assets/images/logo.png" alt="">
+    <img src="assets/images/logo.png" alt="">
+    <img src="assets/images/logo.png" alt="">
+    <img src="assets/images/logo.png" alt="">
+    <img src="assets/images/logo.png" alt="">
+    <img src="assets/images/logo.png" alt="">
+    <img src="assets/images/logo.png" alt="">
+    
+   
+    
+</div>
 
 <div class="container">
 
