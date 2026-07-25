@@ -15,13 +15,21 @@ if (!isset($_GET['id'])) {
 
 $id = (int) $_GET['id'];
 
+/*
+|--------------------------------------------------------------------------
+| Delete Message (Owner Only)
+|--------------------------------------------------------------------------
+*/
+
 $stmt = $conn->prepare("
     DELETE FROM contact_messages
     WHERE id = :id
+    AND owner_id = :owner_id
 ");
 
 $stmt->execute([
-    ':id' => $id
+    ':id' => $id,
+    ':owner_id' => $_SESSION['user_id']
 ]);
 
 header("Location: ../dashboard/messages/index.php");

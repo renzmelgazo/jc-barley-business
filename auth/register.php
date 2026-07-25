@@ -80,14 +80,50 @@ VALUES
     $stmt->execute([
     ':fullname' => $fullname,
     ':username' => $username,
-    ':site_slug' => $site_slug,
     ':email' => $email,
-        ':password' => $hashedPassword,
-        ':profile_picture' => $profile_picture,
-        ':theme' => $theme,
-        ':status' => $status
-    ]);
+    ':password' => $hashedPassword,
+    ':profile_picture' => $profile_picture,
+    ':theme' => $theme,
+    ':status' => $status
+]);
 
-    header("Location: ../login.php?registered=1");
-    exit;
+/*
+|--------------------------------------------------------------------------
+| Create Default Website Settings
+|--------------------------------------------------------------------------
+*/
+
+$ownerId = $conn->lastInsertId();
+
+$stmt = $conn->prepare("
+    INSERT INTO website_settings
+    (
+        owner_id,
+        website_name,
+        tagline,
+        about,
+        contact_number,
+        email,
+        facebook
+    )
+    VALUES
+    (
+        :owner_id,
+        :website_name,
+        '',
+        '',
+        '',
+        :email,
+        ''
+    )
+");
+
+$stmt->execute([
+    ':owner_id' => $ownerId,
+    ':website_name' => $fullname,
+    ':email' => $email
+]);
+
+header("Location: ../login.php?registered=1");
+exit;
 }

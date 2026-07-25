@@ -7,24 +7,52 @@
 
     <hr class="text-secondary">
 
-    <a href="index.php"
+    <a href="../index.php"
        class="text-white text-decoration-none py-2 px-3 rounded mb-2">
 
         🏠 Dashboard
 
     </a>
 
-    <a href="profile.php"
+    <a href="../achievements/index.php"
+       class="text-white text-decoration-none py-2 px-3 rounded mb-2">
+
+        🏆 Achievements
+
+    </a>
+
+    <a href="../gallery/index.php"
+       class="text-white text-decoration-none py-2 px-3 rounded mb-2">
+
+        🖼 Gallery
+
+    </a>
+
+    <a href="../messages/index.php"
+       class="text-white text-decoration-none py-2 px-3 rounded mb-2">
+
+        📩 Messages
+
+    </a>
+
+    <a href="../website-settings/index.php"
+       class="text-white text-decoration-none py-2 px-3 rounded mb-2">
+
+        🌐 Website Settings
+
+    </a>
+
+    <a href="../profile.php"
        class="text-white text-decoration-none py-2 px-3 rounded mb-2">
 
         👤 My Profile
 
     </a>
 
-    <a href="settings.php"
+    <a href="../settings.php"
        class="text-white text-decoration-none py-2 px-3 rounded mb-2">
 
-        ⚙ Settings
+        ⚙️ Settings
 
     </a>
 
@@ -32,7 +60,7 @@
 
         <hr class="text-secondary">
 
-        <a href="../logout.php"
+        <a href="../../logout.php"
            class="text-danger text-decoration-none py-2 px-3 d-block">
 
             🚪 Logout

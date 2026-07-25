@@ -17,7 +17,7 @@ $id = (int) $_GET['id'];
 
 /*
 |--------------------------------------------------------------------------
-| Mark message as Read
+| Mark message as Read (Owner Only)
 |--------------------------------------------------------------------------
 */
 
@@ -25,15 +25,17 @@ $stmt = $conn->prepare("
     UPDATE contact_messages
     SET status = 'Read'
     WHERE id = :id
+    AND owner_id = :owner_id
 ");
 
 $stmt->execute([
-    ':id' => $id
+    ':id' => $id,
+    ':owner_id' => $_SESSION['user_id']
 ]);
 
 /*
 |--------------------------------------------------------------------------
-| Get message
+| Get Message (Owner Only)
 |--------------------------------------------------------------------------
 */
 
@@ -41,10 +43,12 @@ $stmt = $conn->prepare("
     SELECT *
     FROM contact_messages
     WHERE id = :id
+    AND owner_id = :owner_id
 ");
 
 $stmt->execute([
-    ':id' => $id
+    ':id' => $id,
+    ':owner_id' => $_SESSION['user_id']
 ]);
 
 $message = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -60,69 +64,67 @@ include '../../includes/navbar.php';
 
 <div class="d-flex">
 
-    <?php include '../../includes/sidebar.php'; ?>
+<?php include '../../includes/sidebar.php'; ?>
 
-    <div class="container-fluid p-4">
+<div class="container-fluid p-4">
 
-        <h2 class="mb-4">View Message</h2>
+<h2 class="mb-4">View Message</h2>
 
-        <div class="card shadow">
+<div class="card shadow">
 
-            <div class="card-body">
+<div class="card-body">
 
-                <table class="table">
+<table class="table">
 
-                    <tr>
-                        <th width="180">Full Name</th>
-                        <td><?= htmlspecialchars($message['fullname']) ?></td>
-                    </tr>
+<tr>
+<th width="180">Full Name</th>
+<td><?= htmlspecialchars($message['fullname']) ?></td>
+</tr>
 
-                    <tr>
-                        <th>Email</th>
-                        <td><?= htmlspecialchars($message['email']) ?></td>
-                    </tr>
+<tr>
+<th>Email</th>
+<td><?= htmlspecialchars($message['email']) ?></td>
+</tr>
 
-                    <tr>
-                        <th>Subject</th>
-                        <td><?= htmlspecialchars($message['subject']) ?></td>
-                    </tr>
+<tr>
+<th>Subject</th>
+<td><?= htmlspecialchars($message['subject']) ?></td>
+</tr>
 
-                    <tr>
-                        <th>Status</th>
-                        <td>
-                            <span class="badge bg-success">
-                                <?= htmlspecialchars($message['status']) ?>
-                            </span>
-                        </td>
-                    </tr>
+<tr>
+<th>Status</th>
+<td>
+<span class="badge bg-success">
+<?= htmlspecialchars($message['status']) ?>
+</span>
+</td>
+</tr>
 
-                    <tr>
-                        <th>Date</th>
-                        <td>
-                            <?= date('F d, Y h:i A', strtotime($message['created_at'])) ?>
-                        </td>
-                    </tr>
+<tr>
+<th>Date</th>
+<td><?= date('F d, Y h:i A', strtotime($message['created_at'])) ?></td>
+</tr>
 
-                    <tr>
-                        <th>Message</th>
-                        <td><?= nl2br(htmlspecialchars($message['message'])) ?></td>
-                    </tr>
+<tr>
+<th>Message</th>
+<td><?= nl2br(htmlspecialchars($message['message'])) ?></td>
+</tr>
 
-                </table>
+</table>
 
-                <a
-                    href="index.php"
-                    class="btn btn-secondary">
+<a
+href="index.php"
+class="btn btn-secondary">
 
-                    Back to Inbox
+Back to Inbox
 
-                </a>
+</a>
 
-            </div>
+</div>
 
-        </div>
+</div>
 
-    </div>
+</div>
 
 </div>
 

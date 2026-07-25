@@ -11,10 +11,13 @@ if (!isset($_SESSION['user_id'])) {
 $stmt = $conn->prepare("
     SELECT *
     FROM contact_messages
+    WHERE owner_id = :owner_id
     ORDER BY created_at DESC
 ");
 
-$stmt->execute();
+$stmt->execute([
+    ':owner_id' => $_SESSION['user_id']
+]);
 
 $messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
 

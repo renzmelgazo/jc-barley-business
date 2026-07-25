@@ -56,9 +56,48 @@ if (!move_uploaded_file($file['tmp_name'], $destination)) {
     die("Failed to save uploaded file.");
 }
 
+/*
+|--------------------------------------------------------------------------
+| Get Old Profile Picture
+|--------------------------------------------------------------------------
+*/
+
+$stmt = $conn->prepare("
+    SELECT profile_picture
+    FROM users
+    WHERE id = :id
+");
+
+$stmt->execute([
+    ':id' => $_SESSION['user_id']
+]);
+
+$user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+/*
+|--------------------------------------------------------------------------
+| Delete Old Profile Picture
+|--------------------------------------------------------------------------
+*/
+
+if (
+    !empty($user['profile_picture']) &&
+    file_exists("../uploads/profiles/" . $user['profile_picture'])
+) {
+    unlink("../uploads/profiles/" . $user['profile_picture']);
+}
+
+/*
+|--------------------------------------------------------------------------
+| Update Database
+|--------------------------------------------------------------------------
+*/
+
 $stmt = $conn->prepare("
     UPDATE users
-    SET profile_picture = :picture
+    SET
+        profile_picture = :picture,
+        updated_at = NOW()
     WHERE id = :id
 ");
 

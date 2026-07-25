@@ -14,26 +14,54 @@ if (!isset($_SESSION['user_id'])) {
 |--------------------------------------------------------------------------
 */
 
-$totalAchievements = $conn->query("
+$stmt = $conn->prepare("
     SELECT COUNT(*)
     FROM achievements
-")->fetchColumn();
+    WHERE owner_id = :owner_id
+");
 
-$totalGallery = $conn->query("
+$stmt->execute([
+    ':owner_id' => $_SESSION['user_id']
+]);
+
+$totalAchievements = $stmt->fetchColumn();
+
+$stmt = $conn->prepare("
     SELECT COUNT(*)
     FROM gallery
-")->fetchColumn();
+    WHERE owner_id = :owner_id
+");
 
-$totalMessages = $conn->query("
+$stmt->execute([
+    ':owner_id' => $_SESSION['user_id']
+]);
+
+$totalGallery = $stmt->fetchColumn();
+
+$stmt = $conn->prepare("
     SELECT COUNT(*)
     FROM contact_messages
-")->fetchColumn();
+    WHERE owner_id = :owner_id
+");
 
-$unreadMessages = $conn->query("
+$stmt->execute([
+    ':owner_id' => $_SESSION['user_id']
+]);
+
+$totalMessages = $stmt->fetchColumn();
+
+$stmt = $conn->prepare("
     SELECT COUNT(*)
     FROM contact_messages
-    WHERE status = 'Unread'
-")->fetchColumn();
+    WHERE owner_id = :owner_id
+    AND status = 'Unread'
+");
+
+$stmt->execute([
+    ':owner_id' => $_SESSION['user_id']
+]);
+
+$unreadMessages = $stmt->fetchColumn();
 
 /*
 |--------------------------------------------------------------------------
@@ -42,13 +70,19 @@ $unreadMessages = $conn->query("
 */
 
 $stmt = $conn->prepare("
-    SELECT title, award_date
+    SELECT
+        title,
+        award_date
     FROM achievements
+    WHERE owner_id = :owner_id
     ORDER BY award_date DESC
     LIMIT 5
 ");
 
-$stmt->execute();
+$stmt->execute([
+    ':owner_id' => $_SESSION['user_id']
+]);
+
 $recentAchievements = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 /*
@@ -58,13 +92,21 @@ $recentAchievements = $stmt->fetchAll(PDO::FETCH_ASSOC);
 */
 
 $stmt = $conn->prepare("
-    SELECT fullname, subject, status, created_at
+    SELECT
+        fullname,
+        subject,
+        status,
+        created_at
     FROM contact_messages
+    WHERE owner_id = :owner_id
     ORDER BY created_at DESC
     LIMIT 5
 ");
 
-$stmt->execute();
+$stmt->execute([
+    ':owner_id' => $_SESSION['user_id']
+]);
+
 $recentMessages = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 include '../includes/header.php';
