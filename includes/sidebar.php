@@ -38,7 +38,7 @@
     <a href="../website-settings/index.php"
        class="text-white text-decoration-none py-2 px-3 rounded mb-2">
 
-        🌐 Website Settings
+        🛠 Website Builder
 
     </a>
 

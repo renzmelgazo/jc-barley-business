@@ -122,6 +122,46 @@ include '../includes/navbar.php';
 
         <h2 class="fw-bold mb-4">Dashboard</h2>
 
+        <?php
+
+$stmt = $conn->prepare("
+    SELECT site_slug
+    FROM users
+    WHERE id = :id
+");
+
+$stmt->execute([
+    ':id' => $_SESSION['user_id']
+]);
+
+$userSite = $stmt->fetch(PDO::FETCH_ASSOC);
+
+$websiteLink = "../site.php?owner=" . urlencode($userSite['site_slug']);
+
+?>
+
+<div class="mb-4 d-flex gap-2">
+
+    <a
+        href="<?= $websiteLink ?>"
+        target="_blank"
+        class="btn btn-success">
+
+        🌐 View My Website
+
+    </a>
+
+    <button
+        type="button"
+        class="btn btn-outline-primary"
+        onclick="copyWebsiteLink()">
+
+        📋 Copy Website Link
+
+    </button>
+
+</div>
+
         <div class="row">
 
             <div class="col-md-3 mb-4">
@@ -331,5 +371,17 @@ include '../includes/navbar.php';
     </div>
 
 </div>
+<script>
 
+function copyWebsiteLink() {
+
+    navigator.clipboard.writeText(
+        window.location.origin + "<?= substr($websiteLink, 2) ?>"
+    );
+
+    alert("Website link copied!");
+
+}
+
+</script>
 <?php include '../includes/footer.php'; ?>

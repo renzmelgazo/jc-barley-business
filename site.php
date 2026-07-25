@@ -107,17 +107,106 @@ rel="stylesheet">
 
 <body>
 
-<div class="container py-5">
+<nav class="navbar navbar-expand-lg navbar-dark bg-success shadow sticky-top">
 
-<h1 class="mb-3">
-<?= htmlspecialchars($settings['website_name'] ?: $ownerName) ?>
-</h1>
+    <div class="container">
 
-<p class="text-muted">
-<?= htmlspecialchars($settings['tagline']) ?>
-</p>
+        <a class="navbar-brand fw-bold" href="#">
 
-<hr>
+            <?= htmlspecialchars($settings['website_name']) ?>
+
+        </a>
+
+        <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNav">
+
+            <span class="navbar-toggler-icon"></span>
+
+        </button>
+
+        <div
+            class="collapse navbar-collapse"
+            id="navbarNav">
+
+            <ul class="navbar-nav ms-auto">
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#home">
+                        Home
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#about">
+                        About
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#achievements">
+                        Achievements
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#gallery">
+                        Gallery
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#contact">
+                        Contact
+                    </a>
+                </li>
+
+            </ul>
+
+        </div>
+
+    </div>
+
+</nav>
+
+<div class="container py-5" id="home">
+
+<div
+    id="about"
+    class="text-center py-5 mb-5 rounded shadow"
+     style="background:#198754;color:white;">
+
+    <h5 class="text-uppercase">
+
+        <?= htmlspecialchars($settings['website_name']) ?>
+
+    </h5>
+
+    <h1 class="display-4 fw-bold mt-3">
+
+        <?= htmlspecialchars($ownerName) ?>
+
+    </h1>
+
+    <p class="lead">
+
+        <?= htmlspecialchars($settings['tagline']) ?>
+
+    </p>
+
+    <hr
+        class="mx-auto"
+        style="width:120px;border:2px solid white;">
+
+    <p class="mt-3">
+
+        <?= nl2br(htmlspecialchars($settings['about'])) ?>
+
+    </p>
+
+</div>
 
 <h3>About</h3>
 
@@ -129,45 +218,129 @@ rel="stylesheet">
 
 <hr>
 
-<h3>Achievements</h3>
+<h2 id="achievements" class="text-center mb-5">
 
-<?php foreach($achievements as $row): ?>
+    🏆 Achievements
 
-<div class="card mb-3">
-
-<div class="card-body">
-
-<h5><?= htmlspecialchars($row['title']) ?></h5>
-
-<p><?= htmlspecialchars($row['description']) ?></p>
-
-</div>
-
-</div>
-
-<?php endforeach; ?>
-
-<hr>
-
-<h3>Gallery</h3>
+</h2>
 
 <div class="row">
 
+<?php if(count($achievements) > 0): ?>
+
+    <?php foreach($achievements as $row): ?>
+
+    <div class="col-md-4 mb-4">
+
+        <div class="card h-100 shadow border-0">
+
+            <img
+                src="uploads/achievements/<?= htmlspecialchars($row['image']) ?>"
+                class="card-img-top"
+                style="height:220px;object-fit:cover;">
+
+            <div class="card-body">
+
+                <h5 class="fw-bold">
+
+                    <?= htmlspecialchars($row['title']) ?>
+
+                </h5>
+
+                <small class="text-muted">
+
+                    <?= date('F d, Y', strtotime($row['award_date'])) ?>
+
+                </small>
+
+                <hr>
+
+                <p>
+
+                    <?= nl2br(htmlspecialchars($row['description'])) ?>
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <?php endforeach; ?>
+
+<?php else: ?>
+
+<div class="col-12">
+
+    <div class="alert alert-secondary text-center">
+
+        No achievements available.
+
+    </div>
+
+</div>
+
+<?php endif; ?>
+
+</div>
+
+<h2 id="gallery" class="text-center mt-5 mb-5">
+
+    🖼 Gallery
+
+</h2>
+
+<div class="row">
+
+<?php if(count($gallery) > 0): ?>
+
 <?php foreach($gallery as $row): ?>
 
-<div class="col-md-3 mb-4">
+<div class="col-lg-3 col-md-4 col-sm-6 mb-4">
 
-<img
-src="uploads/gallery/<?= htmlspecialchars($row['image']) ?>"
-class="img-fluid rounded">
+    <div class="card border-0 shadow h-100">
 
-<p class="mt-2">
-<?= htmlspecialchars($row['title']) ?>
-</p>
+        <img
+            src="uploads/gallery/<?= htmlspecialchars($row['image']) ?>"
+            class="card-img-top"
+            style="height:220px;object-fit:cover;">
+
+        <div class="card-body text-center">
+
+            <h6 class="fw-bold">
+
+                <?= htmlspecialchars($row['title']) ?>
+
+            </h6>
+
+            <p class="small text-muted">
+
+                <?= htmlspecialchars($row['description']) ?>
+
+            </p>
+
+        </div>
+
+    </div>
 
 </div>
 
 <?php endforeach; ?>
+
+<?php else: ?>
+
+<div class="col-12">
+
+    <div class="alert alert-secondary text-center">
+
+        No gallery images available.
+
+    </div>
+
+</div>
+
+<?php endif; ?>
 
 </div>
 
@@ -203,7 +376,9 @@ class="img-fluid rounded">
 
 </ul>
 
-<h3>Contact <?= htmlspecialchars($ownerName) ?></h3>
+<h3 id="contact">
+    Contact <?= htmlspecialchars($ownerName) ?>
+</h3>
 
 <form action="auth/save_contact.php" method="POST">
 
@@ -259,6 +434,8 @@ class="img-fluid rounded">
 </form>
 
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 
