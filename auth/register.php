@@ -80,6 +80,7 @@ VALUES
     $stmt->execute([
     ':fullname' => $fullname,
     ':username' => $username,
+    ':site_slug' => $site_slug,
     ':email' => $email,
     ':password' => $hashedPassword,
     ':profile_picture' => $profile_picture,

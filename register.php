@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 
+
 <head>
 
 <meta charset="UTF-8">
 
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Create Account | JC Barley Website</title>
 
@@ -18,7 +18,23 @@ rel="stylesheet">
 rel="stylesheet"
 href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
+<link rel="stylesheet" href="css/auth.css">
+
+</head>
 <style>
+
+    .container{
+    padding:0;
+}
+
+.row{
+    margin:0;
+}
+
+.col-lg-5,
+.col-lg-7{
+    padding:0;
+}
 
     
 
@@ -41,17 +57,11 @@ body{
     radial-gradient(circle at bottom right,#b9e65a 0%,transparent 30%),
     linear-gradient(
         135deg,
-        #d9f7ba 0%,
-        #8bc34a 45%,
+        #8dcb4eff 0%,
+        rgba(139, 195, 74, 1) 45%,
         #2e7d32 100%
     );
 }
-
-/* ===========================
-   GLOBAL JC WATERMARK
-=========================== */
-
-
 
 body::after{
 
@@ -111,7 +121,7 @@ body::after{
 
     overflow:hidden;
 
-    background:rgba(255,255,255,.96);
+    background:rgba(255, 255, 255, 0.96);
 
     backdrop-filter:blur(12px);
 
@@ -127,9 +137,11 @@ body::after{
 
     color:white;
 
-    padding:70px 55px;
+    padding:72px 55px;
 
     display:flex;
+
+    border-radius:28px 0 0 28px;
 
     flex-direction:column;
 
@@ -182,19 +194,13 @@ body::after{
 
 .right-side{
 
+    background:white;
+
+    border-radius:0 28px 28px 0;
+
     padding:55px;
 
-    background:
-
-    linear-gradient(
-
-    180deg,
-
-    white,
-
-    #fbfff6
-
-    );
+    background:linear-gradient(180deg,white,#fbfff6);
 
 }
 
@@ -254,7 +260,7 @@ body::after{
         #82B81E 100%
     );
 
-    background-size:200% auto;
+    background-size:% auto;
 
     box-shadow:
         0 15px 30px rgba(120,170,25,.35);
@@ -297,7 +303,7 @@ body::after{
 
     gap:12px;
 
-    margin:18px 0;
+    margin:10px 0;
 
     font-size:17px;
 
@@ -312,39 +318,123 @@ body::after{
 /* ============================= */
 
 
+/* =====================================
+   JC LOGO WATERMARK BACKGROUND
+===================================== */
 
-/* PREMIUM RANDOM WATERMARKS */
-.watermarks{position:fixed;inset:0;pointer-events:none;z-index:1;overflow:hidden;}
-.watermarks img{position:absolute;filter:grayscale(100%);}
-.watermarks img:nth-child(1){width:100px;left:84%;bottom:10%;opacity:50;transform:rotate(38deg);}
-.watermarks img:nth-child(2){width:79px;right:90%;top:12%;opacity:40;transform:rotate(39deg);}
-.watermarks img:nth-child(3){width:77px;left:90%;top:27%;opacity:30;transform:rotate(41deg);}
-.watermarks img:nth-child(4){width:125px;right:90%;top:8%;opacity:20;transform:rotate(15deg);}
-.watermarks img:nth-child(5){width:140px;left:90%;top:7%;opacity:10;transform:rotate(27deg);}
-.watermarks img:nth-child(6){width:98px;left:80%;top:80%;opacity:50;transform:rotate(29deg);}
-.watermarks img:nth-child(7){width:143px;right:90%;top:50%;opacity:30;transform:rotate(39deg);}
-.watermarks img:nth-child(8){width:75px;left:90%;top:17%;opacity:40;transform:rotate(8deg);}
-.watermarks img:nth-child(9){width:88px;right:90%;top:15%;opacity:30;transform:rotate(28deg);}
-.watermarks img:nth-child(10){width:141px;right:90%;bottom:23%;opacity:20;transform:rotate(32deg);}
-.watermarks img:nth-child(13){width:96px;right:90%;bottom:87%;opacity:20;transform:rotate(23deg);}eg);}
-.watermarks img:nth-child(17){width:137px;left:90%%;bottom:43%;opacity:30;transform:rotate(12deg);}
-.watermarks img:nth-child(18){width:147px;left;90%top:15%;opacity:35;transform:rotate(20deg);}
-.watermarks img:nth-child(19){width:91px;left:90%;bottom:19%;opacity:35;transform:rotate(17deg);}
-.watermarks img:nth-child(20){width:75px;left:90%;top:9%;opacity:40;transform:rotate(26deg);}
+.watermarks{
+
+    position:fixed;
+
+    inset:0;
+
+    overflow:hidden;
+
+    pointer-events:none;
+
+    z-index:1;
+
+}
+
+.watermarks img{
+
+    position:absolute;
+
+    width:120px;
+
+    opacity:.65;
+
+    filter:grayscale(100%);
+
+    transition:.3s;
+
+}
 
 
+.watermarks img:nth-child(1){bottom:93%;right:17%;width:110px;}
+.watermarks img:nth-child(2){bottom:88%;right:27%;}
+.watermarks img:nth-child(3){bottom:93%;right:37%;}
+.watermarks img:nth-child(4){bottom:95%;right:47%;}
+.watermarks img:nth-child(5){bottom:88%;right:57%;}
+.watermarks img:nth-child(6){bottom:94%;right:65%;}
+
+
+.watermarks img:nth-child(7){bottom:94%;right:94%;}
+.watermarks img:nth-child(8){bottom:92%;right:75%;}
+.watermarks img:nth-child(9){bottom:84%;right:45%;}
+.watermarks img:nth-child(10){bottom:90%;right:85%;}
+.watermarks img:nth-child(11){bottom:80%;right:93%;}
+
+
+.watermarks img:nth-child(12){bottom:70%;right:84%;}
+.watermarks img:nth-child(13){bottom:60%;right:93%;}
+.watermarks img:nth-child(14){bottom:50%;right:83%;}
+.watermarks img:nth-child(15){bottom:40%;right:91%;}
+.watermarks img:nth-child(16){bottom:30%;right:85%;}
+
+
+.watermarks img:nth-child(17){bottom:20%;right:93%;}
+.watermarks img:nth-child(18){bottom:10%;right:83%;}
+.watermarks img:nth-child(19){bottom:0%;right:90%;}
+.watermarks img:nth-child(20){bottom:-5%;right:79%;}
+.watermarks img:nth-child(21){bottom:-2%;right:65%;}
+
+
+.watermarks img:nth-child(22){bottom:-10%;right:57%;}
+.watermarks img:nth-child(23){bottom:-9%;right:37%;}
+.watermarks img:nth-child(24){bottom:-3%;right:47%;}
+.watermarks img:nth-child(25){bottom:-15%;right:17%;}
+.watermarks img:nth-child(26){bottom:-2%;right:27%;}
+
+
+.watermarks img:nth-child(27){top:70%;left:84%;}
+.watermarks img:nth-child(28){top:60%;left:93%;}
+.watermarks img:nth-child(29){top:50%;left:83%;}
+.watermarks img:nth-child(30){top:40%;left:91%;}
+.watermarks img:nth-child(31){top:30%;left:85%;}
+
+.watermarks img:nth-child(32){top:20%;left:93%;}
+.watermarks img:nth-child(33){top:10%;left:83%;}
+.watermarks img:nth-child(34){top:0%;left:90%;}
+
+.watermarks img:nth-child(35){top:94%;left:94%;}
+.watermarks img:nth-child(36){top:92%;left:75%;}
+.watermarks img:nth-child(37){top:96%;left:89%;}
+.watermarks img:nth-child(38){top:90%;left:85%;}
+.watermarks img:nth-child(39){top:80%;left:93%;}
 </style>
 
 </head>
 
 <body>
 
-<div class="leaf leaf-top-left"></div>
-<div class="leaf leaf-top-right"></div>
-<div class="leaf leaf-bottom-left"></div>
-<div class="leaf leaf-bottom-right"></div>
+
 
 <div class="watermarks">
+    <img src="assets/images/logo.png" alt="">
+    <img src="assets/images/logo.png" alt="">
+    <img src="assets/images/logo.png" alt="">
+    <img src="assets/images/logo.png" alt="">
+    <img src="assets/images/logo.png" alt="">
+    <img src="assets/images/logo.png" alt="">
+    <img src="assets/images/logo.png" alt="">
+    <img src="assets/images/logo.png" alt="">
+    <img src="assets/images/logo.png" alt="">
+    <img src="assets/images/logo.png" alt="">
+    <img src="assets/images/logo.png" alt="">
+    <img src="assets/images/logo.png" alt="">
+    <img src="assets/images/logo.png" alt="">
+    <img src="assets/images/logo.png" alt="">
+    <img src="assets/images/logo.png" alt="">
+    <img src="assets/images/logo.png" alt="">
+    <img src="assets/images/logo.png" alt="">
+    <img src="assets/images/logo.png" alt="">
+    <img src="assets/images/logo.png" alt="">
+    <img src="assets/images/logo.png" alt="">
+    <img src="assets/images/logo.png" alt="">
+    <img src="assets/images/logo.png" alt="">
+    <img src="assets/images/logo.png" alt="">
+    <img src="assets/images/logo.png" alt="">
     <img src="assets/images/logo.png" alt="">
     <img src="assets/images/logo.png" alt="">
     <img src="assets/images/logo.png" alt="">
@@ -502,7 +592,7 @@ required>
 
 </div>
 
-<div class="row">
+<div class="row m-0">
 
 <div class="col-md-6 mb-3">
 

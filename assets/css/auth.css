@@ -1,0 +1,389 @@
+/* =========================================
+   JC BARLEY AUTH DESIGN
+========================================= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    overflow:hidden;
+    font-family:'Poppins',sans-serif;
+    position:relative;
+
+    background:
+    radial-gradient(circle at top left,#f7ffd8 0%,transparent 35%),
+    radial-gradient(circle at bottom right,#b9e65a 0%,transparent 30%),
+    linear-gradient(
+        135deg,
+        #8dcb4e 0%,
+        #8BC34A 45%,
+        #2E7D32 100%
+    );
+}
+
+body::after{
+
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    background:
+
+    radial-gradient(circle at 15% 25%,rgba(255,255,255,.12),transparent 180px),
+
+    radial-gradient(circle at 80% 20%,rgba(255,255,255,.08),transparent 220px),
+
+    radial-gradient(circle at 60% 80%,rgba(255,255,255,.10),transparent 250px),
+
+    radial-gradient(circle at 35% 60%,rgba(255,255,255,.08),transparent 200px);
+
+    pointer-events:none;
+
+    z-index:0;
+
+}
+
+/* =========================================
+   MAIN CONTAINER
+========================================= */
+
+.container{
+
+    width:1100px;
+    max-width:95%;
+    min-height:720px;
+
+    padding:0;
+
+    border-radius:28px;
+
+    overflow:hidden;
+
+    background:#fff;
+
+    position:relative;
+
+    z-index:5;
+
+    box-shadow:0 35px 80px rgba(0,0,0,.18);
+
+}
+
+.row{
+
+    width:100%;
+    margin:0;
+
+}
+
+.col-lg-5,
+.col-lg-7{
+
+    padding:0;
+
+}
+
+/* =========================================
+   LEFT PANEL
+========================================= */
+
+.left-side{
+
+    min-height:720px;
+
+    color:#fff;
+
+    padding:70px 55px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    position:relative;
+
+    overflow:hidden;
+
+    background:
+
+    radial-gradient(
+        circle at top left,
+        rgba(255,255,255,.22),
+        transparent 220px
+    ),
+
+    radial-gradient(
+        circle at bottom right,
+        rgba(255,255,255,.12),
+        transparent 280px
+    ),
+
+    linear-gradient(
+        180deg,
+        #6b9415 0%,
+        #6DBB38 38%,
+        #2E7D32 100%
+    );
+
+}
+
+.left-side h2{
+
+    margin-top:20px;
+
+    font-size:38px;
+
+    font-weight:800;
+
+    text-shadow:0 3px 12px rgba(0,0,0,.25);
+
+}
+
+.left-side p{
+
+    margin-top:18px;
+
+    font-size:16px;
+
+    line-height:30px;
+
+    color:rgba(255,255,255,.92);
+
+}
+
+.left-side hr{
+
+    margin:28px 0;
+
+    border-color:rgba(255,255,255,.20);
+
+}
+
+.feature{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    margin:18px 0;
+
+    font-size:17px;
+
+    font-weight:500;
+
+}
+
+/* =========================================
+   RIGHT PANEL
+========================================= */
+
+.right-side{
+
+    min-height:720px;
+
+    padding:55px;
+
+    background:linear-gradient(
+        180deg,
+        #ffffff,
+        #fbfff6
+    );
+
+}
+
+/* =========================================
+   FORM
+========================================= */
+
+h3{
+    font-size:42px;
+    font-weight:800;
+    color:#222;
+}
+
+.text-muted{
+    color:#6c757d !important;
+}
+
+.form-label{
+    font-weight:600;
+    color:#333;
+    margin-bottom:8px;
+}
+
+.form-control{
+
+    height:56px;
+
+    border-radius:14px;
+
+    border:2px solid #dfead4;
+
+    background:#fbfff8;
+
+    font-size:15px;
+
+    transition:.3s;
+
+}
+
+.form-control:focus{
+
+    border-color:#8BC34A;
+
+    box-shadow:0 0 0 5px rgba(139,195,74,.15);
+
+    background:#fff;
+
+}
+
+.form-check-input:checked{
+
+    background:#6DBB38;
+
+    border-color:#6DBB38;
+
+}
+
+/* =========================================
+   BUTTON
+========================================= */
+
+.btn-success{
+
+    height:58px;
+
+    border:none;
+
+    border-radius:16px;
+
+    font-size:17px;
+
+    font-weight:700;
+
+    color:#294400;
+
+    background:linear-gradient(
+        90deg,
+        #FFF8A6 0%,
+        #D7F16C 35%,
+        #A9D82F 70%,
+        #82B81E 100%
+    );
+
+    background-size:200% auto;
+
+    box-shadow:0 15px 30px rgba(120,170,25,.35);
+
+    transition:.35s;
+
+}
+
+.btn-success:hover{
+
+    transform:translateY(-4px);
+
+    background-position:right center;
+
+    color:#173400;
+
+    box-shadow:0 22px 45px rgba(0,0,0,.20);
+
+}
+
+.btn-success:active{
+
+    transform:scale(.98);
+
+}
+
+.btn-success i{
+
+    margin-right:8px;
+
+}
+
+/* =========================================
+   LINKS
+========================================= */
+
+a{
+
+    transition:.25s;
+
+}
+
+a:hover{
+
+    opacity:.8;
+
+}
+
+/* =========================================
+   WATERMARKS
+========================================= */
+
+.watermarks{
+
+    position:fixed;
+
+    inset:0;
+
+    pointer-events:none;
+
+    overflow:hidden;
+
+    z-index:1;
+
+}
+
+.watermarks img{
+
+    position:absolute;
+
+    width:95px;
+
+    opacity:.18;
+
+    filter:grayscale(100%);
+
+}
+
+/* Left */
+
+.watermarks img:nth-child(1){top:30px;left:40px;}
+.watermarks img:nth-child(2){top:150px;left:90px;}
+.watermarks img:nth-child(3){top:270px;left:30px;}
+.watermarks img:nth-child(4){top:430px;left:100px;}
+.watermarks img:nth-child(5){top:620px;left:40px;}
+
+/* Top */
+
+.watermarks img:nth-child(6){top:20px;left:320px;}
+.watermarks img:nth-child(7){top:20px;left:600px;}
+.watermarks img:nth-child(8){top:20px;left:900px;}
+.watermarks img:nth-child(9){top:20px;left:1180px;}
+
+/* Right */
+
+.watermarks img:nth-child(10){top:90px;right:60px;}
+.watermarks img:nth-child(11){top:240px;right:40px;}
+.watermarks img:nth-child(12){top:420px;right:70px;}
+.watermarks img:nth-child(13){top:610px;right:40px;}
+
+/* Bottom */
+
+.watermarks img:nth-child(14){bottom:40px;left:450px;}
+.watermarks img:nth-child(15){bottom:30px;right:450px;}
