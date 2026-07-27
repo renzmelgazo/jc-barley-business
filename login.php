@@ -13,7 +13,7 @@
 <link rel="stylesheet"
 href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-<link rel="stylesheet" href="assets/css/auth.css?v=<?= time(); ?>">
+<link rel="stylesheet" href="assets/css/auth.css">
 
 </head>
 
@@ -21,6 +21,30 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.m
 
 <div class="watermarks">
 
+    <img src="assets/images/logo.png" alt="">
+    <img src="assets/images/logo.png" alt="">
+    <img src="assets/images/logo.png" alt="">
+    <img src="assets/images/logo.png" alt="">
+    <img src="assets/images/logo.png" alt="">
+    <img src="assets/images/logo.png" alt="">
+    <img src="assets/images/logo.png" alt="">
+    <img src="assets/images/logo.png" alt="">
+    <img src="assets/images/logo.png" alt="">
+    <img src="assets/images/logo.png" alt="">
+    <img src="assets/images/logo.png" alt="">
+    <img src="assets/images/logo.png" alt="">
+    <img src="assets/images/logo.png" alt="">
+    <img src="assets/images/logo.png" alt="">
+    <img src="assets/images/logo.png" alt="">
+    <img src="assets/images/logo.png" alt="">
+    <img src="assets/images/logo.png" alt="">
+    <img src="assets/images/logo.png" alt="">
+    <img src="assets/images/logo.png" alt="">
+    <img src="assets/images/logo.png" alt="">
+    <img src="assets/images/logo.png" alt="">
+    <img src="assets/images/logo.png" alt="">
+    <img src="assets/images/logo.png" alt="">
+    <img src="assets/images/logo.png" alt="">
     <img src="assets/images/logo.png" alt="">
     <img src="assets/images/logo.png" alt="">
     <img src="assets/images/logo.png" alt="">
@@ -124,6 +148,26 @@ Customer Messages
     Sign in to your account to continue.
 </p>
 
+<?php if(isset($_GET['error']) && $_GET['error'] == 'invalid'): ?>
+<div class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
+    <i class="bi bi-exclamation-triangle-fill"></i>
+    Invalid username/email or password.
+    <button type="button"
+            class="btn-close"
+            data-bs-dismiss="alert"></button>
+</div>
+<?php endif; ?>
+
+<?php if(isset($_GET['registered'])): ?>
+<div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
+    <i class="bi bi-check-circle-fill"></i>
+    Registration successful! You can now login.
+    <button type="button"
+            class="btn-close"
+            data-bs-dismiss="alert"></button>
+</div>
+<?php endif; ?>
+
 <form action="auth/login.php" method="POST">
 
     <div class="mb-3">
@@ -164,28 +208,29 @@ Customer Messages
 
         <div class="form-check">
 
-            <input
-                class="form-check-input"
-                type="checkbox"
-                id="remember">
+    <input
+        class="form-check-input"
+        type="checkbox"
+        name="remember"
+        id="remember">
 
-            <label
-                class="form-check-label"
-                for="remember">
+    <label
+        class="form-check-label"
+        for="remember">
 
-                Remember Me
+        Remember Me
 
-            </label>
+    </label>
 
-        </div>
+</div>
 
         <a
-            href="#"
-            class="text-success text-decoration-none fw-semibold">
+    href="forgot-password.php"
+    class="text-success text-decoration-none fw-semibold">
 
-            Forgot Password?
+    Forgot Password?
 
-        </a>
+</a>
 
     </div>
 
@@ -217,6 +262,7 @@ Customer Messages
 
     </div>
 
+
 </form>
 </div>
 
@@ -225,6 +271,8 @@ Customer Messages
 </div>
 
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 

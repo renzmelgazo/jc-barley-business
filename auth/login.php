@@ -2,6 +2,7 @@
 
 require '../config/session.php';
 require '../config/database.php';
+require '../config/remember.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -23,22 +24,96 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if (!$user) {
-        die("Invalid username or email.");
-    }
+    header("Location: ../login.php?error=invalid");
+    exit;
+}
 
-    if (!password_verify($password, $user['password'])) {
-        die("Incorrect password.");
-    }
-
+if (!password_verify($password, $user['password'])) {
+    header("Location: ../login.php?error=invalid");
+    exit;
+}
     if ($user['status'] !== 'active') {
         die("Your account is inactive.");
     }
 
-    $_SESSION['user_id'] = $user['id'];
-    $_SESSION['fullname'] = $user['fullname'];
-    $_SESSION['username'] = $user['username'];
-    $_SESSION['email'] = $user['email'];
+    /*
+|--------------------------------------------------------------------------
+| Login Session
+|--------------------------------------------------------------------------
+*/
 
-    header("Location: ../dashboard/index.php");
+$_SESSION['user_id'] = $user['id'];
+$_SESSION['fullname'] = $user['fullname'];
+$_SESSION['username'] = $user['username'];
+$_SESSION['email'] = $user['email'];
+
+/*
+|--------------------------------------------------------------------------
+| Remember Me
+|--------------------------------------------------------------------------
+*/
+
+if (isset($_POST['remember'])) {
+
+    $selector = generateSelector();
+    $token = generateRememberToken();
+
+    $hashedToken = password_hash($token, PASSWORD_DEFAULT);
+
+    $expires = date(
+        'Y-m-d H:i:s',
+        strtotime('+30 days')
+    );
+
+    $stmt = $conn->prepare("
+        INSERT INTO remember_tokens
+        (
+            user_id,
+            selector,
+            hashed_token,
+            expires_at
+        )
+        VALUES
+        (
+            :user_id,
+            :selector,
+            :hashed_token,
+            :expires_at
+        )
+    ");
+
+    $stmt->execute([
+
+        ':user_id' => $user['id'],
+
+        ':selector' => $selector,
+
+        ':hashed_token' => $hashedToken,
+
+        ':expires_at' => $expires
+
+    ]);
+
+    setcookie(
+
+        "remember",
+
+        $selector . ":" . $token,
+
+        time() + (60 * 60 * 24 * 30),
+
+        "/",
+
+        "",
+
+        false,
+
+        true
+
+    );
+
+}
+
+header("Location: ../dashboard/index.php");
 exit;
 }
