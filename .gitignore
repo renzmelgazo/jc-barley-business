@@ -1,1 +1,8 @@
+# macOS
 .DS_Store
+
+# Composer
+/vendor/
+
+# Mail Configuration
+config/mail.php
