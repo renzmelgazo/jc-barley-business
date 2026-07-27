@@ -1,82 +1,62 @@
+<?php
+$currentUrl = $_SERVER['REQUEST_URI'];
+?>
+
 <div class="sidebar">
 
-<div class="logo">
+    <div class="logo">
+        <h4>
+            <i class="bi bi-grid-fill"></i>
+            JC Barley
+        </h4>
+    </div>
 
-<h4>
+    <a href="../dashboard/index.php"
+class="<?= strpos($currentUrl,'/dashboard/index.php') !== false ? 'active' : '' ?>">
+        <i class="bi bi-speedometer2"></i>
+        <span>Dashboard</span>
+    </a>
 
-<i class="bi bi-grid-fill"></i>
+    <a href="../website-settings/index.php">
+        <i class="bi bi-globe"></i>
+        <span>Website Builder</span>
+    </a>
 
-JC Barley
+    <a href="/jc-barley-website/dashboard/achievements/index.php"
+class="<?= strpos($_SERVER['REQUEST_URI'], '/dashboard/achievements') !== false ? 'active' : '' ?>">
+        <i class="bi bi-trophy"></i>
+        <span>Achievements</span>
+    </a>
 
-</h4>
+    <a href="../gallery/index.php">
+        <i class="bi bi-image"></i>
+        <span>Gallery</span>
+    </a>
 
-</div>
+    <a href="../messages/index.php">
+        <i class="bi bi-envelope"></i>
+        <span>Messages</span>
+    </a>
 
-<a href="../dashboard/index.php">
+    <a href="../profile.php">
+        <i class="bi bi-person-circle"></i>
+        <span>Profile</span>
+    </a>
 
-<i class="bi bi-speedometer2"></i>
+    <a href="../settings.php">
+        <i class="bi bi-gear-fill"></i>
+        <span>Settings</span>
+    </a>
 
-Dashboard
+    <div class="logout">
 
-</a>
+    <a href="../logout.php">
 
-<a href="../dashboard/website.php">
+        <i class="bi bi-box-arrow-right"></i>
 
-<i class="bi bi-globe"></i>
+        <span>Logout</span>
 
-Website Builder
-
-</a>
-
-<a href="../dashboard/achievements.php">
-
-<i class="bi bi-trophy-fill"></i>
-
-Achievements
-
-</a>
-
-<a href="../dashboard/gallery.php">
-
-<i class="bi bi-images"></i>
-
-Gallery
-
-</a>
-
-<a href="../dashboard/messages.php">
-
-<i class="bi bi-envelope-fill"></i>
-
-Messages
-
-</a>
-
-<a href="../dashboard/profile.php">
-
-<i class="bi bi-person-circle"></i>
-
-Profile
-
-</a>
-
-<a href="../dashboard/settings.php">
-
-<i class="bi bi-gear-fill"></i>
-
-Settings
-
-</a>
-
-<div class="logout">
-
-<a href="../auth/logout.php">
-
-<i class="bi bi-box-arrow-right"></i>
-
-Logout
-
-</a>
+    </a>
 
 </div>
 

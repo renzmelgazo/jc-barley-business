@@ -110,17 +110,32 @@ $stmt->execute([
 $recentMessages = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 include '../includes/header.php';
-include '../includes/navbar.php';
-
 ?>
 
-<div class="d-flex">
+<?php include '../includes/sidebar.php'; ?>
 
-    <?php include '../includes/sidebar.php'; ?>
+<div class="main-content">
 
-    <div class="container-fluid p-4">
+    <?php include '../includes/navbar.php'; ?>
 
-        <h2 class="fw-bold mb-4">Dashboard</h2>
+    <div class="content">
+
+        <div class="dashboard-card mb-4">
+
+    <h2 class="fw-bold">
+
+        Welcome back,
+        <?= htmlspecialchars($_SESSION['fullname']) ?> 👋
+
+    </h2>
+
+    <p class="text-muted mb-0">
+
+        Manage your business website, achievements, gallery, and customer messages from one place.
+
+    </p>
+
+</div>
 
         <?php
 
@@ -162,45 +177,97 @@ $websiteLink = "../site.php?owner=" . urlencode($userSite['site_slug']);
 
 </div>
 
-        <div class="row">
+        <div class="row g-4 mb-5">
 
-            <div class="col-md-3 mb-4">
-                <div class="card border-0 shadow bg-success text-white">
-                    <div class="card-body">
-                        <h5>Achievements</h5>
-                        <h2><?= $totalAchievements ?></h2>
-                    </div>
-                </div>
-            </div>
+    <div class="col-xl-3 col-md-6">
 
-            <div class="col-md-3 mb-4">
-                <div class="card border-0 shadow bg-primary text-white">
-                    <div class="card-body">
-                        <h5>Gallery Images</h5>
-                        <h2><?= $totalGallery ?></h2>
-                    </div>
-                </div>
-            </div>
+        <div class="dashboard-card">
 
-            <div class="col-md-3 mb-4">
-                <div class="card border-0 shadow bg-info text-white">
-                    <div class="card-body">
-                        <h5>Total Messages</h5>
-                        <h2><?= $totalMessages ?></h2>
-                    </div>
-                </div>
-            </div>
+            <div class="d-flex justify-content-between align-items-center">
 
-            <div class="col-md-3 mb-4">
-                <div class="card border-0 shadow bg-danger text-white">
-                    <div class="card-body">
-                        <h5>Unread Messages</h5>
-                        <h2><?= $unreadMessages ?></h2>
-                    </div>
+                <div>
+
+                    <h6>Achievements</h6>
+
+                    <h2><?= $totalAchievements ?></h2>
+
                 </div>
+
+                <i class="bi bi-trophy-fill stat-icon text-success"></i>
+
             </div>
 
         </div>
+
+    </div>
+
+    <div class="col-xl-3 col-md-6">
+
+        <div class="dashboard-card">
+
+            <div class="d-flex justify-content-between align-items-center">
+
+                <div>
+
+                    <h6>Gallery</h6>
+
+                    <h2><?= $totalGallery ?></h2>
+
+                </div>
+
+                <i class="bi bi-images stat-icon text-primary"></i>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-xl-3 col-md-6">
+
+        <div class="dashboard-card">
+
+            <div class="d-flex justify-content-between align-items-center">
+
+                <div>
+
+                    <h6>Messages</h6>
+
+                    <h2><?= $totalMessages ?></h2>
+
+                </div>
+
+                <i class="bi bi-envelope-fill stat-icon text-warning"></i>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-xl-3 col-md-6">
+
+        <div class="dashboard-card">
+
+            <div class="d-flex justify-content-between align-items-center">
+
+                <div>
+
+                    <h6>Unread</h6>
+
+                    <h2><?= $unreadMessages ?></h2>
+
+                </div>
+
+                <i class="bi bi-bell-fill stat-icon text-danger"></i>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
 
         <!-- System Overview -->
         <div class="card shadow border-0 mb-4">
@@ -368,15 +435,16 @@ $websiteLink = "../site.php?owner=" . urlencode($userSite['site_slug']);
 
         </div>
 
-    </div>
+        </div>
 
 </div>
+
 <script>
 
-function copyWebsiteLink() {
+function copyWebsiteLink(){
 
     navigator.clipboard.writeText(
-        window.location.origin + "<?= substr($websiteLink, 2) ?>"
+        window.location.origin + "<?= substr($websiteLink,2) ?>"
     );
 
     alert("Website link copied!");
@@ -384,4 +452,5 @@ function copyWebsiteLink() {
 }
 
 </script>
+
 <?php include '../includes/footer.php'; ?>

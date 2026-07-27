@@ -33,7 +33,7 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.m
 
 <link
 rel="stylesheet"
-href="../assets/css/dashboard.css">
+href="/jc-barley-website/assets/css/dashboard.css">
 
 </head>
 

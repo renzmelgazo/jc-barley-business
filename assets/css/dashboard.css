@@ -1,0 +1,453 @@
+/* ==========================================================
+   JC BARLEY BUSINESS DASHBOARD
+========================================================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body.dashboard-body{
+    background:#f5f7fa;
+    font-family:"Segoe UI",Tahoma,Geneva,Verdana,sans-serif;
+    color:#343a40;
+}
+
+/* ==========================================================
+   SIDEBAR
+========================================================== */
+
+.sidebar{
+
+    position:fixed;
+
+    top:0;
+
+    left:0;
+
+    width:260px;
+
+    height:100vh;
+
+    background:#198754;
+
+    color:#fff;
+
+    display:flex;
+
+    flex-direction:column;
+
+    overflow-y:auto;
+
+    box-shadow:0 10px 25px rgba(0,0,0,.15);
+
+    z-index:1000;
+
+}
+
+.logo{
+
+    padding:30px 20px;
+
+    text-align:center;
+
+    border-bottom:1px solid rgba(255,255,255,.15);
+
+}
+
+.logo h4{
+
+    margin:0;
+
+    font-weight:700;
+
+    letter-spacing:.5px;
+
+}
+
+.logo i{
+
+    margin-right:8px;
+
+}
+
+/* ==========================================================
+   SIDEBAR LINKS
+========================================================== */
+
+.sidebar a{
+
+    color:#fff;
+
+    text-decoration:none;
+
+    padding:14px 25px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    transition:.25s;
+
+    font-weight:500;
+
+}
+
+.sidebar a:hover{
+
+    background:rgba(255,255,255,.15);
+
+    padding-left:35px;
+
+}
+
+.sidebar a.active{
+
+    background:#ffffff;
+
+    color:#198754;
+
+    font-weight:700;
+
+    border-left:5px solid #145c32;
+
+}
+
+.sidebar a i{
+
+    font-size:18px;
+
+}
+
+/* ==========================================================
+   LOGOUT
+========================================================== */
+
+.logout{
+
+    margin-top:auto;
+
+    border-top:1px solid rgba(255,255,255,.15);
+
+}
+
+.logout a{
+
+    color:#ffdddd;
+
+}
+
+.logout a:hover{
+
+    background:#dc3545;
+
+    color:#fff;
+
+}
+
+/* ==========================================================
+   MAIN CONTENT
+========================================================== */
+
+.main-content{
+
+    margin-left:260px;
+
+    min-height:100vh;
+
+    display:flex;
+
+    flex-direction:column;
+
+}
+
+/* ==========================================================
+   NAVBAR
+========================================================== */
+
+.navbar{
+
+    height:75px;
+
+    background:#fff !important;
+
+    border-bottom:1px solid #ececec;
+
+}
+
+.navbar h5{
+
+    margin-bottom:0;
+
+}
+
+.dropdown-toggle::after{
+
+    display:none;
+
+}
+
+/* ==========================================================
+   PAGE CONTENT
+========================================================== */
+
+.content{
+
+    padding:30px;
+
+}
+
+/* ==========================================================
+   DASHBOARD CARDS
+========================================================== */
+
+.dashboard-card{
+
+    background:#fff;
+
+    border-radius:18px;
+
+    padding:25px;
+
+    box-shadow:0 8px 25px rgba(0,0,0,.06);
+
+    transition:.3s;
+
+    height:100%;
+
+}
+
+.dashboard-card:hover{
+
+    transform:translateY(-5px);
+
+    box-shadow:0 15px 35px rgba(0,0,0,.10);
+
+}
+
+.dashboard-card h6{
+
+    color:#6c757d;
+
+    margin-bottom:10px;
+
+}
+
+.dashboard-card h2{
+
+    font-weight:700;
+
+    color:#198754;
+
+}
+
+/* ==========================================================
+   QUICK ACTION
+========================================================== */
+
+.quick-action{
+
+    background:#fff;
+
+    border-radius:15px;
+
+    padding:18px;
+
+    text-align:center;
+
+    text-decoration:none;
+
+    color:#198754;
+
+    display:block;
+
+    transition:.3s;
+
+    box-shadow:0 5px 15px rgba(0,0,0,.05);
+
+}
+
+.quick-action:hover{
+
+    background:#198754;
+
+    color:#fff;
+
+    transform:translateY(-4px);
+
+}
+
+.quick-action i{
+
+    font-size:28px;
+
+    display:block;
+
+    margin-bottom:12px;
+
+}
+
+/* ==========================================================
+   TABLE / ACTIVITY
+========================================================== */
+
+.activity-box{
+
+    background:#fff;
+
+    border-radius:18px;
+
+    padding:25px;
+
+    box-shadow:0 8px 20px rgba(0,0,0,.06);
+
+}
+
+.activity-item{
+
+    padding:12px 0;
+
+    border-bottom:1px solid #ececec;
+
+}
+
+.activity-item:last-child{
+
+    border-bottom:none;
+
+}
+
+/* ==========================================================
+   BUTTONS
+========================================================== */
+
+.btn-success{
+
+    background:#198754;
+
+    border:none;
+
+}
+
+.btn-success:hover{
+
+    background:#157347;
+
+}
+
+/* ==========================================================
+   RESPONSIVE
+========================================================== */
+
+@media(max-width:992px){
+
+.sidebar{
+
+    width:80px;
+
+}
+
+.logo h4{
+
+    display:none;
+
+}
+
+.sidebar a{
+
+    justify-content:center;
+
+    padding:18px;
+
+}
+
+.sidebar a span{
+
+    display:none;
+
+}
+
+.main-content{
+
+    margin-left:80px;
+
+}
+
+}
+
+@media(max-width:768px){
+
+.sidebar{
+
+    position:fixed;
+
+    left:-260px;
+
+    transition:.3s;
+
+}
+
+.sidebar.show{
+
+    left:0;
+
+}
+
+.main-content{
+
+    margin-left:0;
+
+}
+
+.content{
+
+    padding:20px;
+
+}
+
+}
+
+.stat-icon{
+
+    font-size:50px;
+
+    opacity:.18;
+
+    transition:.3s;
+
+}
+
+.dashboard-card:hover .stat-icon{
+
+    transform:scale(1.15) rotate(-8deg);
+
+    opacity:.35;
+
+}
+
+.dashboard-card{
+
+    border:none;
+
+    border-radius:18px;
+
+    background:#fff;
+
+    padding:25px;
+
+    box-shadow:0 10px 25px rgba(0,0,0,.06);
+
+    transition:.3s;
+
+}
+
+.dashboard-card:hover{
+
+    transform:translateY(-6px);
+
+    box-shadow:0 20px 40px rgba(0,0,0,.10);
+
+}

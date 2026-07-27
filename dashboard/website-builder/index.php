@@ -21,202 +21,211 @@ $stmt->execute([
 $settings = $stmt->fetch(PDO::FETCH_ASSOC);
 
 include '../../includes/header.php';
-include '../../includes/navbar.php';
-
 ?>
-
-<div class="d-flex">
 
 <?php include '../../includes/sidebar.php'; ?>
 
-<div class="container-fluid p-4">
+<div class="main-content">
 
-<div class="card shadow-lg">
+    <?php include '../../includes/navbar.php'; ?>
 
-<div class="card-header bg-success text-white">
+    <div class="content">
 
-<h3 class="mb-0">
+        <div class="dashboard-card">
 
-🛠 Website Builder
+            <div class="d-flex justify-content-between align-items-center mb-4">
 
-</h3>
+                <h2 class="fw-bold text-success mb-0">
 
-</div>
+                    <i class="bi bi-globe2"></i>
 
-<div class="card-body">
+                    Website Builder
 
-<form
-action="../../auth/update_website_settings.php"
-method="POST">
+                </h2>
 
-<div class="row">
+                <button class="btn btn-success" form="websiteForm">
 
-<div class="col-md-6 mb-3">
+                    <i class="bi bi-floppy"></i>
 
-<label class="form-label">
+                    Save Changes
 
-Website Name
+                </button>
 
-</label>
+            </div>
 
-<input
-type="text"
-name="website_name"
-class="form-control"
-value="<?= htmlspecialchars($settings['website_name']) ?>">
+            <form
+                id="websiteForm"
+                action="../../auth/update_website_settings.php"
+                method="POST">
 
-</div>
+                <div class="row">
 
-<div class="col-md-6 mb-3">
+                    <div class="col-md-6 mb-4">
 
-<label class="form-label">
+                        <label class="form-label fw-semibold">
+                            Website Name
+                        </label>
 
-Tagline
+                        <input
+                            type="text"
+                            name="website_name"
+                            class="form-control"
+                            value="<?= htmlspecialchars($settings['website_name']) ?>">
 
-</label>
+                    </div>
 
-<input
-type="text"
-name="tagline"
-class="form-control"
-value="<?= htmlspecialchars($settings['tagline']) ?>">
+                    <div class="col-md-6 mb-4">
 
-</div>
+                        <label class="form-label fw-semibold">
+                            Tagline
+                        </label>
 
-</div>
+                        <input
+                            type="text"
+                            name="tagline"
+                            class="form-control"
+                            value="<?= htmlspecialchars($settings['tagline']) ?>">
 
-<div class="mb-3">
+                    </div>
 
-<label class="form-label">
+                </div>
 
-About
+                <div class="mb-4">
 
-</label>
+                    <label class="form-label fw-semibold">
 
-<textarea
-name="about"
-rows="5"
-class="form-control"><?= htmlspecialchars($settings['about']) ?></textarea>
+                        About Business
 
-</div>
+                    </label>
 
-<div class="row">
+                    <textarea
+                        class="form-control"
+                        rows="6"
+                        name="about"><?= htmlspecialchars($settings['about']) ?></textarea>
 
-<div class="col-md-4 mb-3">
+                </div>
 
-<label>
+                <hr class="my-4">
 
-Contact Number
+                <h4 class="fw-bold mb-4">
 
-</label>
+                    Contact Information
 
-<input
-type="text"
-name="contact_number"
-class="form-control"
-value="<?= htmlspecialchars($settings['contact_number']) ?>">
+                </h4>
 
-</div>
+                <div class="row">
 
-<div class="col-md-4 mb-3">
+                    <div class="col-md-4 mb-3">
 
-<label>
+                        <label class="form-label">
 
-Email
+                            Contact Number
 
-</label>
+                        </label>
 
-<input
-type="email"
-name="email"
-class="form-control"
-value="<?= htmlspecialchars($settings['email']) ?>">
+                        <input
+                            type="text"
+                            class="form-control"
+                            name="contact_number"
+                            value="<?= htmlspecialchars($settings['contact_number']) ?>">
 
-</div>
+                    </div>
 
-<div class="col-md-4 mb-3">
+                    <div class="col-md-4 mb-3">
 
-<label>
+                        <label class="form-label">
 
-Facebook
+                            Email Address
 
-</label>
+                        </label>
 
-<input
-type="text"
-name="facebook"
-class="form-control"
-value="<?= htmlspecialchars($settings['facebook']) ?>">
+                        <input
+                            type="email"
+                            class="form-control"
+                            name="email"
+                            value="<?= htmlspecialchars($settings['email']) ?>">
 
-</div>
+                    </div>
 
-</div>
+                    <div class="col-md-4 mb-3">
 
-<hr>
+                        <label class="form-label">
 
-<h5 class="mb-3">
+                            Facebook Page
 
-Website Branding
+                        </label>
 
-</h5>
+                        <input
+                            type="text"
+                            class="form-control"
+                            name="facebook"
+                            value="<?= htmlspecialchars($settings['facebook']) ?>">
 
-<div class="row">
+                    </div>
 
-<div class="col-md-6">
+                </div>
 
-<div class="border rounded p-4 text-center">
+                <hr class="my-4">
 
-Logo
+                <h4 class="fw-bold mb-4">
 
-<br><br>
+                    Branding
 
-<small class="text-muted">
+                </h4>
 
-Coming Soon
+                <div class="row">
 
-</small>
+                    <div class="col-md-6">
 
-</div>
+                        <div class="border rounded-4 p-5 text-center bg-light">
 
-</div>
+                            <i class="bi bi-image fs-1 text-success"></i>
 
-<div class="col-md-6">
+                            <h5 class="mt-3">
 
-<div class="border rounded p-4 text-center">
+                                Website Logo
 
-Banner
+                            </h5>
 
-<br><br>
+                            <small class="text-muted">
 
-<small class="text-muted">
+                                Upload feature will be added next.
 
-Coming Soon
+                            </small>
 
-</small>
+                        </div>
 
-</div>
+                    </div>
 
-</div>
+                    <div class="col-md-6">
 
-</div>
+                        <div class="border rounded-4 p-5 text-center bg-light">
 
-<hr>
+                            <i class="bi bi-card-image fs-1 text-success"></i>
 
-<button
-type="submit"
-class="btn btn-success">
+                            <h5 class="mt-3">
 
-💾 Save Website
+                                Hero Banner
 
-</button>
+                            </h5>
 
-</form>
+                            <small class="text-muted">
 
-</div>
+                                Upload feature will be added next.
 
-</div>
+                            </small>
 
-</div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
 
 </div>
 
