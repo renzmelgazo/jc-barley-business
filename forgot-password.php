@@ -40,9 +40,44 @@ Enter your registered email address.
 
 </p>
 
+<?php if(isset($_GET['success'])): ?>
+
+<div class="alert alert-success alert-dismissible fade show mb-3" role="alert">
+
+    <i class="bi bi-check-circle-fill"></i>
+
+    If an account with that email exists, a password reset link has been sent.
+
+    <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="alert">
+    </button>
+
+</div>
+
+<?php endif; ?>
+
+<?php if(isset($_GET['error']) && $_GET['error'] == 'empty'): ?>
+
+<div class="alert alert-danger alert-dismissible fade show mb-3" role="alert">
+
+    <i class="bi bi-exclamation-circle-fill"></i>
+
+    Please enter your email address.
+
+    <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="alert">
+    </button>
+
+</div>
+
+<?php endif; ?>
+
 <form
-action="auth/forgot-password.php"
-method="POST">
+action="auth/forgot-password.php"method="POST">
 
 <div class="mb-3">
 

@@ -1,72 +1,83 @@
-<div class="bg-dark text-white d-flex flex-column p-3"
-     style="width:260px; min-height:100vh;">
+<div class="sidebar">
 
-    <h3 class="text-center mb-4">
-        JC Barley
-    </h3>
+<div class="logo">
 
-    <hr class="text-secondary">
+<h4>
 
-    <a href="../index.php"
-       class="text-white text-decoration-none py-2 px-3 rounded mb-2">
+<i class="bi bi-grid-fill"></i>
 
-        🏠 Dashboard
+JC Barley
 
-    </a>
+</h4>
 
-    <a href="../achievements/index.php"
-       class="text-white text-decoration-none py-2 px-3 rounded mb-2">
+</div>
 
-        🏆 Achievements
+<a href="../dashboard/index.php">
 
-    </a>
+<i class="bi bi-speedometer2"></i>
 
-    <a href="../gallery/index.php"
-       class="text-white text-decoration-none py-2 px-3 rounded mb-2">
+Dashboard
 
-        🖼 Gallery
+</a>
 
-    </a>
+<a href="../dashboard/website.php">
 
-    <a href="../messages/index.php"
-       class="text-white text-decoration-none py-2 px-3 rounded mb-2">
+<i class="bi bi-globe"></i>
 
-        📩 Messages
+Website Builder
 
-    </a>
+</a>
 
-    <a href="../website-settings/index.php"
-       class="text-white text-decoration-none py-2 px-3 rounded mb-2">
+<a href="../dashboard/achievements.php">
 
-        🛠 Website Builder
+<i class="bi bi-trophy-fill"></i>
 
-    </a>
+Achievements
 
-    <a href="../profile.php"
-       class="text-white text-decoration-none py-2 px-3 rounded mb-2">
+</a>
 
-        👤 My Profile
+<a href="../dashboard/gallery.php">
 
-    </a>
+<i class="bi bi-images"></i>
 
-    <a href="../settings.php"
-       class="text-white text-decoration-none py-2 px-3 rounded mb-2">
+Gallery
 
-        ⚙️ Settings
+</a>
 
-    </a>
+<a href="../dashboard/messages.php">
 
-    <div class="mt-auto">
+<i class="bi bi-envelope-fill"></i>
 
-        <hr class="text-secondary">
+Messages
 
-        <a href="../../logout.php"
-           class="text-danger text-decoration-none py-2 px-3 d-block">
+</a>
 
-            🚪 Logout
+<a href="../dashboard/profile.php">
 
-        </a>
+<i class="bi bi-person-circle"></i>
 
-    </div>
+Profile
+
+</a>
+
+<a href="../dashboard/settings.php">
+
+<i class="bi bi-gear-fill"></i>
+
+Settings
+
+</a>
+
+<div class="logout">
+
+<a href="../auth/logout.php">
+
+<i class="bi bi-box-arrow-right"></i>
+
+Logout
+
+</a>
+
+</div>
 
 </div>

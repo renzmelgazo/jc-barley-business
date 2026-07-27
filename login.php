@@ -168,6 +168,16 @@ Customer Messages
 </div>
 <?php endif; ?>
 
+<?php if(isset($_GET['password_reset'])): ?>
+<div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
+    <i class="bi bi-check-circle-fill"></i>
+    Your password has been reset successfully. You can now log in with your new password.
+    <button type="button"
+            class="btn-close"
+            data-bs-dismiss="alert"></button>
+</div>
+<?php endif; ?>
+
 <form action="auth/login.php" method="POST">
 
     <div class="mb-3">
@@ -179,11 +189,12 @@ Customer Messages
         </label>
 
         <input
-            type="text"
-            name="login"
-            class="form-control"
-            placeholder="Enter your username or email"
-            required>
+    type="text"
+    name="login"
+    class="form-control"
+    placeholder="Enter your username or email"
+    value="<?= htmlspecialchars($_GET['login'] ?? '') ?>"
+    required>
 
     </div>
 

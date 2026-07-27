@@ -23,14 +23,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if (!$user) {
-    header("Location: ../login.php?error=invalid");
+/*
+|--------------------------------------------------------------------------
+| User Not Found
+|--------------------------------------------------------------------------
+*/
+
+if (!$user) {
+
+    header("Location: ../login.php?error=invalid&login=" . urlencode($login));
+
     exit;
+
 }
 
+/*
+|--------------------------------------------------------------------------
+| Wrong Password
+|--------------------------------------------------------------------------
+*/
+
 if (!password_verify($password, $user['password'])) {
-    header("Location: ../login.php?error=invalid");
+
+    header("Location: ../login.php?error=invalid&login=" . urlencode($login));
+
     exit;
+
 }
     if ($user['status'] !== 'active') {
         die("Your account is inactive.");
