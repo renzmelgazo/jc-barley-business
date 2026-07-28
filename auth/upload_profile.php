@@ -14,13 +14,17 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 if (!isset($_FILES['profile_picture'])) {
-    die("No file uploaded.");
+    $_SESSION['error'] = "Please select an image first.";
+header("Location: ../dashboard/profile.php");
+exit;
 }
 
 $file = $_FILES['profile_picture'];
 
 if ($file['error'] !== UPLOAD_ERR_OK) {
-    die("Upload failed.");
+    $_SESSION['error'] = "Upload failed. Please try again.";
+header("Location: ../dashboard/profile.php");
+exit;
 }
 
 $allowedTypes = [
@@ -34,11 +38,15 @@ $mime = finfo_file($finfo, $file['tmp_name']);
 finfo_close($finfo);
 
 if (!isset($allowedTypes[$mime])) {
-    die("Only JPG, PNG and WEBP files are allowed.");
+    $_SESSION['error'] = "Only JPG, PNG and WEBP images are allowed.";
+header("Location: ../dashboard/profile.php");
+exit;
 }
 
 if ($file['size'] > 2 * 1024 * 1024) {
-    die("Maximum file size is 2MB.");
+    $_SESSION['error'] = "Image is too large. Maximum file size is 2MB.";
+header("Location: ../dashboard/profile.php");
+exit;
 }
 
 $extension = $allowedTypes[$mime];
@@ -53,7 +61,9 @@ if (!is_dir($uploadDir)) {
 $destination = $uploadDir . $filename;
 
 if (!move_uploaded_file($file['tmp_name'], $destination)) {
-    die("Failed to save uploaded file.");
+    $_SESSION['error'] = "Failed to save the uploaded image.";
+header("Location: ../dashboard/profile.php");
+exit;
 }
 
 /*
@@ -105,6 +115,10 @@ $stmt->execute([
     ':picture' => $filename,
     ':id' => $_SESSION['user_id']
 ]);
+
+$_SESSION['profile_picture'] = $filename;
+
+$_SESSION['success'] = "Profile picture updated successfully.";
 
 header("Location: ../dashboard/profile.php");
 exit;

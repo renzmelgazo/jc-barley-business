@@ -8,6 +8,8 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
+$pageTitle = "Messages";
+
 $stmt = $conn->prepare("
     SELECT *
     FROM contact_messages
@@ -22,41 +24,46 @@ $stmt->execute([
 $messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 include '../../includes/header.php';
-include '../../includes/navbar.php';
 
 ?>
 
-<div class="d-flex">
+<?php include '../../includes/sidebar.php'; ?>
 
-    <?php include '../../includes/sidebar.php'; ?>
+<div class="main-content">
 
-    <div class="container-fluid p-4">
+    <?php include '../../includes/navbar.php'; ?>
 
-        <h2 class="mb-4">Contact Messages</h2>
+    <div class="content">
 
-        <div class="card shadow">
+        <div class="dashboard-card">
 
-            <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-4">
 
-                <table class="table table-bordered table-hover">
+                <h2 class="fw-bold mb-0">
+
+                    <i class="bi bi-envelope-fill text-success"></i>
+
+                    Contact Messages
+
+                </h2>
+
+            </div>
+
+            <div class="table-responsive">
+
+                <table class="table table-hover align-middle">
 
                     <thead class="table-success">
 
                         <tr>
 
                             <th width="70">ID</th>
-
                             <th>Full Name</th>
-
                             <th>Email</th>
-
                             <th>Subject</th>
-
                             <th>Status</th>
-
                             <th width="140">Date</th>
-
-                            <th width="180">Action</th>
+                            <th width="180">Actions</th>
 
                         </tr>
 
@@ -112,6 +119,8 @@ include '../../includes/navbar.php';
                                     href="view.php?id=<?= $row['id'] ?>"
                                     class="btn btn-primary btn-sm">
 
+                                    <i class="bi bi-eye"></i>
+
                                     View
 
                                 </a>
@@ -120,6 +129,8 @@ include '../../includes/navbar.php';
                                     href="../../auth/delete_message.php?id=<?= $row['id'] ?>"
                                     class="btn btn-danger btn-sm"
                                     onclick="return confirm('Delete this message?')">
+
+                                    <i class="bi bi-trash"></i>
 
                                     Delete
 

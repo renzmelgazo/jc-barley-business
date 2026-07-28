@@ -20,6 +20,7 @@ $stmt->execute([
 
 $settings = $stmt->fetch(PDO::FETCH_ASSOC);
 
+$pageTitle = "Website Builder";
 include '../../includes/header.php';
 ?>
 

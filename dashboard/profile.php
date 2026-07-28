@@ -24,17 +24,62 @@ $profileImage = !empty($user['profile_picture'])
     ? "../uploads/profiles/" . $user['profile_picture']
     : "../assets/images/default-avatar.png";
 
+$pageTitle = "My Profile";
 include '../includes/header.php';
-include '../includes/navbar.php';
 ?>
 
-<div class="d-flex">
+<?php include '../includes/sidebar.php'; ?>
 
-    <?php include '../includes/sidebar.php'; ?>
+<div class="main-content">
 
-    <div class="container-fluid p-5">
+    <?php include '../includes/navbar.php'; ?>
+
+    <div class="content">
+
+        <?php if(isset($_SESSION['success'])): ?>
+
+        <div class="alert alert-success alert-dismissible fade show mb-4">
+
+            <i class="bi bi-check-circle-fill me-2"></i>
+
+            <?= $_SESSION['success']; ?>
+
+            <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="alert">
+            </button>
+
+        </div>
+
+        <?php unset($_SESSION['success']); ?>
+
+        <?php endif; ?>
+
+
+        <?php if(isset($_SESSION['error'])): ?>
+
+        <div class="alert alert-danger alert-dismissible fade show mb-4">
+
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+
+            <?= $_SESSION['error']; ?>
+
+            <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="alert">
+            </button>
+
+        </div>
+
+        <?php unset($_SESSION['error']); ?>
+
+        <?php endif; ?>
 
         <h2 class="fw-bold mb-4">My Profile</h2>
+
+
 
         <div class="card shadow-lg border-0 rounded-4 mx-auto" style="max-width:950px;">
 
@@ -46,9 +91,15 @@ include '../includes/navbar.php';
                     <div class="col-md-4 text-center border-end">
 
                         <img
-src="<?= $profileImage ?>"
-class="rounded-circle shadow border border-3 mb-4 profile-picture"
-alt="Profile Picture">
+    src="<?= $profileImage ?>"
+    class="rounded-circle shadow border border-3 mb-4"
+    alt="Profile Picture"
+    style="
+        width:200px;
+        height:200px;
+        object-fit:cover;
+        border-color:#198754!important;
+    ">
 
                         <form
                             action="../auth/upload_profile.php"
@@ -56,11 +107,19 @@ alt="Profile Picture">
                             enctype="multipart/form-data">
 
                             <input
-                                type="file"
-                                name="profile_picture"
-                                class="form-control mb-3"
-                                accept=".jpg,.jpeg,.png,.webp"
-                                required>
+    type="file"
+    name="profile_picture"
+    class="form-control mb-2"
+    accept=".jpg,.jpeg,.png,.webp"
+    required>
+
+<small class="text-muted">
+
+Allowed:
+JPG, JPEG, PNG, WEBP
+(Maximum 2MB)
+
+</small>
 
                             <button
                                 class="btn btn-success w-100">

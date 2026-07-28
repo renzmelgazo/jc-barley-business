@@ -109,6 +109,7 @@ $stmt->execute([
 
 $recentMessages = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+$pageTitle = "Dashboard";
 include '../includes/header.php';
 ?>
 

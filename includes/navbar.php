@@ -1,96 +1,134 @@
+<?php
+
+require_once __DIR__ . '/../config/app.php';
+
+$navProfileImage = !empty($_SESSION['profile_picture'])
+    ? BASE_URL . "/uploads/profiles/" . $_SESSION['profile_picture']
+    : BASE_URL . "/assets/images/default-avatar.png";
+
+?>
+
 <nav class="navbar navbar-expand-lg bg-white shadow-sm px-4">
 
-<div class="container-fluid">
+    <div class="container-fluid">
 
-<div>
+        <div>
 
-<h5 class="mb-0 fw-bold text-success">
+            <h5 class="mb-0 fw-bold text-success">
+                JC Barley Business
+            </h5>
 
-JC Barley Business
+            <small class="text-muted">
+                Dashboard
+            </small>
 
-</h5>
+        </div>
 
-<small class="text-muted">
+        <div class="dropdown">
 
-Dashboard
+            <a
+                href="#"
+                class="text-decoration-none text-dark d-flex align-items-center"
+                data-bs-toggle="dropdown">
 
-</small>
+                <div class="position-relative me-3">
 
-</div>
+                    <img
+                        src="<?= $navProfileImage ?>"
+                        alt="Profile Picture"
+                        class="rounded-circle shadow-sm"
+                        style="
+                            width:48px;
+                            height:48px;
+                            object-fit:cover;
+                            border:2px solid #198754;
+                        ">
 
-<div class="dropdown">
+                    <!-- Online Status -->
+                    <span
+                        class="position-absolute bottom-0 end-0 bg-success border border-white rounded-circle"
+                        style="
+                            width:13px;
+                            height:13px;
+                        ">
+                    </span>
 
-<a
-href="#"
-class="text-decoration-none text-dark d-flex align-items-center"
-data-bs-toggle="dropdown">
+                </div>
 
-<i class="bi bi-person-circle fs-2 me-2 text-success"></i>
+                <div class="text-start">
 
-<div class="text-start">
+                    <div class="fw-bold">
 
-<div class="fw-semibold">
+                        <?= htmlspecialchars($_SESSION['fullname']) ?>
 
-<?= htmlspecialchars($_SESSION['fullname']) ?>
+                    </div>
 
-</div>
+                    <small class="text-muted">
 
-<small class="text-muted">
+                        Administrator
 
-Administrator
+                    </small>
 
-</small>
+                </div>
 
-</div>
+                <i class="bi bi-chevron-down ms-3"></i>
 
-<i class="bi bi-chevron-down ms-2"></i>
+            </a>
 
-</a>
+            <ul class="dropdown-menu dropdown-menu-end shadow">
 
-<ul class="dropdown-menu dropdown-menu-end shadow">
+                <li>
 
-<li>
+                    <a
+                        class="dropdown-item"
+                        href="<?= DASHBOARD_URL ?>/profile.php">
 
-<a class="dropdown-item" href="profile.php">
+                        <i class="bi bi-person-circle me-2"></i>
 
-<i class="bi bi-person me-2"></i>
+                        My Profile
 
-Profile
+                    </a>
 
-</a>
+                </li>
 
-</li>
+                <li>
 
-<li>
+                    <a
+                        class="dropdown-item"
+                        href="<?= DASHBOARD_URL ?>/settings.php">
 
-<a class="dropdown-item" href="settings.php">
+                        <i class="bi bi-gear me-2"></i>
 
-<i class="bi bi-gear me-2"></i>
+                        Settings
 
-Settings
+                    </a>
 
-</a>
+                </li>
 
-</li>
+                <li>
 
-<li><hr class="dropdown-divider"></li>
+                    <hr class="dropdown-divider">
 
-<li>
+                </li>
 
-<a class="dropdown-item text-danger" href="../auth/logout.php">
+                <li>
 
-<i class="bi bi-box-arrow-right me-2"></i>
+                    <a
+                        class="dropdown-item text-danger"
+                        href="<?= BASE_URL ?>/logout.php">
 
-Logout
+                        <i class="bi bi-box-arrow-right me-2"></i>
 
-</a>
+                        Logout
 
-</li>
+                    </a>
 
-</ul>
+                </li>
 
-</div>
+            </ul>
 
-</div>
+        </div>
+
+    </div>
 
 </nav>

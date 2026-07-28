@@ -59,6 +59,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         ':id' => $_SESSION['user_id']
     ]);
 
+    $_SESSION['profile_picture'] = $filename;
+$_SESSION['success'] = "Profile picture updated successfully.";
+
     // Update session values
     $_SESSION['fullname'] = $fullname;
     $_SESSION['username'] = $username;

@@ -21,6 +21,7 @@ $stmt->execute([
 
 $achievements = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+$pageTitle = "Achievements";
 include '../../includes/header.php';
 ?>
 

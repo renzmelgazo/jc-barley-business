@@ -64,6 +64,7 @@ $_SESSION['user_id'] = $user['id'];
 $_SESSION['fullname'] = $user['fullname'];
 $_SESSION['username'] = $user['username'];
 $_SESSION['email'] = $user['email'];
+$_SESSION['profile_picture'] = $user['profile_picture'];
 
 /*
 |--------------------------------------------------------------------------

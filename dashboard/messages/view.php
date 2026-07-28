@@ -57,6 +57,7 @@ if (!$message) {
     die("Message not found.");
 }
 
+$pageTitle = "Messages";
 include '../../includes/header.php';
 include '../../includes/navbar.php';
 
