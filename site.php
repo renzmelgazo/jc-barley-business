@@ -2,14 +2,18 @@
 
 require 'config/database.php';
 
-// Check if owner slug exists
 if (!isset($_GET['owner']) || empty($_GET['owner'])) {
-    die("Owner not specified.");
+    die("Website not specified.");
 }
 
 $slug = trim($_GET['owner']);
 
-// Get owner information
+/*
+|--------------------------------------------------------------------------
+| Get Website Owner
+|--------------------------------------------------------------------------
+*/
+
 $stmt = $conn->prepare("
     SELECT *
     FROM users
@@ -27,9 +31,12 @@ if (!$owner) {
     die("Website not found.");
 }
 
+$ownerId = $owner['id'];
+$ownerName = $owner['fullname'];
+
 /*
 |--------------------------------------------------------------------------
-| Get Website Settings
+| Website Settings
 |--------------------------------------------------------------------------
 */
 
@@ -37,34 +44,27 @@ $stmt = $conn->prepare("
     SELECT *
     FROM website_settings
     WHERE owner_id = :owner_id
+    LIMIT 1
 ");
 
 $stmt->execute([
-    ':owner_id' => $owner['id']
+    ':owner_id' => $ownerId
 ]);
 
 $settings = $stmt->fetch(PDO::FETCH_ASSOC);
 
-$stmt->execute([
-    ':owner_id' => $owner['id']
-]);
+/*
+|--------------------------------------------------------------------------
+| Achievements
+|--------------------------------------------------------------------------
+*/
 
-$settings = $stmt->fetch(PDO::FETCH_ASSOC);
-
-if (!$owner) {
-    die("Website not found.");
-}
-
-// Save owner info
-$ownerId = $owner['id'];
-$ownerName = $owner['fullname'];
-
-// Load Achievements
 $stmt = $conn->prepare("
     SELECT *
     FROM achievements
     WHERE owner_id = :owner_id
     ORDER BY award_date DESC
+    LIMIT 6
 ");
 
 $stmt->execute([
@@ -72,370 +72,290 @@ $stmt->execute([
 ]);
 
 $achievements = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-// Load Gallery
-$stmt = $conn->prepare("
-    SELECT *
-    FROM gallery
-    WHERE owner_id = :owner_id
-    ORDER BY created_at DESC
-");
-
-$stmt->execute([
-    ':owner_id' => $ownerId
-]);
-
-$gallery = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-
-<meta charset="UTF-8">
-
-<title>
-<?= htmlspecialchars($settings['website_name'] ?: $ownerName) ?>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+<?= htmlspecialchars($settings['website_name'] ?? $ownerName) ?>
 </title>
 
-<link
-href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-rel="stylesheet">
-
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
 
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-success shadow sticky-top">
+    <!-- Navigation -->
+    <header>
 
-    <div class="container">
-
-        <a class="navbar-brand fw-bold" href="#">
-
-            <?= htmlspecialchars($settings['website_name']) ?>
-
-        </a>
-
-        <button
-            class="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarNav">
-
-            <span class="navbar-toggler-icon"></span>
-
-        </button>
-
-        <div
-            class="collapse navbar-collapse"
-            id="navbarNav">
-
-            <ul class="navbar-nav ms-auto">
-
-                <li class="nav-item">
-                    <a class="nav-link" href="#home">
-                        Home
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" href="#about">
-                        About
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" href="#achievements">
-                        Achievements
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" href="#gallery">
-                        Gallery
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" href="#contact">
-                        Contact
-                    </a>
-                </li>
-
-            </ul>
-
+        <div class="logo">
+            <img src="assets/images/logo.png" alt="Logo">
+            <h2>
+<?= htmlspecialchars($settings['website_name'] ?? 'JC Barley Business') ?>
+</h2>
         </div>
 
-    </div>
-
+        <nav>
+    <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#achievements">Achievements</a></li>
+        <li><a href="#gallery">Gallery</a></li>
+        <li><a href="#chat">Support</a></li>
+    </ul>
 </nav>
 
-<div class="container py-5" id="home">
+    </header>
 
-<div
-    id="about"
-    class="text-center py-5 mb-5 rounded shadow"
-     style="background:#198754;color:white;">
+    <!-- Hero Section -->
+    <section id="home" class="hero">
 
-    <h5 class="text-uppercase">
+        <h1>
+<?= htmlspecialchars(
+    !empty($settings['hero_title'])
+        ? $settings['hero_title']
+        : 'Empowering Success Through JC Barley Business'
+) ?>
+</h1>
 
-        <?= htmlspecialchars($settings['website_name']) ?>
 
-    </h5>
+        <p>
+Discover inspiring achievements, successful members, and the journey of building a better future together.
+</p>
 
-    <h1 class="display-4 fw-bold mt-3">
+        <a href="#achievements" class="btn">
+    View Achievements
+</a>
 
-        <?= htmlspecialchars($ownerName) ?>
+    </section>
 
-    </h1>
+    <!-- About Section -->
+    <section id="about" class="about">
 
-    <p class="lead">
+        <div class="about-text">
 
-        <?= htmlspecialchars($settings['tagline']) ?>
+           <h2>About JC Barley Business</h2>
 
-    </p>
+            <p>
 
-    <hr
-        class="mx-auto"
-        style="width:120px;border:2px solid white;">
-
-    <p class="mt-3">
-
-        <?= nl2br(htmlspecialchars($settings['about'])) ?>
-
-    </p>
-
-</div>
-
-<h3>About</h3>
-
-<p>
-
-<?= nl2br(htmlspecialchars($settings['about'])) ?>
+JC Barley Business is committed to empowering individuals by providing opportunities for personal growth, financial success, and entrepreneurship.
 
 </p>
 
-<hr>
+<p>Through dedication, teamwork, and continuous learning, our community continues to grow stronger every day.</p>
+        </div>
 
-<h2 id="achievements" class="text-center mb-5">
+        <div class="about-image">
 
-    🏆 Achievements
+            <img src="assets/images/about.jpg" alt="About JC Barley">
+        </div>
 
-</h2>
+    </section>
 
-<div class="row">
+    <!-- Statistics Section -->
+    <section class="stats">
 
-<?php if(count($achievements) > 0): ?>
+        <div class="stat-box">
+            <h2>10+</h2>
+            <p>Years in Business</p>
+        </div>
 
-    <?php foreach($achievements as $row): ?>
+        <div class="stat-box">
+            <h2>5,000+</h2>
+            <p>Happy Members</p>
+        </div>
 
-    <div class="col-md-4 mb-4">
+        <div class="stat-box">
+            <h2>100+</h2>
+            <p>Awards Received</p>
+        </div>
 
-        <div class="card h-100 shadow border-0">
+        <div class="stat-box">
+            <h2>1,000+</h2>
+            <p>Success Stories</p>
+        </div>
 
-            <img
-                src="uploads/achievements/<?= htmlspecialchars($row['image']) ?>"
-                class="card-img-top"
-                style="height:220px;object-fit:cover;">
+    </section>
 
-            <div class="card-body">
+    <!-- Gallery Section -->
+    <section id="gallery" class="gallery">
 
-                <h5 class="fw-bold">
+        <h2>Our Gallery</h2>
 
-                    <?= htmlspecialchars($row['title']) ?>
+        <p>
+            Explore memorable moments, successful events, inspiring achievements,
+            and the vibrant community of JC Barley Business.
+        </p>
 
-                </h5>
+        <div class="gallery-container">
 
-                <small class="text-muted">
+            <img src="assets/images/gallery1.jpg" alt="Gallery Image 1">
+            <img src="assets/images/gallery2.jpg" alt="Gallery Image 2">
+            <img src="assets/images/gallery3.jpg" alt="Gallery Image 3">
+            <img src="assets/images/gallery4.jpg" alt="Gallery Image 4">
+            <img src="assets/images/gallery5.jpg" alt="Gallery Image 5">
+            <img src="assets/images/gallery6.jpg" alt="Gallery Image 6">
 
-                    <?= date('F d, Y', strtotime($row['award_date'])) ?>
+        </div>
 
-                </small>
+    </section>
 
-                <hr>
+    <!-- Testimonials Section -->
+    <section class="testimonials">
+
+        <h2>What Our Members Say</h2>
+
+        <div class="testimonial-container">
+
+            <div class="testimonial-card">
+
+                <img src="assets/images/person1.jpg" alt="Member">
+
+                <h3>Maria Santos</h3>
 
                 <p>
+                    "JC Barley Business changed my life. I gained confidence,
+                    financial opportunities, and lifelong friends."
+                </p>
 
-                    <?= nl2br(htmlspecialchars($row['description'])) ?>
+            </div>
 
+            <div class="testimonial-card">
+
+                <img src="assets/images/person2.jpg" alt="Member">
+
+                <h3>Juan Dela Cruz</h3>
+
+                <p>
+                    "The support from the community inspired me to reach
+                    my goals and help others succeed."
+                </p>
+
+            </div>
+
+            <div class="testimonial-card">
+
+                <img src="assets/images/person3.jpg" alt="Member">
+
+                <h3>Ana Reyes</h3>
+
+                <p>
+                    "Every recognition motivates me to work harder and
+                    become a better leader."
                 </p>
 
             </div>
 
         </div>
 
-    </div>
+    </section>
 
-    <?php endforeach; ?>
+    <!-- Achievement Section -->
+<section class="achievement">
 
-<?php else: ?>
+    <h2>Latest Achievements</h2>
 
-<div class="col-12">
+    <div class="card-container">
 
-    <div class="alert alert-secondary text-center">
+        <?php if(count($achievements) > 0): ?>
 
-        No achievements available.
+            <?php foreach($achievements as $achievement): ?>
 
-    </div>
+                <div class="achievement-card">
 
-</div>
+                    <img
+                        src="uploads/achievements/<?= htmlspecialchars($achievement['image']) ?>"
+                        alt="<?= htmlspecialchars($achievement['title']) ?>">
 
-<?php endif; ?>
+                    <h3>
+                        <?= htmlspecialchars($achievement['title']) ?>
+                    </h3>
 
-</div>
+                    <p>
+                        <?= htmlspecialchars($achievement['description']) ?>
+                    </p>
 
-<h2 id="gallery" class="text-center mt-5 mb-5">
+                    <small>
+                        <?= date('F d, Y', strtotime($achievement['award_date'])) ?>
+                    </small>
 
-    🖼 Gallery
+                </div>
 
-</h2>
+            <?php endforeach; ?>
 
-<div class="row">
+        <?php else: ?>
 
-<?php if(count($gallery) > 0): ?>
+            <p>No achievements found.</p>
 
-<?php foreach($gallery as $row): ?>
-
-<div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-
-    <div class="card border-0 shadow h-100">
-
-        <img
-            src="uploads/gallery/<?= htmlspecialchars($row['image']) ?>"
-            class="card-img-top"
-            style="height:220px;object-fit:cover;">
-
-        <div class="card-body text-center">
-
-            <h6 class="fw-bold">
-
-                <?= htmlspecialchars($row['title']) ?>
-
-            </h6>
-
-            <p class="small text-muted">
-
-                <?= htmlspecialchars($row['description']) ?>
-
-            </p>
-
-        </div>
+        <?php endif; ?>
 
     </div>
 
+</section>
+
+    <!-- Footer -->
+    <footer>
+
+        <p>
+            © 2026 JC Barley Business. All Rights Reserved.
+        </p>
+
+    </footer>
+
+    <script src="assets/js/script.js"></script>
+
+<!-- AI Chat Widget -->
+
+<div id="chat-button">
+
+    💬
+
 </div>
 
-<?php endforeach; ?>
+<div id="chat" class="chat-box">
 
-<?php else: ?>
+    <div class="chat-header">
 
-<div class="col-12">
-
-    <div class="alert alert-secondary text-center">
-
-        No gallery images available.
+        JC Barley AI Assistant
 
     </div>
 
+    <div id="chat-messages">
+
+        <div class="bot">
+    👋 Hello! Welcome to our website.
+
+    I'm your AI Assistant and I'm here to answer your questions about our products and services.
+
+    How may I assist you today?
 </div>
 
-<?php endif; ?>
+    </div>
 
-</div>
+    <div class="chat-input">
 
-<hr class="my-5">
-
-<h3>Contact Information</h3>
-
-<ul class="list-group mb-4">
-
-<li class="list-group-item">
-
-<strong>Phone:</strong>
-
-<?= htmlspecialchars($settings['contact_number']) ?>
-
-</li>
-
-<li class="list-group-item">
-
-<strong>Email:</strong>
-
-<?= htmlspecialchars($settings['email']) ?>
-
-</li>
-
-<li class="list-group-item">
-
-<strong>Facebook:</strong>
-
-<?= htmlspecialchars($settings['facebook']) ?>
-
-</li>
-
-</ul>
-
-<h3 id="contact">
-    Contact <?= htmlspecialchars($ownerName) ?>
-</h3>
-
-<form action="auth/save_contact.php" method="POST">
-
-    <input
-        type="hidden"
-        name="owner_id"
-        value="<?= $ownerId ?>">
-
-    <div class="mb-3">
         <input
             type="text"
-            name="fullname"
-            class="form-control"
-            placeholder="Full Name"
-            required>
+            id="message"
+            placeholder="Type a message...">
+
+        <button id="sendBtn">
+
+            Send
+
+        </button>
+
     </div>
-
-    <div class="mb-3">
-        <input
-            type="email"
-            name="email"
-            class="form-control"
-            placeholder="Email Address"
-            required>
-    </div>
-
-    <div class="mb-3">
-        <input
-            type="text"
-            name="subject"
-            class="form-control"
-            placeholder="Subject"
-            required>
-    </div>
-
-    <div class="mb-3">
-        <textarea
-            name="message"
-            class="form-control"
-            rows="5"
-            placeholder="Your Message"
-            required></textarea>
-    </div>
-
-    <button
-        class="btn btn-success"
-        type="submit">
-
-        Send Message
-
-    </button>
-
-</form>
 
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<link rel="stylesheet" href="chat/style.css">
+
+<script src="chat/script.js"></script>
 
 </body>
 

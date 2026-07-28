@@ -8,57 +8,219 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
-$pageTitle = "Settings";
-include '../includes/header.php';
-?>
+$stmt = $conn->prepare("
+    SELECT *
+    FROM users
+    WHERE id = :id
+");
 
-<?php include '../includes/sidebar.php'; ?>
+$stmt->execute([
+    ':id' => $_SESSION['user_id']
+]);
+
+$user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+$pageTitle = "Settings";
+
+include '../includes/header.php';
+include '../includes/sidebar.php';
+?>
 
 <div class="main-content">
 
-    <?php include '../includes/navbar.php'; ?>
+<?php include '../includes/navbar.php'; ?>
 
-    <div class="content">
+<div class="content">
 
-        <div class="dashboard-card">
+<?php if(isset($_SESSION['success'])): ?>
 
-            <h2 class="fw-bold text-success mb-4">
+<div class="alert alert-success alert-dismissible fade show mb-4">
 
-                <i class="bi bi-gear-fill"></i>
+    <i class="bi bi-check-circle-fill me-2"></i>
 
-                Settings
+    <?= $_SESSION['success']; ?>
 
-            </h2>
+    <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="alert">
+    </button>
 
-            <div class="alert alert-info">
+</div>
 
-                <h5 class="mb-2">
+<?php unset($_SESSION['success']); ?>
 
-                    🚧 Coming Soon
+<?php endif; ?>
 
-                </h5>
 
-                <p class="mb-0">
+<?php if(isset($_SESSION['error'])): ?>
 
-                    This page will contain:
+<div class="alert alert-danger alert-dismissible fade show mb-4">
 
-                </p>
+    <i class="bi bi-exclamation-triangle-fill me-2"></i>
 
-                <ul class="mt-3 mb-0">
+    <?= $_SESSION['error']; ?>
 
-                    <li>Change Password</li>
+    <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="alert">
+    </button>
 
-                    <li>Two-Factor Authentication</li>
+</div>
 
-                    <li>Email Notifications</li>
+<?php unset($_SESSION['error']); ?>
 
-                    <li>Account Preferences</li>
+<?php endif; ?>
 
-                    <li>Security Settings</li>
+    <h2 class="fw-bold mb-4">
 
-                </ul>
+        <i class="bi bi-gear-fill text-success"></i>
 
-            </div>
+        Settings
+
+    </h2>
+
+    <div class="card shadow border-0">
+
+        <div class="card-body p-4">
+
+            <form action="../auth/update_settings.php" method="POST">
+
+                <h4 class="mb-4">
+
+                    Personal Information
+
+                </h4>
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+
+                        Full Name
+
+                    </label>
+
+                    <input
+                        type="text"
+                        name="fullname"
+                        class="form-control"
+                        value="<?= htmlspecialchars($user['fullname']) ?>">
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+
+                        Username
+
+                    </label>
+
+                    <input
+                        type="text"
+                        name="username"
+                        class="form-control"
+                        value="<?= htmlspecialchars($user['username']) ?>">
+
+                </div>
+
+                <div class="mb-4">
+
+                    <label class="form-label">
+
+                        Email
+
+                    </label>
+
+                    <input
+                        type="email"
+                        name="email"
+                        class="form-control"
+                        value="<?= htmlspecialchars($user['email']) ?>">
+
+                </div>
+
+                <button
+                    class="btn btn-success">
+
+                    Save Changes
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <br>
+
+    <div class="card shadow border-0">
+
+        <div class="card-body p-4">
+
+            <h4 class="mb-4">
+
+                Change Password
+
+            </h4>
+
+            <form action="../auth/change_password.php" method="POST">
+
+                <div class="mb-3">
+
+                    <label>
+
+                        Current Password
+
+                    </label>
+
+                    <input
+                        type="password"
+                        name="current_password"
+                        class="form-control">
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label>
+
+                        New Password
+
+                    </label>
+
+                    <input
+                        type="password"
+                        name="new_password"
+                        class="form-control">
+
+                </div>
+
+                <div class="mb-4">
+
+                    <label>
+
+                        Confirm Password
+
+                    </label>
+
+                    <input
+                        type="password"
+                        name="confirm_password"
+                        class="form-control">
+
+                </div>
+
+                <button
+                    class="btn btn-primary">
+
+                    Change Password
+
+                </button>
+
+            </form>
 
         </div>
 
@@ -66,4 +228,13 @@ include '../includes/header.php';
 
 </div>
 
+<br>
+
+
+
+</div>
+
+</div>
+
 <?php include '../includes/footer.php'; ?>
+

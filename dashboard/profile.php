@@ -197,25 +197,19 @@ JPG, JPEG, PNG, WEBP
 
                         </div>
 
-                        <div class="d-flex gap-3">
+                        <div class="text-center mt-4">
 
-                            <a
-                                href="edit-profile.php"
-                                class="btn btn-primary">
+    <a
+        href="settings.php"
+        class="btn btn-success px-4">
 
-                                Edit Profile
+        <i class="bi bi-gear-fill me-2"></i>
 
-                            </a>
+        Manage Account Settings
 
-                            <a
-                                href="change-password.php"
-                                class="btn btn-outline-secondary">
+    </a>
 
-                                Change Password
-
-                            </a>
-
-                        </div>
+</div>
 
                     </div>
 

@@ -57,17 +57,25 @@ if (!$message) {
     die("Message not found.");
 }
 
-$pageTitle = "Messages";
-include '../../includes/header.php';
-include '../../includes/navbar.php';
+$pageTitle = "View Message";
 
+include '../../includes/header.php';
+include '../../includes/sidebar.php';
 ?>
 
-<div class="d-flex">
+<div class="main-content">
 
-<?php include '../../includes/sidebar.php'; ?>
+<?php include '../../includes/navbar.php'; ?>
 
-<div class="container-fluid p-4">
+<div class="content">
+
+<h2 class="fw-bold mb-4">
+
+<i class="bi bi-envelope-open me-2 text-success"></i>
+
+View Message
+
+</h2>
 
 <h2 class="mb-4">View Message</h2>
 
