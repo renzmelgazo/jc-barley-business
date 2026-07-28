@@ -105,7 +105,7 @@ $achievements = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <li><a href="#about">About</a></li>
         <li><a href="#achievements">Achievements</a></li>
         <li><a href="#gallery">Gallery</a></li>
-        <li><a href="#chat">Support</a></li>
+        <li><a href="javascript:void(0)" id="support-link">Support</a></li>
     </ul>
 </nav>
 
@@ -316,7 +316,7 @@ JC Barley Business is committed to empowering individuals by providing opportuni
 
 </div>
 
-<div id="chat" class="chat-box">
+<div id="chat-box">
 
     <div class="chat-header">
 

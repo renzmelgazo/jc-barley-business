@@ -55,3 +55,11 @@ document.getElementById("chat-messages").appendChild(div);
 input.value="";
 
 }
+
+const supportLink = document.getElementById("support-link");
+
+if (supportLink) {
+    supportLink.onclick = function () {
+        box.style.display = "block";
+    };
+}
