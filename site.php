@@ -73,6 +73,7 @@ $stmt->execute([
 
 $achievements = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+
 /*
 |--------------------------------------------------------------------------
 | Gallery Images
@@ -187,15 +188,23 @@ Discover inspiring achievements, successful members, and the journey of building
 
         <div class="about-text">
 
-           <h2>About JC Barley Business</h2>
+           <h2>
 
-            <p>
+<?= htmlspecialchars(
+$settings['about_title']
+?? 'About JC Barley Business'
+) ?>
 
-JC Barley Business is committed to empowering individuals by providing opportunities for personal growth, financial success, and entrepreneurship.
+</h2>
+
+<p>
+
+<?= nl2br(htmlspecialchars(
+$settings['about_description']
+?? 'JC Barley Business is committed to empowering individuals by providing opportunities for personal growth, financial success, and entrepreneurship.'
+)) ?>
 
 </p>
-
-<p>Through dedication, teamwork, and continuous learning, our community continues to grow stronger every day.</p>
         </div>
 
         <div class="about-image">
@@ -254,19 +263,21 @@ alt="About">
 
         <div class="gallery-container">
 
-<?php
+<?php if(count($galleryImages)>0): ?>
 
-foreach($galleryImages as $img):
+    <?php foreach($galleryImages as $image): ?>
 
-if($img['section']!="gallery") continue;
+        <img
+            src="uploads/gallery/<?= htmlspecialchars($image['image']) ?>"
+            alt="<?= htmlspecialchars($image['title']) ?>">
 
-?>
+    <?php endforeach; ?>
 
-<img
-src="uploads/gallery/<?= htmlspecialchars($img['image']) ?>"
-alt="<?= htmlspecialchars($img['title']) ?>">
+<?php else: ?>
 
-<?php endforeach; ?>
+    <p>No gallery uploaded yet.</p>
+
+<?php endif; ?>
 
 </div>
 
@@ -426,6 +437,16 @@ window.ownerId = <?= $ownerId ?>;
 </script>
 
 <script src="chat/script.js"></script>
+
+<!-- Gallery Lightbox -->
+
+<div id="galleryModal" class="gallery-modal">
+
+    <span id="closeGallery">&times;</span>
+
+    <img id="galleryPreview">
+
+</div>
 
 </body>
 

@@ -1,130 +1,202 @@
+<?php
+
+require '../../config/session.php';
+
+if(!isset($_SESSION['user_id'])){
+    header("Location: ../../login.php");
+    exit;
+}
+
+$pageTitle="Add Gallery";
+
+include '../../includes/header.php';
+include '../../includes/sidebar.php';
+?>
+
+<div class="main-content">
+
+<?php include '../../includes/navbar.php'; ?>
+
+<div class="content">
+
+<div class="dashboard-card">
+
+<h2 class="fw-bold mb-4">
+
+<i class="bi bi-images text-success"></i>
+
+Add Gallery Image
+
+</h2>
+
 <form
-    action="../../auth/save_gallery.php"
-    method="POST"
-    enctype="multipart/form-data">
+action="../../auth/save_gallery.php"
+method="POST"
+enctype="multipart/form-data">
 
-    <div class="mb-3">
+<div class="row">
 
-        <label class="form-label">
-            Title
-        </label>
+<div class="col-md-6">
 
-        <input
-            type="text"
-            name="title"
-            class="form-control"
-            required>
+<label class="form-label">
 
-    </div>
+Image Title
 
-    <div class="mb-3">
+</label>
 
-        <label class="form-label">
-            Description
-        </label>
-
-        <div class="mb-3">
-
-    <label class="form-label">
-
-        Website Section
-
-    </label>
-
-    <select
-        name="section"
-        class="form-select"
-        required>
-
-        <option value="">Select Section</option>
-
-        <option value="hero">Hero Banner</option>
-
-        <option value="about">About Section</option>
-
-        <option value="gallery">Gallery Section</option>
-
-        <option value="achievement">Achievement Section</option>
-
-        <option value="testimonial">Testimonials</option>
-
-    </select>
+<input
+type="text"
+name="title"
+class="form-control form-control-lg"
+required>
 
 </div>
 
-        <textarea
-            name="description"
-            class="form-control"
-            rows="4"></textarea>
+<div class="col-md-6">
 
-    </div>
+<label class="form-label">
 
-    <div class="mb-3">
+Website Section
 
-        <label class="form-label">
-            Website Section
-        </label>
+</label>
 
-        <select
-            name="section"
-            class="form-select"
-            required>
+<select
+name="section"
+class="form-select form-select-lg"
+required>
 
-            <option value="">Select Section</option>
+<option value="">Select Section</option>
 
-            <option value="hero">
-                Hero Banner
-            </option>
+<option value="hero">Hero Banner</option>
 
-            <option value="about">
-                About Section
-            </option>
+<option value="about">About Section</option>
 
-            <option value="gallery">
-                Gallery
-            </option>
+<option value="gallery">Gallery</option>
 
-            <option value="testimonial">
-                Testimonials
-            </option>
+<option value="achievement">Achievement</option>
 
-            <option value="achievement">
-                Achievement
-            </option>
+<option value="testimonial">Testimonial</option>
 
-        </select>
+</select>
 
-    </div>
+</div>
 
-    <div class="mb-3">
+</div>
 
-        <label class="form-label">
-            Image
-        </label>
+<div class="mt-4">
 
-        <input
-            type="file"
-            name="image"
-            class="form-control"
-            accept=".jpg,.jpeg,.png,.webp"
-            required>
+<label class="form-label">
 
-    </div>
+Description
 
-    <button
-        type="submit"
-        class="btn btn-success">
+</label>
 
-        Save Gallery
+<textarea
+name="description"
+rows="5"
+class="form-control"></textarea>
 
-    </button>
+</div>
 
-    <a
-        href="index.php"
-        class="btn btn-secondary">
+<div class="mt-4">
 
-        Cancel
+<label class="form-label">
 
-    </a>
+Upload Image
+
+</label>
+
+<div class="upload-box">
+
+<input
+type="file"
+id="imageInput"
+name="image"
+accept=".jpg,.jpeg,.png,.webp"
+required>
+
+<div id="previewArea">
+
+<div class="upload-icon">
+
+📷
+
+</div>
+
+<p>
+
+Click here to upload image
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="mt-5">
+
+<button
+class="btn btn-success btn-lg">
+
+Save Gallery
+
+</button>
+
+<a
+href="index.php"
+class="btn btn-outline-secondary btn-lg">
+
+Cancel
+
+</a>
+
+</div>
 
 </form>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+const input=document.getElementById("imageInput");
+
+const preview=document.getElementById("previewArea");
+
+input.onchange=function(){
+
+const file=this.files[0];
+
+if(!file)return;
+
+const reader=new FileReader();
+
+reader.onload=function(e){
+
+preview.innerHTML=`
+
+<img
+src="${e.target.result}"
+style="
+width:100%;
+height:300px;
+object-fit:cover;
+border-radius:15px;
+">
+
+`;
+
+}
+
+reader.readAsDataURL(file);
+
+}
+
+</script>
+
+<?php include '../../includes/footer.php'; ?>
