@@ -10,19 +10,42 @@ if (!isset($_SESSION['user_id'])) {
 
 $ownerId = $_SESSION['user_id'];
 
-$hero_title = trim($_POST['hero_title']);
-$hero_description = trim($_POST['hero_description']);
-$hero_button_text = trim($_POST['hero_button_text']);
-$hero_button_link = trim($_POST['hero_button_link']);
-$hero_text_color = trim($_POST['hero_text_color']);
+/*
+|--------------------------------------------------------------------------
+| HERO
+|--------------------------------------------------------------------------
+*/
 
-$about_title = trim($_POST['about_title']);
-$about_description = trim($_POST['about_description']);
-$about_text_color = trim($_POST['about_text_color']);
+$hero_title        = trim($_POST['hero_title']);
+$hero_description  = trim($_POST['hero_description']);
+$hero_button_text  = trim($_POST['hero_button_text']);
+$hero_button_link  = trim($_POST['hero_button_link']);
+$hero_text_color   = trim($_POST['hero_text_color']);
 
 /*
 |--------------------------------------------------------------------------
-| Get Current Images
+| ABOUT
+|--------------------------------------------------------------------------
+*/
+
+$about_title        = trim($_POST['about_title']);
+$about_description  = trim($_POST['about_description']);
+$about_text_color   = trim($_POST['about_text_color']);
+
+/*
+|--------------------------------------------------------------------------
+| STATISTICS
+|--------------------------------------------------------------------------
+*/
+
+$stat_years   = trim($_POST['stat_years']);
+$stat_members = trim($_POST['stat_members']);
+$stat_awards  = trim($_POST['stat_awards']);
+$stat_success = trim($_POST['stat_success']);
+
+/*
+|--------------------------------------------------------------------------
+| CURRENT IMAGES
 |--------------------------------------------------------------------------
 */
 
@@ -34,12 +57,12 @@ LIMIT 1
 ");
 
 $stmt->execute([
-    ':owner'=>$ownerId
+    ':owner' => $ownerId
 ]);
 
 $current = $stmt->fetch(PDO::FETCH_ASSOC);
 
-$hero_image = $current['hero_image'];
+$hero_image  = $current['hero_image'];
 $about_image = $current['about_image'];
 
 /*
@@ -50,8 +73,8 @@ $about_image = $current['about_image'];
 
 $uploadDir = "../uploads/website/";
 
-if(!is_dir($uploadDir)){
-    mkdir($uploadDir,0777,true);
+if (!is_dir($uploadDir)) {
+    mkdir($uploadDir, 0777, true);
 }
 
 /*
@@ -60,17 +83,16 @@ if(!is_dir($uploadDir)){
 |--------------------------------------------------------------------------
 */
 
-if(isset($_FILES['hero_image']) && $_FILES['hero_image']['error']==0){
+if (isset($_FILES['hero_image']) && $_FILES['hero_image']['error'] == 0) {
 
-    $ext = strtolower(pathinfo($_FILES['hero_image']['name'],PATHINFO_EXTENSION));
+    $ext = strtolower(pathinfo($_FILES['hero_image']['name'], PATHINFO_EXTENSION));
 
-    $hero_image = uniqid().".".$ext;
+    $hero_image = uniqid() . "." . $ext;
 
     move_uploaded_file(
         $_FILES['hero_image']['tmp_name'],
-        $uploadDir.$hero_image
+        $uploadDir . $hero_image
     );
-
 }
 
 /*
@@ -79,59 +101,67 @@ if(isset($_FILES['hero_image']) && $_FILES['hero_image']['error']==0){
 |--------------------------------------------------------------------------
 */
 
-if(isset($_FILES['about_image']) && $_FILES['about_image']['error']==0){
+if (isset($_FILES['about_image']) && $_FILES['about_image']['error'] == 0) {
 
-    $ext = strtolower(pathinfo($_FILES['about_image']['name'],PATHINFO_EXTENSION));
+    $ext = strtolower(pathinfo($_FILES['about_image']['name'], PATHINFO_EXTENSION));
 
-    $about_image = uniqid().".".$ext;
+    $about_image = uniqid() . "." . $ext;
 
     move_uploaded_file(
         $_FILES['about_image']['tmp_name'],
-        $uploadDir.$about_image
+        $uploadDir . $about_image
     );
-
 }
 
 /*
 |--------------------------------------------------------------------------
-| Update Website
+| UPDATE WEBSITE
 |--------------------------------------------------------------------------
 */
 
 $stmt = $conn->prepare("
-UPDATE website_settings
-SET
+UPDATE website_settings SET
 
-hero_image=:hero_image,
-hero_title=:hero_title,
-hero_description=:hero_description,
-hero_button_text=:hero_button_text,
-hero_button_link=:hero_button_link,
-hero_text_color=:hero_text_color,
+hero_image = :hero_image,
+hero_title = :hero_title,
+hero_description = :hero_description,
+hero_button_text = :hero_button_text,
+hero_button_link = :hero_button_link,
+hero_text_color = :hero_text_color,
 
-about_image=:about_image,
-about_title=:about_title,
-about_description=:about_description,
-about_text_color=:about_text_color
+about_image = :about_image,
+about_title = :about_title,
+about_description = :about_description,
+about_text_color = :about_text_color,
 
-WHERE owner_id=:owner
+stat_years = :stat_years,
+stat_members = :stat_members,
+stat_awards = :stat_awards,
+stat_success = :stat_success
+
+WHERE owner_id = :owner
 ");
 
 $stmt->execute([
 
-':hero_image'=>$hero_image,
-':hero_title'=>$hero_title,
-':hero_description'=>$hero_description,
-':hero_button_text'=>$hero_button_text,
-':hero_button_link'=>$hero_button_link,
-':hero_text_color'=>$hero_text_color,
+    ':hero_image' => $hero_image,
+    ':hero_title' => $hero_title,
+    ':hero_description' => $hero_description,
+    ':hero_button_text' => $hero_button_text,
+    ':hero_button_link' => $hero_button_link,
+    ':hero_text_color' => $hero_text_color,
 
-':about_image'=>$about_image,
-':about_title'=>$about_title,
-':about_description'=>$about_description,
-':about_text_color'=>$about_text_color,
+    ':about_image' => $about_image,
+    ':about_title' => $about_title,
+    ':about_description' => $about_description,
+    ':about_text_color' => $about_text_color,
 
-':owner'=>$ownerId
+    ':stat_years' => $stat_years,
+    ':stat_members' => $stat_members,
+    ':stat_awards' => $stat_awards,
+    ':stat_success' => $stat_success,
+
+    ':owner' => $ownerId
 
 ]);
 

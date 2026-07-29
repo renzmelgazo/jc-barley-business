@@ -199,29 +199,50 @@ alt="About">
     </section>
 
     <!-- Statistics Section -->
-    <section class="stats">
 
-        <div class="stat-box">
-            <h2>10+</h2>
-            <p>Years in Business</p>
-        </div>
+<section class="stats">
 
-        <div class="stat-box">
-            <h2>5,000+</h2>
-            <p>Happy Members</p>
-        </div>
+    <div class="stat-box">
 
-        <div class="stat-box">
-            <h2>100+</h2>
-            <p>Awards Received</p>
-        </div>
+        <h2>
+            <?= htmlspecialchars($settings['stat_years'] ?? '10+') ?>
+        </h2>
 
-        <div class="stat-box">
-            <h2>1,000+</h2>
-            <p>Success Stories</p>
-        </div>
+        <p>Years in Business</p>
 
-    </section>
+    </div>
+
+    <div class="stat-box">
+
+        <h2>
+            <?= htmlspecialchars($settings['stat_members'] ?? '5000+') ?>
+        </h2>
+
+        <p>Happy Members</p>
+
+    </div>
+
+    <div class="stat-box">
+
+        <h2>
+            <?= htmlspecialchars($settings['stat_awards'] ?? '100+') ?>
+        </h2>
+
+        <p>Awards Received</p>
+
+    </div>
+
+    <div class="stat-box">
+
+        <h2>
+            <?= htmlspecialchars($settings['stat_success'] ?? '1000+') ?>
+        </h2>
+
+        <p>Success Stories</p>
+
+    </div>
+
+</section>
 
     <!-- Gallery Section -->
     <section id="gallery" class="gallery">
