@@ -85,6 +85,7 @@ $achievements = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </title>
 
     <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="chat/style.css">
 </head>
 
 <body>

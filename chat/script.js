@@ -1,8 +1,31 @@
+const chatButton = document.getElementById("chat-button");
+const chatBox = document.getElementById("chat-box");
+
 const sendBtn = document.getElementById("sendBtn");
 const messageInput = document.getElementById("message");
 const messages = document.getElementById("chat-messages");
 
 let conversationCreated = false;
+
+/*
+|--------------------------------------------------------------------------
+| Open / Close Chat
+|--------------------------------------------------------------------------
+*/
+
+chatButton.onclick = function () {
+
+    if (getComputedStyle(chatBox).display === "none") {
+
+        chatBox.style.display = "flex";
+
+    } else {
+
+        chatBox.style.display = "none";
+
+    }
+
+};
 
 /*
 |--------------------------------------------------------------------------
@@ -19,7 +42,6 @@ async function createConversation() {
     const form = new FormData();
 
     form.append("owner_id", ownerId);
-
     form.append("fullname", "");
     form.append("email", "");
     form.append("phone", "");
@@ -41,11 +63,11 @@ async function createConversation() {
 |--------------------------------------------------------------------------
 */
 
-async function sendMessage(){
+async function sendMessage() {
 
     const text = messageInput.value.trim();
 
-    if(text=="") return;
+    if (text === "") return;
 
     await createConversation();
 
@@ -53,40 +75,53 @@ async function sendMessage(){
         <div class="user">${text}</div>
     `;
 
-    messageInput.value="";
+    messageInput.value = "";
 
-    const form=new FormData();
+    messages.scrollTop = messages.scrollHeight;
 
-    form.append("message",text);
+    const form = new FormData();
 
-    await fetch("chat/send.php",{
+    form.append("message", text);
 
-        method:"POST",
+    await fetch("chat/send.php", {
 
-        body:form
+        method: "POST",
+        body: form
 
     });
 
-    const response=await fetch("chat/reply.php");
+    const response = await fetch("chat/reply.php");
 
-    const reply=await response.text();
+    const reply = await response.text();
 
-    messages.innerHTML+=`
+    messages.innerHTML += `
         <div class="bot">${reply}</div>
     `;
 
-    messages.scrollTop=messages.scrollHeight;
+    messages.scrollTop = messages.scrollHeight;
 
 }
 
-sendBtn.onclick=sendMessage;
+sendBtn.onclick = sendMessage;
 
-messageInput.addEventListener("keypress",function(e){
+messageInput.addEventListener("keypress", function (e) {
 
-    if(e.key==="Enter"){
+    if (e.key === "Enter") {
 
         sendMessage();
 
     }
 
 });
+
+const supportLink = document.getElementById("support-link");
+
+if (supportLink) {
+
+    supportLink.onclick = function () {
+
+        chatBox.style.display = "flex";
+
+    };
+
+}

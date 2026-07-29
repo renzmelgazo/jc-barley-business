@@ -4,11 +4,11 @@ session_start();
 
 require '../config/database.php';
 
-if (!isset($_SESSION['chat_session'])) {
-    exit("No session.");
+if (!isset($_SESSION['conversation_id'])) {
+    exit("Conversation not found.");
 }
 
-$sessionId = $_SESSION['chat_session'];
+$conversationId = $_SESSION['conversation_id'];
 
 $message = trim($_POST['message'] ?? '');
 
@@ -18,28 +18,78 @@ if ($message == '') {
 
 /*
 |--------------------------------------------------------------------------
-| Find Conversation
+| Get Current Visitor Info
 |--------------------------------------------------------------------------
 */
 
 $stmt = $conn->prepare("
-SELECT id
-FROM ai_conversations
-WHERE session_id = :session_id
+SELECT
+    visitor_name,
+    visitor_phone,
+    visitor_email
+FROM conversations
+WHERE id=:id
 LIMIT 1
 ");
 
 $stmt->execute([
-    ':session_id' => $sessionId
+    ":id"=>$conversationId
 ]);
 
 $conversation = $stmt->fetch(PDO::FETCH_ASSOC);
 
-if (!$conversation) {
-    exit("Conversation not found.");
+if(!$conversation){
+    exit;
 }
 
-$conversationId = $conversation['id'];
+/*
+|--------------------------------------------------------------------------
+| Auto Save Visitor Information
+|--------------------------------------------------------------------------
+*/
+
+if(empty($conversation['visitor_name'])){
+
+    $stmt=$conn->prepare("
+    UPDATE conversations
+    SET visitor_name=:value
+    WHERE id=:id
+    ");
+
+    $stmt->execute([
+        ":value"=>$message,
+        ":id"=>$conversationId
+    ]);
+
+}
+elseif(empty($conversation['visitor_phone'])){
+
+    $stmt=$conn->prepare("
+    UPDATE conversations
+    SET visitor_phone=:value
+    WHERE id=:id
+    ");
+
+    $stmt->execute([
+        ":value"=>$message,
+        ":id"=>$conversationId
+    ]);
+
+}
+elseif(empty($conversation['visitor_email'])){
+
+    $stmt=$conn->prepare("
+    UPDATE conversations
+    SET visitor_email=:value
+    WHERE id=:id
+    ");
+
+    $stmt->execute([
+        ":value"=>$message,
+        ":id"=>$conversationId
+    ]);
+
+}
 
 /*
 |--------------------------------------------------------------------------
@@ -50,22 +100,22 @@ $conversationId = $conversation['id'];
 $stmt = $conn->prepare("
 INSERT INTO conversation_messages
 (
-    conversation_id,
-    sender,
-    message
+conversation_id,
+sender,
+message
 )
 VALUES
 (
-    :conversation_id,
-    'Customer',
-    :message
+:id,
+'Customer',
+:message
 )
 ");
 
 $stmt->execute([
 
-    ':conversation_id' => $conversationId,
-    ':message' => $message
+":id"=>$conversationId,
+":message"=>$message
 
 ]);
 
