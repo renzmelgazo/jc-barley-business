@@ -3,230 +3,325 @@
 require '../../config/session.php';
 require '../../config/database.php';
 
-if (!isset($_SESSION['user_id'])) {
+if(!isset($_SESSION['user_id'])){
     header("Location: ../../login.php");
     exit;
 }
 
 $stmt = $conn->prepare("
-    SELECT *
-    FROM website_settings
-    WHERE owner_id = :owner_id
+SELECT *
+FROM website_settings
+WHERE owner_id = :owner
+LIMIT 1
 ");
 
 $stmt->execute([
-    ':owner_id' => $_SESSION['user_id']
+    ':owner' => $_SESSION['user_id']
 ]);
 
-$settings = $stmt->fetch(PDO::FETCH_ASSOC);
+$website = $stmt->fetch(PDO::FETCH_ASSOC);
 
-$pageTitle = "Website Builder";
 include '../../includes/header.php';
-?>
+include '../../includes/sidebar.php';
+include '../../includes/navbar.php';
 
-<?php include '../../includes/sidebar.php'; ?>
+?>
 
 <div class="main-content">
 
-    <?php include '../../includes/navbar.php'; ?>
+<div class="content">
 
-    <div class="content">
+<div class="container-fluid">
 
-        <div class="dashboard-card">
+<h2 class="mb-4 fw-bold">
 
-            <div class="d-flex justify-content-between align-items-center mb-4">
+🌐 Website Builder
 
-                <h2 class="fw-bold text-success mb-0">
+</h2>
 
-                    <i class="bi bi-globe2"></i>
+<form
+action="../../auth/save_website_builder.php"
+method="POST"
+enctype="multipart/form-data">
 
-                    Website Builder
+<!-- HERO -->
 
-                </h2>
+<div class="card shadow mb-4">
 
-                <button class="btn btn-success" form="websiteForm">
+<div class="card-header bg-success text-white">
 
-                    <i class="bi bi-floppy"></i>
+<h4 class="mb-0">
 
-                    Save Changes
+Hero Section
 
-                </button>
+</h4>
 
-            </div>
+</div>
 
-            <form
-                id="websiteForm"
-                action="../../auth/update_website_settings.php"
-                method="POST">
+<div class="card-body">
 
-                <div class="row">
+<div class="row">
 
-                    <div class="col-md-6 mb-4">
+<div class="col-md-6">
 
-                        <label class="form-label fw-semibold">
-                            Website Name
-                        </label>
+<label>Hero Image</label>
 
-                        <input
-                            type="text"
-                            name="website_name"
-                            class="form-control"
-                            value="<?= htmlspecialchars($settings['website_name']) ?>">
+<input
+type="file"
+name="hero_image"
+class="form-control">
 
-                    </div>
+<?php if(!empty($website['hero_image'])): ?>
 
-                    <div class="col-md-6 mb-4">
+<img
+src="../../uploads/website/<?= $website['hero_image']; ?>"
+class="img-fluid mt-3 rounded">
 
-                        <label class="form-label fw-semibold">
-                            Tagline
-                        </label>
+<?php endif; ?>
 
-                        <input
-                            type="text"
-                            name="tagline"
-                            class="form-control"
-                            value="<?= htmlspecialchars($settings['tagline']) ?>">
+</div>
 
-                    </div>
+<div class="col-md-6">
 
-                </div>
+<label>Hero Title</label>
 
-                <div class="mb-4">
+<input
+type="text"
+name="hero_title"
+class="form-control"
+value="<?= htmlspecialchars($website['hero_title'] ?? '') ?>">
 
-                    <label class="form-label fw-semibold">
+<br>
 
-                        About Business
+<label>Hero Description</label>
 
-                    </label>
+<textarea
+name="hero_description"
+class="form-control"
+rows="5"><?= htmlspecialchars($website['hero_description'] ?? '') ?></textarea>
 
-                    <textarea
-                        class="form-control"
-                        rows="6"
-                        name="about"><?= htmlspecialchars($settings['about']) ?></textarea>
+<br>
 
-                </div>
+<label>Button Text</label>
 
-                <hr class="my-4">
+<input
+type="text"
+name="hero_button_text"
+class="form-control"
+value="<?= htmlspecialchars($website['hero_button_text'] ?? '') ?>">
 
-                <h4 class="fw-bold mb-4">
+<br>
 
-                    Contact Information
+<label>Button Link</label>
 
-                </h4>
+<input
+type="text"
+name="hero_button_link"
+class="form-control"
+value="<?= htmlspecialchars($website['hero_button_link'] ?? '') ?>">
 
-                <div class="row">
+<br>
 
-                    <div class="col-md-4 mb-3">
+<label>Text Color</label>
 
-                        <label class="form-label">
+<input
+type="color"
+name="hero_text_color"
+class="form-control form-control-color"
+value="<?= $website['hero_text_color'] ?? '#ffffff'; ?>">
 
-                            Contact Number
+</div>
 
-                        </label>
+</div>
 
-                        <input
-                            type="text"
-                            class="form-control"
-                            name="contact_number"
-                            value="<?= htmlspecialchars($settings['contact_number']) ?>">
+</div>
 
-                    </div>
+</div>
 
-                    <div class="col-md-4 mb-3">
+<!-- ABOUT -->
 
-                        <label class="form-label">
+<div class="card shadow">
 
-                            Email Address
+<div class="card-header bg-primary text-white">
 
-                        </label>
+<h4 class="mb-0">
 
-                        <input
-                            type="email"
-                            class="form-control"
-                            name="email"
-                            value="<?= htmlspecialchars($settings['email']) ?>">
+<!-- STATISTICS -->
 
-                    </div>
+<div class="card shadow mt-4">
 
-                    <div class="col-md-4 mb-3">
+<div class="card-header bg-warning text-dark">
 
-                        <label class="form-label">
+<h4 class="mb-0">
+📊 Statistics
+</h4>
 
-                            Facebook Page
+</div>
 
-                        </label>
+<!-- TESTIMONIALS -->
 
-                        <input
-                            type="text"
-                            class="form-control"
-                            name="facebook"
-                            value="<?= htmlspecialchars($settings['facebook']) ?>">
+<div class="card shadow mt-4">
 
-                    </div>
+<div class="card-header bg-info text-white">
 
-                </div>
+<h4 class="mb-0">
+💬 Testimonials
+</h4>
 
-                <hr class="my-4">
+</div>
 
-                <h4 class="fw-bold mb-4">
+<div class="card-body">
 
-                    Branding
+<p class="text-muted">
 
-                </h4>
+Mamaya natin ito gagawing dynamic gamit ang sariling database table.
 
-                <div class="row">
+</p>
 
-                    <div class="col-md-6">
+</div>
 
-                        <div class="border rounded-4 p-5 text-center bg-light">
+</div>
 
-                            <i class="bi bi-image fs-1 text-success"></i>
+<div class="card-body">
 
-                            <h5 class="mt-3">
+<div class="row">
 
-                                Website Logo
+<div class="col-md-3">
 
-                            </h5>
+<label>Years in Business</label>
 
-                            <small class="text-muted">
+<input
+type="text"
+name="stat_years"
+class="form-control"
+value="<?= htmlspecialchars($website['stat_years'] ?? '10+') ?>">
 
-                                Upload feature will be added next.
+</div>
 
-                            </small>
+<div class="col-md-3">
 
-                        </div>
+<label>Happy Members</label>
 
-                    </div>
+<input
+type="text"
+name="stat_members"
+class="form-control"
+value="<?= htmlspecialchars($website['stat_members'] ?? '5000+') ?>">
 
-                    <div class="col-md-6">
+</div>
 
-                        <div class="border rounded-4 p-5 text-center bg-light">
+<div class="col-md-3">
 
-                            <i class="bi bi-card-image fs-1 text-success"></i>
+<label>Awards</label>
 
-                            <h5 class="mt-3">
+<input
+type="text"
+name="stat_awards"
+class="form-control"
+value="<?= htmlspecialchars($website['stat_awards'] ?? '100+') ?>">
 
-                                Hero Banner
+</div>
 
-                            </h5>
+<div class="col-md-3">
 
-                            <small class="text-muted">
+<label>Success Stories</label>
 
-                                Upload feature will be added next.
+<input
+type="text"
+name="stat_success"
+class="form-control"
+value="<?= htmlspecialchars($website['stat_success'] ?? '1000+') ?>">
 
-                            </small>
+</div>
 
-                        </div>
+</div>
 
-                    </div>
+</div>
 
-                </div>
+</div>
 
-            </form>
+About Section
 
-        </div>
+</h4>
 
-    </div>
+</div>
+
+<div class="card-body">
+
+<div class="row">
+
+<div class="col-md-6">
+
+<label>About Image</label>
+
+<input
+type="file"
+name="about_image"
+class="form-control">
+
+<?php if(!empty($website['about_image'])): ?>
+
+<img
+src="../../uploads/website/<?= $website['about_image']; ?>"
+class="img-fluid mt-3 rounded">
+
+<?php endif; ?>
+
+</div>
+
+<div class="col-md-6">
+
+<label>About Title</label>
+
+<input
+type="text"
+name="about_title"
+class="form-control"
+value="<?= htmlspecialchars($website['about_title'] ?? '') ?>">
+
+<br>
+
+<label>About Description</label>
+
+<textarea
+name="about_description"
+class="form-control"
+rows="5"><?= htmlspecialchars($website['about_description'] ?? '') ?></textarea>
+
+<br>
+
+<label>Text Color</label>
+
+<input
+type="color"
+name="about_text_color"
+class="form-control form-control-color"
+value="<?= $website['about_text_color'] ?? '#000000'; ?>">
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="mt-4">
+
+<button
+class="btn btn-success btn-lg">
+
+💾 Save Website
+
+</button>
+
+</div>
+
+</form>
+
+</div>
+
+</div>
 
 </div>
 

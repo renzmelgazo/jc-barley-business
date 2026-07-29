@@ -93,20 +93,6 @@ $stmt->execute([
 
 $galleryImages = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-$heroImage = null;
-$aboutImage = null;
-
-foreach($galleryImages as $img){
-
-    if($img['section']=="hero" && $heroImage==null){
-        $heroImage=$img;
-    }
-
-    if($img['section']=="about" && $aboutImage==null){
-        $aboutImage=$img;
-    }
-
-}
 
 ?>
 
@@ -152,33 +138,32 @@ foreach($galleryImages as $img){
 id="home"
 class="hero"
 
-<?php if($heroImage): ?>
-
 style="
-background-image:url('uploads/gallery/<?= htmlspecialchars($heroImage['image']) ?>');
+background-image:url('uploads/website/<?= htmlspecialchars($settings['hero_image']) ?>');
 background-size:cover;
 background-position:center;
 "
-
-<?php endif; ?>
-
 >
 
         <h1>
-<?= htmlspecialchars(
-    !empty($settings['hero_title'])
-        ? $settings['hero_title']
-        : 'Empowering Success Through JC Barley Business'
-) ?>
+<span style="color:<?= htmlspecialchars($settings['hero_text_color']) ?>">
+<?= htmlspecialchars($settings['hero_title']) ?>
+</span>
 </h1>
 
 
-        <p>
-Discover inspiring achievements, successful members, and the journey of building a better future together.
+        <p style="color:<?= htmlspecialchars($settings['hero_text_color']) ?>">
+
+<?= nl2br(htmlspecialchars($settings['hero_description'])) ?>
+
 </p>
 
-        <a href="#achievements" class="btn">
-    View Achievements
+        <a
+href="<?= htmlspecialchars($settings['hero_button_link']) ?>"
+class="btn">
+
+<?= htmlspecialchars($settings['hero_button_text']) ?>
+
 </a>
 
     </section>
@@ -188,40 +173,27 @@ Discover inspiring achievements, successful members, and the journey of building
 
         <div class="about-text">
 
-           <h2>
+        <h2
+style="color:<?= htmlspecialchars($settings['about_text_color'] ?? '#000000') ?>">
 
-<?= htmlspecialchars(
-$settings['about_title']
-?? 'About JC Barley Business'
-) ?>
+<?= htmlspecialchars($settings['about_title']) ?>
 
 </h2>
 
-<p>
+<p
+style="color:<?= htmlspecialchars($settings['about_text_color'] ?? '#000000') ?>">
 
-<?= nl2br(htmlspecialchars(
-$settings['about_description']
-?? 'JC Barley Business is committed to empowering individuals by providing opportunities for personal growth, financial success, and entrepreneurship.'
-)) ?>
+<?= nl2br(htmlspecialchars($settings['about_description'])) ?>
 
 </p>
+        
         </div>
 
         <div class="about-image">
 
-            <?php if($aboutImage): ?>
-
-<img
-src="uploads/gallery/<?= htmlspecialchars($aboutImage['image']) ?>"
+            <img
+src="uploads/website/<?= htmlspecialchars($settings['about_image']) ?>"
 alt="About">
-
-<?php else: ?>
-
-<img
-src="assets/images/about.jpg"
-alt="About">
-
-<?php endif; ?>
         </div>
 
     </section>
