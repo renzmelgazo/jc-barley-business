@@ -8,7 +8,7 @@ if (!isset($_SESSION['chat_session'])) {
     exit;
 }
 
-$sessionId = $_SESSION['chat_session'];
+$session = $_SESSION['chat_session'];
 
 /*
 |--------------------------------------------------------------------------
@@ -17,25 +17,73 @@ $sessionId = $_SESSION['chat_session'];
 */
 
 $stmt = $conn->prepare("
-SELECT id
+SELECT *
 FROM ai_conversations
-WHERE session_id = :session_id
+WHERE session_id=:session
 LIMIT 1
 ");
 
 $stmt->execute([
-    ':session_id' => $sessionId
+    ":session"=>$session
 ]);
 
-$conversation = $stmt->fetch(PDO::FETCH_ASSOC);
+$conversation=$stmt->fetch(PDO::FETCH_ASSOC);
 
-if (!$conversation) {
+if(!$conversation){
     exit;
 }
 
-$conversationId = $conversation['id'];
+/*
+|--------------------------------------------------------------------------
+| Last Customer Message
+|--------------------------------------------------------------------------
+*/
 
-$reply = "Thank you for your message. One of our representatives will contact you shortly. May I also have your name, phone number, or email address so we can assist you better?";
+$stmt=$conn->prepare("
+SELECT message
+FROM conversation_messages
+WHERE conversation_id=:id
+AND sender='Customer'
+ORDER BY id DESC
+LIMIT 1
+");
+
+$stmt->execute([
+":id"=>$conversation['id']
+]);
+
+$last=$stmt->fetchColumn();
+
+$reply="";
+
+if(empty($conversation['fullname'])){
+
+    $reply="Nice to meet you!
+
+May I have your full name?";
+
+}
+elseif(empty($conversation['phone'])){
+
+    $reply="Thank you.
+
+May I have your phone number?";
+
+}
+elseif(empty($conversation['email'])){
+
+    $reply="Great!
+
+May I have your email address?";
+
+}
+else{
+
+    $reply="Thank you!
+
+One of our representatives will contact you shortly.";
+
+}
 
 /*
 |--------------------------------------------------------------------------
@@ -43,25 +91,18 @@ $reply = "Thank you for your message. One of our representatives will contact yo
 |--------------------------------------------------------------------------
 */
 
-$stmt = $conn->prepare("
+$stmt=$conn->prepare("
 INSERT INTO conversation_messages
-(
-    conversation_id,
-    sender,
-    message
-)
+(conversation_id,sender,message)
 VALUES
-(
-    :conversation_id,
-    'AI',
-    :message
-)
+(:id,'AI',:message)
 ");
 
 $stmt->execute([
 
-    ':conversation_id' => $conversationId,
-    ':message' => $reply
+":id"=>$conversation['id'],
+
+":message"=>$reply
 
 ]);
 
