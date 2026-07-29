@@ -2,24 +2,70 @@
 
 session_start();
 
-require "../config/database.php";
+require '../config/database.php';
 
-$message=trim($_POST['message']);
+if (!isset($_SESSION['chat_session'])) {
+    exit("No session.");
+}
 
-$conversation=$_SESSION['conversation_id'];
+$sessionId = $_SESSION['chat_session'];
 
-$stmt=$conn->prepare("
+$message = trim($_POST['message'] ?? '');
+
+if ($message == '') {
+    exit("Empty message.");
+}
+
+/*
+|--------------------------------------------------------------------------
+| Find Conversation
+|--------------------------------------------------------------------------
+*/
+
+$stmt = $conn->prepare("
+SELECT id
+FROM ai_conversations
+WHERE session_id = :session_id
+LIMIT 1
+");
+
+$stmt->execute([
+    ':session_id' => $sessionId
+]);
+
+$conversation = $stmt->fetch(PDO::FETCH_ASSOC);
+
+if (!$conversation) {
+    exit("Conversation not found.");
+}
+
+$conversationId = $conversation['id'];
+
+/*
+|--------------------------------------------------------------------------
+| Save Customer Message
+|--------------------------------------------------------------------------
+*/
+
+$stmt = $conn->prepare("
 INSERT INTO conversation_messages
-(conversation_id,sender,message)
+(
+    conversation_id,
+    sender,
+    message
+)
 VALUES
-(:conversation,'Customer',:message)
+(
+    :conversation_id,
+    'Customer',
+    :message
+)
 ");
 
 $stmt->execute([
 
-":conversation"=>$conversation,
-
-":message"=>$message
+    ':conversation_id' => $conversationId,
+    ':message' => $message
 
 ]);
 
