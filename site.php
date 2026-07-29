@@ -350,6 +350,13 @@ JC Barley Business is committed to empowering individuals by providing opportuni
 </div>
 
 <link rel="stylesheet" href="chat/style.css">
+
+<script>
+
+window.ownerId = <?= $ownerId ?>;
+
+</script>
+
 <script src="chat/script.js"></script>
 
 </body>

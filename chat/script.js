@@ -1,84 +1,92 @@
-const owner = new URLSearchParams(window.location.search).get("owner");
+const sendBtn = document.getElementById("sendBtn");
+const messageInput = document.getElementById("message");
+const messages = document.getElementById("chat-messages");
 
-const button = document.getElementById("chat-button");
-const box = document.getElementById("chat-box");
+let conversationCreated = false;
 
-button.onclick = function () {
+/*
+|--------------------------------------------------------------------------
+| Save Visitor
+|--------------------------------------------------------------------------
+*/
 
-    if (box.style.display === "block") {
-        box.style.display = "none";
-    } else {
-        box.style.display = "block";
-    }
+async function createConversation() {
 
-};
+    if (conversationCreated) return;
 
-document.getElementById("sendBtn").onclick = sendMessage;
+    const ownerId = window.ownerId;
 
-async function sendMessage() {
+    const form = new FormData();
 
-    let input = document.getElementById("message");
+    form.append("owner_id", ownerId);
 
-    let message = input.value.trim();
+    form.append("fullname", "");
+    form.append("email", "");
+    form.append("phone", "");
 
-    if (message === "") return;
-
-    addUserMessage(message);
-
-    input.value = "";
-
-    const response = await fetch("chat/reply.php", {
+    await fetch("chat/save_visitor.php", {
 
         method: "POST",
-
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
-        },
-
-        body:
-            "owner=" + encodeURIComponent(owner) +
-            "&message=" + encodeURIComponent(message)
+        body: form
 
     });
 
-    const text = await response.text();
-
-    addBotMessage(text);
+    conversationCreated = true;
 
 }
 
-function addUserMessage(message){
+/*
+|--------------------------------------------------------------------------
+| Send Message
+|--------------------------------------------------------------------------
+*/
 
-    let div=document.createElement("div");
+async function sendMessage(){
 
-    div.className="user";
+    const text = messageInput.value.trim();
 
-    div.innerHTML=message;
+    if(text=="") return;
 
-    document.getElementById("chat-messages").appendChild(div);
+    await createConversation();
 
-    scrollBottom();
+    messages.innerHTML += `
+        <div class="user">${text}</div>
+    `;
+
+    messageInput.value="";
+
+    const form=new FormData();
+
+    form.append("message",text);
+
+    await fetch("chat/send.php",{
+
+        method:"POST",
+
+        body:form
+
+    });
+
+    const response=await fetch("chat/reply.php");
+
+    const reply=await response.text();
+
+    messages.innerHTML+=`
+        <div class="bot">${reply}</div>
+    `;
+
+    messages.scrollTop=messages.scrollHeight;
 
 }
 
-function addBotMessage(message){
+sendBtn.onclick=sendMessage;
 
-    let div=document.createElement("div");
+messageInput.addEventListener("keypress",function(e){
 
-    div.className="bot";
+    if(e.key==="Enter"){
 
-    div.innerHTML=message;
+        sendMessage();
 
-    document.getElementById("chat-messages").appendChild(div);
+    }
 
-    scrollBottom();
-
-}
-
-function scrollBottom(){
-
-    let box=document.getElementById("chat-messages");
-
-    box.scrollTop=box.scrollHeight;
-
-}
+});
