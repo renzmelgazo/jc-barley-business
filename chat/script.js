@@ -1,65 +1,84 @@
 const owner = new URLSearchParams(window.location.search).get("owner");
 
-fetch("chat/index.php?owner="+owner);
+const button = document.getElementById("chat-button");
+const box = document.getElementById("chat-box");
 
-const button=document.getElementById("chat-button");
+button.onclick = function () {
 
-const box=document.getElementById("chat-box");
-
-button.onclick=()=>{
-
-box.style.display=
-
-box.style.display==="block"
-
-?
-
-"none"
-
-:
-
-"block";
+    if (box.style.display === "block") {
+        box.style.display = "none";
+    } else {
+        box.style.display = "block";
+    }
 
 };
 
-document.getElementById("sendBtn").onclick=sendMessage;
+document.getElementById("sendBtn").onclick = sendMessage;
 
-function sendMessage(){
+async function sendMessage() {
 
-let input=document.getElementById("message");
+    let input = document.getElementById("message");
 
-let message=input.value.trim();
+    let message = input.value.trim();
 
-if(message=="")return;
+    if (message === "") return;
 
-fetch("chat/send.php",{
+    addUserMessage(message);
 
-method:"POST",
+    input.value = "";
 
-headers:{
-"Content-Type":"application/x-www-form-urlencoded"
-},
+    const response = await fetch("chat/reply.php", {
 
-body:"message="+encodeURIComponent(message)
+        method: "POST",
 
-});
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
 
-let div=document.createElement("div");
+        body:
+            "owner=" + encodeURIComponent(owner) +
+            "&message=" + encodeURIComponent(message)
 
-div.className="user";
+    });
 
-div.innerHTML=message;
+    const text = await response.text();
 
-document.getElementById("chat-messages").appendChild(div);
-
-input.value="";
+    addBotMessage(text);
 
 }
 
-const supportLink = document.getElementById("support-link");
+function addUserMessage(message){
 
-if (supportLink) {
-    supportLink.onclick = function () {
-        box.style.display = "block";
-    };
+    let div=document.createElement("div");
+
+    div.className="user";
+
+    div.innerHTML=message;
+
+    document.getElementById("chat-messages").appendChild(div);
+
+    scrollBottom();
+
+}
+
+function addBotMessage(message){
+
+    let div=document.createElement("div");
+
+    div.className="bot";
+
+    div.innerHTML=message;
+
+    document.getElementById("chat-messages").appendChild(div);
+
+    scrollBottom();
+
+}
+
+function scrollBottom(){
+
+    let box=document.getElementById("chat-messages");
+
+    box.scrollTop=box.scrollHeight;
+
 }

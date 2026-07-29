@@ -308,31 +308,29 @@ JC Barley Business is committed to empowering individuals by providing opportuni
 
     <script src="assets/js/script.js"></script>
 
-<!-- AI Chat Widget -->
-
+<!-- AI Chat Button -->
 <div id="chat-button">
-
     💬
-
 </div>
 
+<!-- AI Chat Box -->
 <div id="chat-box">
 
     <div class="chat-header">
-
         JC Barley AI Assistant
-
     </div>
 
     <div id="chat-messages">
 
         <div class="bot">
-    👋 Hello! Welcome to our website.
+            👋 Hello!
 
-    I'm your AI Assistant and I'm here to answer your questions about our products and services.
+            Welcome to our website.
 
-    How may I assist you today?
-</div>
+            I'm here to answer your questions and help you learn more about our products and services.
+
+            How may I assist you today?
+        </div>
 
     </div>
 
@@ -341,12 +339,10 @@ JC Barley Business is committed to empowering individuals by providing opportuni
         <input
             type="text"
             id="message"
-            placeholder="Type a message...">
+            placeholder="Type your message...">
 
         <button id="sendBtn">
-
             Send
-
         </button>
 
     </div>
@@ -354,7 +350,6 @@ JC Barley Business is committed to empowering individuals by providing opportuni
 </div>
 
 <link rel="stylesheet" href="chat/style.css">
-
 <script src="chat/script.js"></script>
 
 </body>

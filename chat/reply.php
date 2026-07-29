@@ -1,69 +1,71 @@
 <?php
 
-require '../config/database.php';
+require "../config/database.php";
 
-session_start();
+header("Content-Type: text/plain");
 
-$data=json_decode(file_get_contents("php://input"),true);
+$message = trim($_POST['message'] ?? '');
+$ownerSlug = trim($_POST['owner'] ?? '');
 
-$ownerId=$data['owner_id'];
-
-$message=strtolower(trim($data['message']));
-
-$visitorId=$_SESSION['visitor_id'];
-
-$reply="Thank you for contacting us. One of our representatives will assist you shortly.";
-
-/*
-|--------------------------------------------------------------------------
-| Basic AI
-|--------------------------------------------------------------------------
-*/
-
-if(str_contains($message,"price"))
-{
-$reply="May I know which product are you interested in?";
-}
-
-elseif(str_contains($message,"hello"))
-{
-$reply="Hello! 👋 Welcome to our website. How can I help you today?";
-}
-
-elseif(str_contains($message,"hi"))
-{
-$reply="Hi there! 😊 How may I assist you?";
-}
-
-elseif(str_contains($message,"location"))
-{
-$reply="May I know where you are located?";
-}
-
-elseif(str_contains($message,"buy"))
-{
-$reply="Great! May I have your Full Name, Phone Number, and Email Address so our team can contact you?";
+if ($message == '') {
+    exit("Please type your message.");
 }
 
 /*
 |--------------------------------------------------------------------------
-| Save AI Reply
+| Find Website Owner
 |--------------------------------------------------------------------------
 */
 
-$stmt=$conn->prepare("
-INSERT INTO ai_conversations
-(owner_id,visitor_id,sender,message)
-VALUES
-(:owner,:visitor,'ai',:message)
+$stmt = $conn->prepare("
+SELECT id
+FROM users
+WHERE site_slug = :slug
+LIMIT 1
 ");
 
 $stmt->execute([
-':owner'=>$ownerId,
-':visitor'=>$visitorId,
-':message'=>$reply
+    ':slug' => $ownerSlug
 ]);
 
-echo json_encode([
-"reply"=>$reply
-]);
+$owner = $stmt->fetch(PDO::FETCH_ASSOC);
+
+if (!$owner) {
+    exit("Website owner not found.");
+}
+
+$ownerId = $owner['id'];
+
+/*
+|--------------------------------------------------------------------------
+| Temporary AI Responses
+|--------------------------------------------------------------------------
+*/
+
+$text = strtolower($message);
+
+if (strpos($text,"price")!==false){
+
+    echo "I'd be happy to help with pricing. Could you tell me which JC Barley product you're interested in?";
+
+    exit;
+
+}
+
+if (strpos($text,"contact")!==false){
+
+    echo "Sure! May I have your Full Name, Phone Number, and Email Address so our business owner can contact you?";
+
+    exit;
+
+}
+
+if (strpos($text,"hello")!==false || strpos($text,"hi")!==false){
+
+    echo "Hello 👋 Thank you for visiting our website. How may I assist you today?";
+
+    exit;
+
+}
+
+echo "Thank you for your message. I'm here to assist you. Could you please tell me more about your inquiry?";
