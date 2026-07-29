@@ -97,6 +97,41 @@ rows="4"><?= htmlspecialchars($gallery['description']) ?></textarea>
 Current Image
 </label>
 
+<div class="mb-3">
+
+    <label class="form-label">
+        Website Section
+    </label>
+
+    <select
+        name="section"
+        class="form-select"
+        required>
+
+        <option value="hero" <?= $gallery['section']=='hero'?'selected':'' ?>>
+            Hero Banner
+        </option>
+
+        <option value="about" <?= $gallery['section']=='about'?'selected':'' ?>>
+            About Section
+        </option>
+
+        <option value="gallery" <?= $gallery['section']=='gallery'?'selected':'' ?>>
+            Gallery
+        </option>
+
+        <option value="testimonial" <?= $gallery['section']=='testimonial'?'selected':'' ?>>
+            Testimonials
+        </option>
+
+        <option value="achievement" <?= $gallery['section']=='achievement'?'selected':'' ?>>
+            Achievement
+        </option>
+
+    </select>
+
+</div>
+
 <br>
 
 <img

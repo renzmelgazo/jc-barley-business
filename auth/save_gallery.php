@@ -15,6 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] != "POST") {
 
 $title = trim($_POST['title']);
 $description = trim($_POST['description']);
+$section = trim($_POST['section']);
 
 if (empty($title)) {
     die("Title is required.");
@@ -49,22 +50,25 @@ $stmt = $conn->prepare("
     owner_id,
     title,
     description,
+    section,
     image
 )
-    VALUES
+VALUES
 (
     :owner_id,
     :title,
     :description,
+    :section,
     :image
 )
 ");
 
 $stmt->execute([
-    ':owner_id' => $_SESSION['user_id'],
-    ':title' => $title,
-    ':description' => $description,
-    ':image' => $newFilename
+    ':owner_id'   => $_SESSION['user_id'],
+    ':title'      => $title,
+    ':description'=> $description,
+    ':section'    => $section,
+    ':image'      => $newFilename
 ]);
 
 header("Location: ../dashboard/gallery/index.php");

@@ -1,100 +1,130 @@
-<?php
+<form
+    action="../../auth/save_gallery.php"
+    method="POST"
+    enctype="multipart/form-data">
 
-require '../../config/session.php';
+    <div class="mb-3">
 
-if (!isset($_SESSION['user_id'])) {
-    header("Location: ../../login.php");
-    exit;
-}
+        <label class="form-label">
+            Title
+        </label>
 
-include '../../includes/header.php';
-include '../../includes/navbar.php';
-
-?>
-
-<div class="d-flex">
-
-    <?php include '../../includes/sidebar.php'; ?>
-
-    <div class="container-fluid p-4">
-
-        <h2 class="mb-4">Add Gallery Image</h2>
-
-        <div class="card shadow">
-
-            <div class="card-body">
-
-                <form
-                    action="../../auth/save_gallery.php"
-                    method="POST"
-                    enctype="multipart/form-data">
-
-                    <div class="mb-3">
-
-                        <label class="form-label">
-                            Title
-                        </label>
-
-                        <input
-                            type="text"
-                            name="title"
-                            class="form-control"
-                            required>
-
-                    </div>
-
-                    <div class="mb-3">
-
-                        <label class="form-label">
-                            Description
-                        </label>
-
-                        <textarea
-                            name="description"
-                            class="form-control"
-                            rows="4"></textarea>
-
-                    </div>
-
-                    <div class="mb-3">
-
-                        <label class="form-label">
-                            Image
-                        </label>
-
-                        <input
-                            type="file"
-                            name="image"
-                            class="form-control"
-                            accept=".jpg,.jpeg,.png,.webp"
-                            required>
-
-                    </div>
-
-                    <button
-                        type="submit"
-                        class="btn btn-success">
-
-                        Save Gallery
-
-                    </button>
-
-                    <a
-                        href="index.php"
-                        class="btn btn-secondary">
-
-                        Cancel
-
-                    </a>
-
-                </form>
-
-            </div>
-
-        </div>
+        <input
+            type="text"
+            name="title"
+            class="form-control"
+            required>
 
     </div>
 
+    <div class="mb-3">
+
+        <label class="form-label">
+            Description
+        </label>
+
+        <div class="mb-3">
+
+    <label class="form-label">
+
+        Website Section
+
+    </label>
+
+    <select
+        name="section"
+        class="form-select"
+        required>
+
+        <option value="">Select Section</option>
+
+        <option value="hero">Hero Banner</option>
+
+        <option value="about">About Section</option>
+
+        <option value="gallery">Gallery Section</option>
+
+        <option value="achievement">Achievement Section</option>
+
+        <option value="testimonial">Testimonials</option>
+
+    </select>
+
 </div>
 
-<?php include '../../includes/footer.php'; ?>
+        <textarea
+            name="description"
+            class="form-control"
+            rows="4"></textarea>
+
+    </div>
+
+    <div class="mb-3">
+
+        <label class="form-label">
+            Website Section
+        </label>
+
+        <select
+            name="section"
+            class="form-select"
+            required>
+
+            <option value="">Select Section</option>
+
+            <option value="hero">
+                Hero Banner
+            </option>
+
+            <option value="about">
+                About Section
+            </option>
+
+            <option value="gallery">
+                Gallery
+            </option>
+
+            <option value="testimonial">
+                Testimonials
+            </option>
+
+            <option value="achievement">
+                Achievement
+            </option>
+
+        </select>
+
+    </div>
+
+    <div class="mb-3">
+
+        <label class="form-label">
+            Image
+        </label>
+
+        <input
+            type="file"
+            name="image"
+            class="form-control"
+            accept=".jpg,.jpeg,.png,.webp"
+            required>
+
+    </div>
+
+    <button
+        type="submit"
+        class="btn btn-success">
+
+        Save Gallery
+
+    </button>
+
+    <a
+        href="index.php"
+        class="btn btn-secondary">
+
+        Cancel
+
+    </a>
+
+</form>

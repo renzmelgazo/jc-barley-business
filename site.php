@@ -106,7 +106,6 @@ $achievements = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <li><a href="#about">About</a></li>
         <li><a href="#achievements">Achievements</a></li>
         <li><a href="#gallery">Gallery</a></li>
-        <li><a href="javascript:void(0)" id="support-link">Support</a></li>
     </ul>
 </nav>
 

@@ -83,12 +83,14 @@ async function sendMessage() {
 
     form.append("message", text);
 
-    await fetch("chat/send.php", {
+    const sendResponse = await fetch("chat/send.php",{
+    method:"POST",
+    body:form
+});
 
-        method: "POST",
-        body: form
+const sendText = await sendResponse.text();
 
-    });
+console.log(sendText);
 
     const response = await fetch("chat/reply.php");
 

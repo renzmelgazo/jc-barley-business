@@ -152,7 +152,7 @@ $stmt->execute([
 
 $userSite = $stmt->fetch(PDO::FETCH_ASSOC);
 
-$websiteLink = "../site.php?owner=" . urlencode($userSite['site_slug']);
+$websiteLink = "http://localhost:8888/jc-barley-website/site.php?owner=" . urlencode($userSite['site_slug']);
 
 ?>
 
@@ -442,13 +442,11 @@ $websiteLink = "../site.php?owner=" . urlencode($userSite['site_slug']);
 
 <script>
 
-function copyWebsiteLink(){
+function copyWebsiteLink() {
 
-    navigator.clipboard.writeText(
-        window.location.origin + "<?= substr($websiteLink,2) ?>"
-    );
+    navigator.clipboard.writeText("<?= $websiteLink ?>");
 
-    alert("Website link copied!");
+    alert("Website link copied successfully!");
 
 }
 

@@ -72,6 +72,7 @@ include '../../includes/header.php';
                             <th>Title</th>
 
                             <th>Description</th>
+                            <th>Section</th>
 
                             <th width="180">Actions</th>
 
@@ -101,6 +102,8 @@ include '../../includes/header.php';
                                 <td><?= htmlspecialchars($row['title']) ?></td>
 
                                 <td><?= htmlspecialchars($row['description']) ?></td>
+
+                                <td><?= htmlspecialchars($row['section']) ?></td>
 
                                 <td>
 
