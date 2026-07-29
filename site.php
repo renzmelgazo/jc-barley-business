@@ -72,6 +72,41 @@ $stmt->execute([
 ]);
 
 $achievements = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+/*
+|--------------------------------------------------------------------------
+| Gallery Images
+|--------------------------------------------------------------------------
+*/
+
+$stmt = $conn->prepare("
+SELECT *
+FROM gallery
+WHERE owner_id = :owner_id
+ORDER BY created_at DESC
+");
+
+$stmt->execute([
+    ':owner_id' => $ownerId
+]);
+
+$galleryImages = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+$heroImage = null;
+$aboutImage = null;
+
+foreach($galleryImages as $img){
+
+    if($img['section']=="hero" && $heroImage==null){
+        $heroImage=$img;
+    }
+
+    if($img['section']=="about" && $aboutImage==null){
+        $aboutImage=$img;
+    }
+
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -112,7 +147,21 @@ $achievements = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </header>
 
     <!-- Hero Section -->
-    <section id="home" class="hero">
+    <section
+id="home"
+class="hero"
+
+<?php if($heroImage): ?>
+
+style="
+background-image:url('uploads/gallery/<?= htmlspecialchars($heroImage['image']) ?>');
+background-size:cover;
+background-position:center;
+"
+
+<?php endif; ?>
+
+>
 
         <h1>
 <?= htmlspecialchars(
@@ -151,7 +200,19 @@ JC Barley Business is committed to empowering individuals by providing opportuni
 
         <div class="about-image">
 
-            <img src="assets/images/about.jpg" alt="About JC Barley">
+            <?php if($aboutImage): ?>
+
+<img
+src="uploads/gallery/<?= htmlspecialchars($aboutImage['image']) ?>"
+alt="About">
+
+<?php else: ?>
+
+<img
+src="assets/images/about.jpg"
+alt="About">
+
+<?php endif; ?>
         </div>
 
     </section>
@@ -193,14 +254,21 @@ JC Barley Business is committed to empowering individuals by providing opportuni
 
         <div class="gallery-container">
 
-            <img src="assets/images/gallery1.jpg" alt="Gallery Image 1">
-            <img src="assets/images/gallery2.jpg" alt="Gallery Image 2">
-            <img src="assets/images/gallery3.jpg" alt="Gallery Image 3">
-            <img src="assets/images/gallery4.jpg" alt="Gallery Image 4">
-            <img src="assets/images/gallery5.jpg" alt="Gallery Image 5">
-            <img src="assets/images/gallery6.jpg" alt="Gallery Image 6">
+<?php
 
-        </div>
+foreach($galleryImages as $img):
+
+if($img['section']!="gallery") continue;
+
+?>
+
+<img
+src="uploads/gallery/<?= htmlspecialchars($img['image']) ?>"
+alt="<?= htmlspecialchars($img['title']) ?>">
+
+<?php endforeach; ?>
+
+</div>
 
     </section>
 
