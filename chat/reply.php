@@ -1,71 +1,68 @@
 <?php
 
-require "../config/database.php";
+session_start();
 
-header("Content-Type: text/plain");
+require '../config/database.php';
 
-$message = trim($_POST['message'] ?? '');
-$ownerSlug = trim($_POST['owner'] ?? '');
-
-if ($message == '') {
-    exit("Please type your message.");
+if (!isset($_SESSION['chat_session'])) {
+    exit;
 }
+
+$sessionId = $_SESSION['chat_session'];
 
 /*
 |--------------------------------------------------------------------------
-| Find Website Owner
+| Get Conversation
 |--------------------------------------------------------------------------
 */
 
 $stmt = $conn->prepare("
 SELECT id
-FROM users
-WHERE site_slug = :slug
+FROM ai_conversations
+WHERE session_id = :session_id
 LIMIT 1
 ");
 
 $stmt->execute([
-    ':slug' => $ownerSlug
+    ':session_id' => $sessionId
 ]);
 
-$owner = $stmt->fetch(PDO::FETCH_ASSOC);
+$conversation = $stmt->fetch(PDO::FETCH_ASSOC);
 
-if (!$owner) {
-    exit("Website owner not found.");
+if (!$conversation) {
+    exit;
 }
 
-$ownerId = $owner['id'];
+$conversationId = $conversation['id'];
+
+$reply = "Thank you for your message. One of our representatives will contact you shortly. May I also have your name, phone number, or email address so we can assist you better?";
 
 /*
 |--------------------------------------------------------------------------
-| Temporary AI Responses
+| Save AI Reply
 |--------------------------------------------------------------------------
 */
 
-$text = strtolower($message);
+$stmt = $conn->prepare("
+INSERT INTO conversation_messages
+(
+    conversation_id,
+    sender,
+    message
+)
+VALUES
+(
+    :conversation_id,
+    'AI',
+    :message
+)
+");
 
-if (strpos($text,"price")!==false){
+$stmt->execute([
 
-    echo "I'd be happy to help with pricing. Could you tell me which JC Barley product you're interested in?";
+    ':conversation_id' => $conversationId,
+    ':message' => $reply
 
-    exit;
+]);
 
-}
-
-if (strpos($text,"contact")!==false){
-
-    echo "Sure! May I have your Full Name, Phone Number, and Email Address so our business owner can contact you?";
-
-    exit;
-
-}
-
-if (strpos($text,"hello")!==false || strpos($text,"hi")!==false){
-
-    echo "Hello 👋 Thank you for visiting our website. How may I assist you today?";
-
-    exit;
-
-}
-
-echo "Thank you for your message. I'm here to assist you. Could you please tell me more about your inquiry?";
+echo $reply;
