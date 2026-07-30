@@ -73,6 +73,26 @@ $stmt->execute([
 
 $achievements = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+/*
+|--------------------------------------------------------------------------
+| Testimonials
+|--------------------------------------------------------------------------
+*/
+
+$stmt = $conn->prepare("
+SELECT *
+FROM testimonials
+WHERE owner_id = :owner_id
+ORDER BY created_at DESC
+LIMIT 6
+");
+
+$stmt->execute([
+    ':owner_id' => $ownerId
+]);
+
+$testimonials = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 
 /*
 |--------------------------------------------------------------------------
@@ -276,55 +296,6 @@ alt="About">
 
     </section>
 
-    <!-- Testimonials Section -->
-    <section class="testimonials">
-
-        <h2>What Our Members Say</h2>
-
-        <div class="testimonial-container">
-
-            <div class="testimonial-card">
-
-                <img src="assets/images/person1.jpg" alt="Member">
-
-                <h3>Maria Santos</h3>
-
-                <p>
-                    "JC Barley Business changed my life. I gained confidence,
-                    financial opportunities, and lifelong friends."
-                </p>
-
-            </div>
-
-            <div class="testimonial-card">
-
-                <img src="assets/images/person2.jpg" alt="Member">
-
-                <h3>Juan Dela Cruz</h3>
-
-                <p>
-                    "The support from the community inspired me to reach
-                    my goals and help others succeed."
-                </p>
-
-            </div>
-
-            <div class="testimonial-card">
-
-                <img src="assets/images/person3.jpg" alt="Member">
-
-                <h3>Ana Reyes</h3>
-
-                <p>
-                    "Every recognition motivates me to work harder and
-                    become a better leader."
-                </p>
-
-            </div>
-
-        </div>
-
-    </section>
 
     <!-- Achievement Section -->
 <section class="achievement">
