@@ -23,6 +23,15 @@ $currentUrl = $_SERVER['REQUEST_URI'];
 
     </a>
 
+    <a href="<?= DASHBOARD_URL ?>/testimonials/index.php"
+class="<?= strpos($currentUrl,'testimonials') !== false ? 'active' : '' ?>">
+
+    <i class="bi bi-chat-square-quote"></i>
+
+    <span>Testimonials</span>
+
+</a>
+
     <a href="<?= DASHBOARD_URL ?>/website-builder/index.php"
        class="<?= strpos($currentUrl,'website-builder') !== false ? 'active' : '' ?>">
 

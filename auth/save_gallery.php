@@ -15,7 +15,6 @@ if ($_SERVER["REQUEST_METHOD"] != "POST") {
 
 $title = trim($_POST['title']);
 $description = trim($_POST['description']);
-$section = trim($_POST['section']);
 
 if (empty($title)) {
     die("Title is required.");

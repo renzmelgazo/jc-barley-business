@@ -69,7 +69,6 @@ UPDATE gallery
 SET
     title = :title,
     description = :description,
-    section = :section,
     image = :image
 WHERE id = :id
 AND owner_id = :owner_id
@@ -78,7 +77,6 @@ AND owner_id = :owner_id
 $stmt->execute([
     ':title' => $title,
     ':description' => $description,
-    ':section' => $section,
     ':image' => $imageName,
     ':id' => $id,
     ':owner_id' => $_SESSION['user_id']

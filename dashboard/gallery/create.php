@@ -56,28 +56,9 @@ required>
 
 <label class="form-label">
 
-Website Section
-
 </label>
 
-<select
-name="section"
-class="form-select form-select-lg"
-required>
 
-<option value="">Select Section</option>
-
-<option value="hero">Hero Banner</option>
-
-<option value="about">About Section</option>
-
-<option value="gallery">Gallery</option>
-
-<option value="achievement">Achievement</option>
-
-<option value="testimonial">Testimonial</option>
-
-</select>
 
 </div>
 
