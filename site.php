@@ -178,13 +178,17 @@ background-position:center;
 
 </p>
 
-        <a
-href="<?= htmlspecialchars($settings['hero_button_link']) ?>"
+        <?php if(!empty($settings['hero_button_text'])): ?>
+
+<a
+href="<?= htmlspecialchars($settings['hero_button_link'] ?: '#') ?>"
 class="btn">
 
 <?= htmlspecialchars($settings['hero_button_text']) ?>
 
 </a>
+
+<?php endif; ?>
 
     </section>
 
@@ -259,6 +263,56 @@ alt="About">
         </h2>
 
         <p>Success Stories</p>
+
+    </div>
+
+</section>
+
+<!-- Testimonials Section -->
+
+<section class="testimonials">
+
+    <h2>What Our Members Say</h2>
+
+    <div class="testimonial-container">
+
+    <?php if(count($testimonials)>0): ?>
+
+        <?php foreach($testimonials as $testimonial): ?>
+
+            <div class="testimonial-card">
+
+                <img
+                src="uploads/testimonials/<?= htmlspecialchars($testimonial['image']) ?>"
+                alt="<?= htmlspecialchars($testimonial['fullname']) ?>">
+
+                <h3>
+
+                    <?= htmlspecialchars($testimonial['fullname']) ?>
+
+                </h3>
+
+                <small>
+
+                    <?= htmlspecialchars($testimonial['position']) ?>
+
+                </small>
+
+                <p>
+
+                    <?= nl2br(htmlspecialchars($testimonial['message'])) ?>
+
+                </p>
+
+            </div>
+
+        <?php endforeach; ?>
+
+    <?php else: ?>
+
+        <p>No testimonials available yet.</p>
+
+    <?php endif; ?>
 
     </div>
 

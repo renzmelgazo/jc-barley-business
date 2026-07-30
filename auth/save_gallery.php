@@ -49,7 +49,6 @@ $stmt = $conn->prepare("
     owner_id,
     title,
     description,
-    section,
     image
 )
 VALUES
@@ -57,7 +56,6 @@ VALUES
     :owner_id,
     :title,
     :description,
-    :section,
     :image
 )
 ");
@@ -66,7 +64,6 @@ $stmt->execute([
     ':owner_id'   => $_SESSION['user_id'],
     ':title'      => $title,
     ':description'=> $description,
-    ':section'    => $section,
     ':image'      => $newFilename
 ]);
 
