@@ -91,61 +91,15 @@ rows="4"><?= htmlspecialchars($gallery['description']) ?></textarea>
 
 </div>
 
-<div class="mb-3">
 
-    <label class="form-label">
-
-
-    </label>
-
-    <select
-        name="section"
-        class="form-select"
-        required>
-
-        <option value="hero"
-            <?= $gallery['section']=="hero" ? "selected" : "" ?>>
-            Hero Banner
-        </option>
-
-        <option value="about"
-            <?= $gallery['section']=="about" ? "selected" : "" ?>>
-            About Section
-        </option>
-
-        <option value="gallery"
-            <?= $gallery['section']=="gallery" ? "selected" : "" ?>>
-            Gallery Section
-        </option>
-
-        <option value="achievement"
-            <?= $gallery['section']=="achievement" ? "selected" : "" ?>>
-            Achievement Section
-        </option>
-
-        <option value="testimonial"
-            <?= $gallery['section']=="testimonial" ? "selected" : "" ?>>
-            Testimonials
-        </option>
-
-    </select>
-
-</div>
 
 <div class="mb-3">
 
 <label class="form-label">
+
 Current Image
+
 </label>
-
-<div class="mb-3">
-
-    <label class="form-label">
-    </label>
-
-
-
-</div>
 
 <br>
 

@@ -9,10 +9,10 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 $stmt = $conn->prepare("
-    SELECT *
-    FROM gallery
-    WHERE owner_id = :owner_id
-    ORDER BY created_at DESC
+SELECT *
+FROM gallery
+WHERE owner_id = :owner_id
+ORDER BY created_at DESC
 ");
 
 $stmt->execute([
@@ -31,130 +31,137 @@ include '../../includes/header.php';
 
 <div class="main-content">
 
-    <?php include '../../includes/navbar.php'; ?>
+<?php include '../../includes/navbar.php'; ?>
 
-    <div class="content">
+<div class="content">
 
-        <div class="dashboard-card">
+<div class="dashboard-card">
 
-            <div class="d-flex justify-content-between align-items-center mb-4">
+<div class="d-flex justify-content-between align-items-center mb-4">
 
-                <h2 class="fw-bold mb-0">
+<h2 class="fw-bold mb-0">
 
-                    <i class="bi bi-images text-success"></i>
+<i class="bi bi-images text-success"></i>
 
-                    Gallery Management
+Gallery Management
 
-                </h2>
+</h2>
 
-                <a href="create.php" class="btn btn-success">
+<a href="create.php" class="btn btn-success">
 
-                    <i class="bi bi-plus-circle"></i>
+<i class="bi bi-plus-circle"></i>
 
-                    Add Image
+Add Image
 
-                </a>
+</a>
 
-            </div>
+</div>
 
-            <div class="table-responsive">
+<div class="table-responsive">
 
-                <table class="table table-hover align-middle">
+<table class="table table-hover align-middle">
 
-                    <thead class="table-success">
+<thead class="table-success">
 
-                        <tr>
+<tr>
 
-                            <th width="80">ID</th>
+<th width="80">ID</th>
 
-                            <th width="150">Image</th>
+<th width="150">Image</th>
 
-                            <th>Title</th>
+<th>Title</th>
 
-                            <th>Description</th>
-                            <th>Section</th>
+<th>Description</th>
 
-                            <th width="180">Actions</th>
+<th width="180">Actions</th>
 
-                        </tr>
+</tr>
 
-                    </thead>
+</thead>
 
-                    <tbody>
+<tbody>
 
-                    <?php if(count($gallery) > 0): ?>
+<?php if(count($gallery)>0): ?>
 
-                        <?php foreach($gallery as $row): ?>
+<?php foreach($gallery as $row): ?>
 
-                            <tr>
+<tr>
 
-                                <td><?= $row['id'] ?></td>
+<td><?= $row['id'] ?></td>
 
-                                <td>
+<td>
 
-                                    <img
-                                        src="../../uploads/gallery/<?= htmlspecialchars($row['image']) ?>"
-                                        class="img-thumbnail"
-                                        style="width:120px;height:80px;object-fit:cover;">
+<img
+src="../../uploads/gallery/<?= htmlspecialchars($row['image']) ?>"
+class="img-thumbnail"
+style="width:120px;height:80px;object-fit:cover;">
 
-                                </td>
+</td>
 
-                                <td><?= htmlspecialchars($row['title']) ?></td>
+<td>
 
-                                <td><?= htmlspecialchars($row['description']) ?></td>
+<?= htmlspecialchars($row['title']) ?>
 
-                                <td><?= htmlspecialchars($row['section']) ?></td>
+</td>
 
-                                <td>
+<td>
 
-                                    <a href="edit.php?id=<?= $row['id'] ?>"
-                                       class="btn btn-primary btn-sm">
+<?= htmlspecialchars($row['description']) ?>
 
-                                        <i class="bi bi-pencil-square"></i>
+</td>
 
-                                        Edit
+<td>
 
-                                    </a>
+<a
+href="edit.php?id=<?= $row['id'] ?>"
+class="btn btn-primary btn-sm">
 
-                                    <a href="../../auth/delete_gallery.php?id=<?= $row['id'] ?>"
-                                       class="btn btn-danger btn-sm"
-                                       onclick="return confirm('Delete this image?')">
+<i class="bi bi-pencil-square"></i>
 
-                                        <i class="bi bi-trash"></i>
+Edit
 
-                                        Delete
+</a>
 
-                                    </a>
+<a
+href="../../auth/delete_gallery.php?id=<?= $row['id'] ?>"
+class="btn btn-danger btn-sm"
+onclick="return confirm('Delete this image?')">
 
-                                </td>
+<i class="bi bi-trash"></i>
 
-                            </tr>
+Delete
 
-                        <?php endforeach; ?>
+</a>
 
-                    <?php else: ?>
+</td>
 
-                        <tr>
+</tr>
 
-                            <td colspan="5" class="text-center">
+<?php endforeach; ?>
 
-                                No gallery images found.
+<?php else: ?>
 
-                            </td>
+<tr>
 
-                        </tr>
+<td colspan="5" class="text-center">
 
-                    <?php endif; ?>
+No gallery images found.
 
-                    </tbody>
+</td>
 
-                </table>
+</tr>
 
-            </div>
+<?php endif; ?>
 
-        </div>
+</tbody>
 
-    </div>
+</table>
+
+</div>
+
+</div>
+
+</div>
 
 </div>
 

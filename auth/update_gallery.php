@@ -16,7 +16,6 @@ if ($_SERVER['REQUEST_METHOD'] != 'POST') {
 $id = $_POST['id'];
 $title = trim($_POST['title']);
 $description = trim($_POST['description']);
-$section = trim($_POST['section']);
 $oldImage = $_POST['old_image'];
 
 $imageName = $oldImage;
