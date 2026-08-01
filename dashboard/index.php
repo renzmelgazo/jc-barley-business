@@ -147,15 +147,14 @@ include '../includes/header.php';
 
         <div class="d-flex gap-2 mt-3 mt-md-0">
 
-            <a
-                href="<?= $websiteLink ?>"
-                target="_blank"
-                class="btn btn-success">
+            <a href="<?= htmlspecialchars($websiteLink) ?>"
+   target="_blank"
+   class="btn btn-success">
 
-                <i class="bi bi-globe2 me-2"></i>
-                Visit Website
+    <i class="bi bi-globe2 me-2"></i>
+    Visit Website
 
-            </a>
+</a>
 
             <button
                 class="btn btn-outline-primary"
@@ -461,20 +460,19 @@ include '../includes/header.php';
 
 function copyWebsiteLink() {
 
-    const link = <?= json_encode($websiteLink) ?>;
+    const website = <?= json_encode($websiteLink) ?>;
 
-    if (navigator.clipboard) {
-
-        navigator.clipboard.writeText(link)
+    navigator.clipboard.writeText(website)
         .then(() => {
-            alert("Website link copied successfully!");
+
+            alert("Website link copied!\n\n" + website);
+
+        })
+        .catch(() => {
+
+            prompt("Copy this link:", website);
+
         });
-
-    } else {
-
-        prompt("Copy this link:", link);
-
-    }
 
 }
 
