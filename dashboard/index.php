@@ -8,12 +8,30 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
+$userId = $_SESSION['user_id'];
+
 /*
 |--------------------------------------------------------------------------
 | Dashboard Statistics
 |--------------------------------------------------------------------------
 */
 
+// Website Slug
+$stmt = $conn->prepare("
+    SELECT site_slug
+    FROM users
+    WHERE id = :id
+");
+$stmt->execute([
+    ':id' => $userId
+]);
+
+$userSite = $stmt->fetch(PDO::FETCH_ASSOC);
+
+$websiteLink = "http://localhost:8888/jc-barley-website/site.php?owner=" .
+urlencode($userSite['site_slug'] ?? '');
+
+// Achievements
 $stmt = $conn->prepare("
     SELECT COUNT(*)
     FROM achievements
@@ -21,570 +39,442 @@ $stmt = $conn->prepare("
 ");
 
 $stmt->execute([
-    ':owner_id' => $_SESSION['user_id']
+    ':owner_id' => $userId
 ]);
 
 $totalAchievements = $stmt->fetchColumn();
 
+// Gallery
 $stmt = $conn->prepare("
     SELECT COUNT(*)
     FROM gallery
     WHERE owner_id = :owner_id
 ");
 
+
 $stmt->execute([
-    ':owner_id' => $_SESSION['user_id']
+    ':owner_id' => $userId
 ]);
 
 $totalGallery = $stmt->fetchColumn();
 
+// Messages
 $stmt = $conn->prepare("
-    SELECT COUNT(*)
-    FROM contact_messages
-    WHERE owner_id = :owner_id
+SELECT
+COUNT(*) AS total,
+SUM(CASE WHEN status='Unread' THEN 1 ELSE 0 END) AS unread
+FROM contact_messages
+WHERE owner_id=:owner_id
 ");
 
 $stmt->execute([
-    ':owner_id' => $_SESSION['user_id']
+':owner_id'=>$userId
 ]);
 
-$totalMessages = $stmt->fetchColumn();
+$messageStats = $stmt->fetch(PDO::FETCH_ASSOC);
 
+$totalMessages = $messageStats['total'] ?? 0;
+$unreadMessages = $messageStats['unread'] ?? 0;
+
+// Recent Messages
 $stmt = $conn->prepare("
-    SELECT COUNT(*)
-    FROM contact_messages
-    WHERE owner_id = :owner_id
-    AND status = 'Unread'
+SELECT
+fullname,
+subject,
+status,
+created_at
+FROM contact_messages
+WHERE owner_id=:owner_id
+ORDER BY created_at DESC
+LIMIT 5
 ");
 
 $stmt->execute([
-    ':owner_id' => $_SESSION['user_id']
-]);
-
-$unreadMessages = $stmt->fetchColumn();
-
-/*
-|--------------------------------------------------------------------------
-| Recent Achievements
-|--------------------------------------------------------------------------
-*/
-
-$stmt = $conn->prepare("
-    SELECT
-        title,
-        award_date
-    FROM achievements
-    WHERE owner_id = :owner_id
-    ORDER BY award_date DESC
-    LIMIT 5
-");
-
-$stmt->execute([
-    ':owner_id' => $_SESSION['user_id']
-]);
-
-$recentAchievements = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-/*
-|--------------------------------------------------------------------------
-| Recent Messages
-|--------------------------------------------------------------------------
-*/
-
-$stmt = $conn->prepare("
-    SELECT
-        fullname,
-        subject,
-        status,
-        created_at
-    FROM contact_messages
-    WHERE owner_id = :owner_id
-    ORDER BY created_at DESC
-    LIMIT 5
-");
-
-$stmt->execute([
-    ':owner_id' => $_SESSION['user_id']
+':owner_id'=>$userId
 ]);
 
 $recentMessages = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+// Recent Achievements
+$stmt = $conn->prepare("
+SELECT
+title,
+award_date
+FROM achievements
+WHERE owner_id=:owner_id
+ORDER BY award_date DESC
+LIMIT 5
+");
+
+$stmt->execute([
+':owner_id'=>$userId
+]);
+
+$recentAchievements = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
+
 $pageTitle = "Dashboard";
+
 include '../includes/header.php';
+
 ?>
 
 <?php include '../includes/sidebar.php'; ?>
 
 <div class="main-content">
 
-    <?php include '../includes/navbar.php'; ?>
+<?php include '../includes/navbar.php'; ?>
+<div class="content">
 
-    <div class="content">
 
-        <div class="dashboard-card mb-4">
+        <!-- Website Actions -->
+<div class="dashboard-card mb-4">
 
-    <h2 class="fw-bold">
+    <div class="d-flex justify-content-between align-items-center flex-wrap">
 
-        Welcome back,
-        <?= htmlspecialchars($_SESSION['fullname']) ?> 👋
+        <div>
 
-    </h2>
-
-    <?php
-
-date_default_timezone_set('Asia/Manila');
-
-$hour = date('H');
-
-if($hour < 12){
-
-    $greeting = "Good Morning ☀️";
-
-}elseif($hour < 18){
-
-    $greeting = "Good Afternoon 🌤";
-
-}else{
-
-    $greeting = "Good Evening 🌙";
-
-}
-
-?>
-
-<div class="dashboard-header mb-4">
-
-    <div class="row align-items-center">
-
-        <div class="col-md-8">
-
-            <span class="badge bg-success px-3 py-2 mb-2">
-
-                Business Website Control Center
-
-            </span>
-
-            <h2 class="fw-bold mt-2">
-
-                <?= $greeting ?>,
-                <?= htmlspecialchars($user['fullname']) ?>
-
-            </h2>
+            <h5 class="fw-bold mb-1">
+                My Website
+            </h5>
 
             <p class="text-muted mb-0">
-
-                Monitor your website, manage content, and grow your business from one dashboard.
-
+                Visit or share your public website.
             </p>
 
         </div>
 
-        <div class="col-md-4 text-end">
-
-            <div class="text-muted">
-
-                <?= date('l') ?>
-
-            </div>
-
-            <h5 class="fw-bold">
-
-                <?= date('F d, Y') ?>
-
-            </h5>
+        <div class="d-flex gap-2 mt-3 mt-md-0">
 
             <a
-            href="<?= BASE_URL ?>/site.php?owner=<?= htmlspecialchars($user['site_slug']) ?>"
-            target="_blank"
-            class="btn btn-success mt-2">
+                href="<?= $websiteLink ?>"
+                target="_blank"
+                class="btn btn-success">
 
-                <i class="bi bi-box-arrow-up-right"></i>
-
+                <i class="bi bi-globe2 me-2"></i>
                 Visit Website
 
             </a>
 
+            <button
+                class="btn btn-outline-primary"
+                onclick="copyWebsiteLink()">
+
+                <i class="bi bi-copy me-2"></i>
+                Copy Website
+
+            </button>
+
         </div>
 
     </div>
 
 </div>
 
-</div>
 
-        <?php
+<!-- Dashboard Shortcuts -->
+<div class="row g-4 mb-5">
 
-$stmt = $conn->prepare("
-    SELECT site_slug
-    FROM users
-    WHERE id = :id
-");
+    <div class="col-xl-3 col-md-6">
 
-$stmt->execute([
-    ':id' => $_SESSION['user_id']
-]);
+        <a href="gallery/index.php" class="text-decoration-none">
 
-$userSite = $stmt->fetch(PDO::FETCH_ASSOC);
+            <div class="card dashboard-shortcut border-0 shadow-sm h-100">
 
-$websiteLink = "http://localhost:8888/jc-barley-website/site.php?owner=" . urlencode($userSite['site_slug']);
+                <div class="card-body text-center py-4">
 
-?>
+                    <div class="shortcut-icon bg-primary-subtle text-primary">
 
-<div class="mb-4 d-flex gap-2">
-
-    <a
-        href="<?= $websiteLink ?>"
-        target="_blank"
-        class="btn btn-success">
-
-        🌐 View My Website
-
-    </a>
-
-    <button
-        type="button"
-        class="btn btn-outline-primary"
-        onclick="copyWebsiteLink()">
-
-        📋 Copy Website Link
-
-    </button>
-
-</div>
-
-    
-    
-
-<!-- Dashboard Grid -->
-
-<div class="row g-4">
-
-    <!-- Quick Actions -->
-
-    <div class="col-lg-8">
-
-        <div class="card shadow-sm border-0 rounded-4 h-100">
-
-            <div class="card-body p-4">
-
-                <h4 class="fw-bold mb-4">
-                    Quick Actions
-                </h4>
-
-                <div class="row g-3">
-
-                    <div class="col-md-6">
-
-                        <a href="website-builder/index.php" class="text-decoration-none">
-
-                            <div class="card border-0 shadow-sm rounded-4 p-4 h-100 action-card">
-
-                                <i class="bi bi-globe2 fs-1 text-success"></i>
-
-                                <h5 class="mt-3 fw-bold">
-                                    Website Builder
-                                </h5>
-
-                                <p class="text-muted mb-0">
-                                    Customize your website.
-                                </p>
-
-                            </div>
-
-                        </a>
+                        <i class="bi bi-images"></i>
 
                     </div>
 
-                    <div class="col-md-6">
+                    <h5 class="mt-3 fw-bold">
+                        Gallery
+                    </h5>
 
-                        <a href="gallery/index.php" class="text-decoration-none">
-
-                            <div class="card border-0 shadow-sm rounded-4 p-4 h-100 action-card">
-
-                                <i class="bi bi-images fs-1 text-primary"></i>
-
-                                <h5 class="mt-3 fw-bold">
-                                    Gallery
-                                </h5>
-
-                                <p class="text-muted mb-0">
-                                    Upload images.
-                                </p>
-
-                            </div>
-
-                        </a>
-
+                    <div class="display-6 fw-bold text-primary mt-2">
+                        <?= $totalGallery ?>
                     </div>
 
-                    <div class="col-md-6">
-
-                        <a href="achievements/index.php" class="text-decoration-none">
-
-                            <div class="card border-0 shadow-sm rounded-4 p-4 h-100 action-card">
-
-                                <i class="bi bi-trophy fs-1 text-warning"></i>
-
-                                <h5 class="mt-3 fw-bold">
-                                    Achievements
-                                </h5>
-
-                                <p class="text-muted mb-0">
-                                    Manage awards.
-                                </p>
-
-                            </div>
-
-                        </a>
-
-                    </div>
-
-                    <div class="col-md-6">
-
-                        <a href="testimonials/index.php" class="text-decoration-none">
-
-                            <div class="card border-0 shadow-sm rounded-4 p-4 h-100 action-card">
-
-                                <i class="bi bi-chat-square-quote fs-1 text-info"></i>
-
-                                <h5 class="mt-3 fw-bold">
-                                    Testimonials
-                                </h5>
-
-                                <p class="text-muted mb-0">
-                                    Manage testimonials.
-                                </p>
-
-                            </div>
-
-                        </a>
-
-                    </div>
+                    <p class="text-muted mb-0">
+                        Uploaded Images
+                    </p>
 
                 </div>
 
             </div>
 
-        </div>
+        </a>
 
     </div>
 
-    <!-- Website Information -->
 
-    <div class="col-lg-4">
+    <div class="col-xl-3 col-md-6">
 
-        <div class="card shadow-sm border-0 rounded-4 h-100">
+        <a href="achievements/index.php" class="text-decoration-none">
 
-            <div class="card-body p-4">
+            <div class="card dashboard-shortcut border-0 shadow-sm h-100">
 
-                <h4 class="fw-bold mb-4">
+                <div class="card-body text-center py-4">
 
-                    Website Information
+                    <div class="shortcut-icon bg-success-subtle text-success">
 
-                </h4>
+                        <i class="bi bi-trophy-fill"></i>
 
-                <p class="mb-2">
+                    </div>
 
-                    <strong>Status</strong>
+                    <h5 class="mt-3 fw-bold">
+                        Achievements
+                    </h5>
 
-                </p>
+                    <div class="display-6 fw-bold text-success mt-2">
+                        <?= $totalAchievements ?>
+                    </div>
 
-                <span class="badge bg-success rounded-pill px-3 py-2">
-
-                    Online
-
-                </span>
-
-                <hr>
-
-                <p>
-
-                    <strong>Public Link</strong>
-
-                </p>
-
-                <input
-
-                    id="websiteLink"
-                    class="form-control mb-3"
-                    readonly
-                    value="<?= BASE_URL ?>/site.php?owner=<?= htmlspecialchars($user['site_slug']) ?>">
-
-                <div class="d-grid gap-2">
-
-                    <button
-type="button"
-class="btn btn-success"
-onclick="copyWebsiteLink(this)">
-
-<i class="bi bi-copy"></i>
-
-Copy Link
-
-</button>   
-
-                    <a
-
-                        href="<?= BASE_URL ?>/site.php?owner=<?= htmlspecialchars($user['site_slug']) ?>"
-
-                        target="_blank"
-
-                        class="btn btn-outline-success">
-
-                        <i class="bi bi-box-arrow-up-right"></i>
-
-                        Open Website
-
-                    </a>
+                    <p class="text-muted mb-0">
+                        Awards & Certificates
+                    </p>
 
                 </div>
 
-            
+            </div>
 
-        </div>
+        </a>
+
+    </div>
+
+
+    <div class="col-xl-3 col-md-6">
+
+        <a href="testimonials/index.php" class="text-decoration-none">
+
+            <div class="card dashboard-shortcut border-0 shadow-sm h-100">
+
+                <div class="card-body text-center py-4">
+
+                    <div class="shortcut-icon bg-warning-subtle text-warning">
+
+                        <i class="bi bi-chat-square-quote-fill"></i>
+
+                    </div>
+
+                    <h5 class="mt-3 fw-bold">
+                        Testimonials
+                    </h5>
+
+                    <div class="display-6 fw-bold text-warning mt-2">
+                        —
+                    </div>
+
+                    <p class="text-muted mb-0">
+                        Client Feedback
+                    </p>
+
+                </div>
+
+            </div>
+
+        </a>
+
+    </div>
+
+
+    <div class="col-xl-3 col-md-6">
+
+        <a href="messages/index.php" class="text-decoration-none">
+
+            <div class="card dashboard-shortcut border-0 shadow-sm h-100">
+
+                <div class="card-body text-center py-4">
+
+                    <div class="shortcut-icon bg-danger-subtle text-danger">
+
+                        <i class="bi bi-envelope-fill"></i>
+
+                    </div>
+
+                    <h5 class="mt-3 fw-bold">
+                        Messages
+                    </h5>
+
+                    <div class="display-6 fw-bold text-danger mt-2">
+                        <?= $unreadMessages ?>
+                    </div>
+
+                    <p class="text-muted mb-0">
+                        Unread Messages
+                    </p>
+
+                </div>
+
+            </div>
+
+        </a>
 
     </div>
 
 </div>
 
-      
-            <!-- Recent Achievements -->
-            <div class="col-lg-6 mb-4">
+<!-- Recent Messages -->
+<div class="card shadow-sm border-0">
 
-                <div class="card shadow border-0">
+    <div class="card-header bg-primary text-white py-3">
 
-                    <div class="card-header bg-success text-white">
-                        <h5 class="mb-0">Recent Achievements</h5>
-                    </div>
+        <h5 class="mb-0">
+            <i class="bi bi-envelope-fill me-2"></i>
+            Recent Messages
+        </h5>
 
-                    <div class="card-body">
+    </div>
 
-                        <table class="table table-hover">
+    <div class="card-body p-0">
 
-                            <thead>
-                                <tr>
-                                    <th>Title</th>
-                                    <th>Date</th>
-                                </tr>
-                            </thead>
+        <div class="table-responsive">
 
-                            <tbody>
+            <table class="table table-hover align-middle mb-0">
 
-                            <?php if(count($recentAchievements) > 0): ?>
+                <thead class="table-light">
 
-                                <?php foreach($recentAchievements as $achievement): ?>
+                    <tr>
 
-                                <tr>
-                                    <td><?= htmlspecialchars($achievement['title']) ?></td>
-                                    <td><?= date('M d, Y', strtotime($achievement['award_date'])) ?></td>
-                                </tr>
+                        <th class="ps-4">Name</th>
 
-                                <?php endforeach; ?>
+                        <th>Subject</th>
+
+                        <th>Status</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                <?php if(!empty($recentMessages)): ?>
+
+                    <?php foreach($recentMessages as $message): ?>
+
+                    <tr>
+
+                        <td class="ps-4 fw-semibold">
+
+                            <?= htmlspecialchars($message['fullname']) ?>
+
+                        </td>
+
+                        <td>
+
+                            <?= htmlspecialchars($message['subject']) ?>
+
+                        </td>
+
+                        <td>
+
+                            <?php if($message['status']=='Unread'): ?>
+
+                                <span class="badge bg-danger">
+                                    Unread
+                                </span>
 
                             <?php else: ?>
 
-                                <tr>
-                                    <td colspan="2" class="text-center text-muted">
-                                        No achievements found.
-                                    </td>
-                                </tr>
+                                <span class="badge bg-success">
+                                    Read
+                                </span>
 
                             <?php endif; ?>
 
-                            </tbody>
+                        </td>
 
-                        </table>
+                    </tr>
 
-                    </div>
+                    <?php endforeach; ?>
 
-                </div>
+                <?php else: ?>
 
-            </div>
+                    <tr>
 
-            <!-- Recent Messages -->
-            <div class="col-lg-6 mb-4">
+                        <td colspan="3" class="text-center py-4 text-muted">
 
-                <div class="card shadow border-0">
+                            No messages found.
 
-                    <div class="card-header bg-primary text-white">
-                        <h5 class="mb-0">Recent Messages</h5>
-                    </div>
+                        </td>
 
-                    <div class="card-body">
+                    </tr>
 
-                        <table class="table table-hover">
+                <?php endif; ?>
 
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Subject</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
+                </tbody>
 
-                            <tbody>
-
-                            <?php if(count($recentMessages) > 0): ?>
-
-                                <?php foreach($recentMessages as $message): ?>
-
-                                <tr>
-
-                                    <td><?= htmlspecialchars($message['fullname']) ?></td>
-
-                                    <td><?= htmlspecialchars($message['subject']) ?></td>
-
-                                    <td>
-
-                                        <?php if($message['status'] == 'Unread'): ?>
-
-                                            <span class="badge bg-danger">Unread</span>
-
-                                        <?php else: ?>
-
-                                            <span class="badge bg-success">Read</span>
-
-                                        <?php endif; ?>
-
-                                    </td>
-
-                                </tr>
-
-                                <?php endforeach; ?>
-
-                            <?php else: ?>
-
-                                <tr>
-                                    <td colspan="3" class="text-center text-muted">
-                                        No messages found.
-                                    </td>
-                                </tr>
-
-                            <?php endif; ?>
-
-                            </tbody>
-
-                        </table>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
+            </table>
 
         </div>
 
 </div>
+
+</div>
+
+</div>
+
+<style>
+
+.dashboard-shortcut{
+
+    transition:.25s;
+
+    border-radius:18px;
+
+}
+
+.dashboard-shortcut:hover{
+
+    transform:translateY(-8px);
+
+    box-shadow:0 18px 35px rgba(0,0,0,.12)!important;
+
+}
+
+.shortcut-icon{
+
+    width:70px;
+
+    height:70px;
+
+    border-radius:50%;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    margin:auto;
+
+    font-size:30px;
+
+}
+
+</style>
 
 <script>
 
 function copyWebsiteLink() {
 
-    navigator.clipboard.writeText("<?= $websiteLink ?>");
+    const link = <?= json_encode($websiteLink) ?>;
 
-    alert("Website link copied successfully!");
+    if (navigator.clipboard) {
+
+        navigator.clipboard.writeText(link)
+        .then(() => {
+            alert("Website link copied successfully!");
+        });
+
+    } else {
+
+        prompt("Copy this link:", link);
+
+    }
 
 }
 
