@@ -556,3 +556,67 @@ opacity:1;
 }
 
 }
+
+.action-card{
+
+transition:.25s;
+
+cursor:pointer;
+
+}
+
+.action-card:hover{
+
+transform:translateY(-6px);
+
+box-shadow:0 15px 35px rgba(0,0,0,.08)!important;
+
+}
+
+.action-card i{
+
+transition:.25s;
+
+}
+
+.action-card:hover i{
+
+transform:scale(1.12);
+
+}
+
+.dashboard-header{
+
+    background:#fff;
+
+    border-radius:20px;
+
+    padding:30px;
+
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
+
+    margin-bottom:30px;
+
+}
+
+.dashboard-header h2{
+
+    font-size:34px;
+
+    font-weight:700;
+
+}
+
+.dashboard-header p{
+
+    font-size:15px;
+
+}
+
+.dashboard-header .badge{
+
+    font-size:13px;
+
+    border-radius:50px;
+
+}

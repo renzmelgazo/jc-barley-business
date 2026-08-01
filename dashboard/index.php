@@ -130,11 +130,85 @@ include '../includes/header.php';
 
     </h2>
 
-    <p class="text-muted mb-0">
+    <?php
 
-        Manage your business website, achievements, gallery, and customer messages from one place.
+date_default_timezone_set('Asia/Manila');
 
-    </p>
+$hour = date('H');
+
+if($hour < 12){
+
+    $greeting = "Good Morning ☀️";
+
+}elseif($hour < 18){
+
+    $greeting = "Good Afternoon 🌤";
+
+}else{
+
+    $greeting = "Good Evening 🌙";
+
+}
+
+?>
+
+<div class="dashboard-header mb-4">
+
+    <div class="row align-items-center">
+
+        <div class="col-md-8">
+
+            <span class="badge bg-success px-3 py-2 mb-2">
+
+                Business Website Control Center
+
+            </span>
+
+            <h2 class="fw-bold mt-2">
+
+                <?= $greeting ?>,
+                <?= htmlspecialchars($user['fullname']) ?>
+
+            </h2>
+
+            <p class="text-muted mb-0">
+
+                Monitor your website, manage content, and grow your business from one dashboard.
+
+            </p>
+
+        </div>
+
+        <div class="col-md-4 text-end">
+
+            <div class="text-muted">
+
+                <?= date('l') ?>
+
+            </div>
+
+            <h5 class="fw-bold">
+
+                <?= date('F d, Y') ?>
+
+            </h5>
+
+            <a
+            href="<?= BASE_URL ?>/site.php?owner=<?= htmlspecialchars($user['site_slug']) ?>"
+            target="_blank"
+            class="btn btn-success mt-2">
+
+                <i class="bi bi-box-arrow-up-right"></i>
+
+                Visit Website
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
 
 </div>
 
@@ -178,23 +252,116 @@ $websiteLink = "http://localhost:8888/jc-barley-website/site.php?owner=" . urlen
 
 </div>
 
-        <div class="row g-4 mb-5">
+    
+    
 
-    <div class="col-xl-3 col-md-6">
+<!-- Dashboard Grid -->
 
-        <div class="dashboard-card">
+<div class="row g-4">
 
-            <div class="d-flex justify-content-between align-items-center">
+    <!-- Quick Actions -->
 
-                <div>
+    <div class="col-lg-8">
 
-                    <h6>Achievements</h6>
+        <div class="card shadow-sm border-0 rounded-4 h-100">
 
-                    <h2><?= $totalAchievements ?></h2>
+            <div class="card-body p-4">
+
+                <h4 class="fw-bold mb-4">
+                    Quick Actions
+                </h4>
+
+                <div class="row g-3">
+
+                    <div class="col-md-6">
+
+                        <a href="website-builder/index.php" class="text-decoration-none">
+
+                            <div class="card border-0 shadow-sm rounded-4 p-4 h-100 action-card">
+
+                                <i class="bi bi-globe2 fs-1 text-success"></i>
+
+                                <h5 class="mt-3 fw-bold">
+                                    Website Builder
+                                </h5>
+
+                                <p class="text-muted mb-0">
+                                    Customize your website.
+                                </p>
+
+                            </div>
+
+                        </a>
+
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <a href="gallery/index.php" class="text-decoration-none">
+
+                            <div class="card border-0 shadow-sm rounded-4 p-4 h-100 action-card">
+
+                                <i class="bi bi-images fs-1 text-primary"></i>
+
+                                <h5 class="mt-3 fw-bold">
+                                    Gallery
+                                </h5>
+
+                                <p class="text-muted mb-0">
+                                    Upload images.
+                                </p>
+
+                            </div>
+
+                        </a>
+
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <a href="achievements/index.php" class="text-decoration-none">
+
+                            <div class="card border-0 shadow-sm rounded-4 p-4 h-100 action-card">
+
+                                <i class="bi bi-trophy fs-1 text-warning"></i>
+
+                                <h5 class="mt-3 fw-bold">
+                                    Achievements
+                                </h5>
+
+                                <p class="text-muted mb-0">
+                                    Manage awards.
+                                </p>
+
+                            </div>
+
+                        </a>
+
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <a href="testimonials/index.php" class="text-decoration-none">
+
+                            <div class="card border-0 shadow-sm rounded-4 p-4 h-100 action-card">
+
+                                <i class="bi bi-chat-square-quote fs-1 text-info"></i>
+
+                                <h5 class="mt-3 fw-bold">
+                                    Testimonials
+                                </h5>
+
+                                <p class="text-muted mb-0">
+                                    Manage testimonials.
+                                </p>
+
+                            </div>
+
+                        </a>
+
+                    </div>
 
                 </div>
-
-                <i class="bi bi-trophy-fill stat-icon text-success"></i>
 
             </div>
 
@@ -202,67 +369,77 @@ $websiteLink = "http://localhost:8888/jc-barley-website/site.php?owner=" . urlen
 
     </div>
 
-    <div class="col-xl-3 col-md-6">
+    <!-- Website Information -->
 
-        <div class="dashboard-card">
+    <div class="col-lg-4">
 
-            <div class="d-flex justify-content-between align-items-center">
+        <div class="card shadow-sm border-0 rounded-4 h-100">
 
-                <div>
+            <div class="card-body p-4">
 
-                    <h6>Gallery</h6>
+                <h4 class="fw-bold mb-4">
 
-                    <h2><?= $totalGallery ?></h2>
+                    Website Information
+
+                </h4>
+
+                <p class="mb-2">
+
+                    <strong>Status</strong>
+
+                </p>
+
+                <span class="badge bg-success rounded-pill px-3 py-2">
+
+                    Online
+
+                </span>
+
+                <hr>
+
+                <p>
+
+                    <strong>Public Link</strong>
+
+                </p>
+
+                <input
+
+                    id="websiteLink"
+                    class="form-control mb-3"
+                    readonly
+                    value="<?= BASE_URL ?>/site.php?owner=<?= htmlspecialchars($user['site_slug']) ?>">
+
+                <div class="d-grid gap-2">
+
+                    <button
+type="button"
+class="btn btn-success"
+onclick="copyWebsiteLink(this)">
+
+<i class="bi bi-copy"></i>
+
+Copy Link
+
+</button>   
+
+                    <a
+
+                        href="<?= BASE_URL ?>/site.php?owner=<?= htmlspecialchars($user['site_slug']) ?>"
+
+                        target="_blank"
+
+                        class="btn btn-outline-success">
+
+                        <i class="bi bi-box-arrow-up-right"></i>
+
+                        Open Website
+
+                    </a>
 
                 </div>
 
-                <i class="bi bi-images stat-icon text-primary"></i>
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <div class="col-xl-3 col-md-6">
-
-        <div class="dashboard-card">
-
-            <div class="d-flex justify-content-between align-items-center">
-
-                <div>
-
-                    <h6>Messages</h6>
-
-                    <h2><?= $totalMessages ?></h2>
-
-                </div>
-
-                <i class="bi bi-envelope-fill stat-icon text-warning"></i>
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <div class="col-xl-3 col-md-6">
-
-        <div class="dashboard-card">
-
-            <div class="d-flex justify-content-between align-items-center">
-
-                <div>
-
-                    <h6>Unread</h6>
-
-                    <h2><?= $unreadMessages ?></h2>
-
-                </div>
-
-                <i class="bi bi-bell-fill stat-icon text-danger"></i>
-
-            </div>
+            
 
         </div>
 
@@ -270,46 +447,7 @@ $websiteLink = "http://localhost:8888/jc-barley-website/site.php?owner=" . urlen
 
 </div>
 
-        <!-- System Overview -->
-        <div class="card shadow border-0 mb-4">
-
-            <div class="card-header">
-                <h4 class="mb-0">System Overview</h4>
-            </div>
-
-            <div class="card-body">
-
-                <table class="table table-bordered align-middle">
-
-                    <tr>
-                        <th width="250">Total Achievements</th>
-                        <td><?= $totalAchievements ?></td>
-                    </tr>
-
-                    <tr>
-                        <th>Total Gallery Images</th>
-                        <td><?= $totalGallery ?></td>
-                    </tr>
-
-                    <tr>
-                        <th>Total Contact Messages</th>
-                        <td><?= $totalMessages ?></td>
-                    </tr>
-
-                    <tr>
-                        <th>Unread Messages</th>
-                        <td><?= $unreadMessages ?></td>
-                    </tr>
-
-                </table>
-
-            </div>
-
-        </div>
-
-        <!-- Recent Tables -->
-        <div class="row">
-
+      
             <!-- Recent Achievements -->
             <div class="col-lg-6 mb-4">
 
