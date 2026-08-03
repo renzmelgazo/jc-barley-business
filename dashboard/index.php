@@ -31,9 +31,7 @@ $userSite = $stmt->fetch(PDO::FETCH_ASSOC);
 $websiteLink = "http://localhost:8888/jc-barley-website/site.php?owner=" .
 urlencode($userSite['site_slug'] ?? '');
 
-echo "<pre>";
-var_dump($websiteLink);
-echo "</pre>";
+
 
 // Achievements
 $stmt = $conn->prepare("
@@ -464,7 +462,7 @@ include '../includes/header.php';
     <script>
 
 function copyWebsiteLink(){
-    
+
 
     const text = <?= json_encode($websiteLink) ?>;
 
