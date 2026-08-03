@@ -102,10 +102,10 @@ include '../includes/sidebar.php';
                     </label>
 
                     <input
-                        type="text"
-                        name="fullname"
-                        class="form-control"
-                        value="<?= htmlspecialchars($user['fullname']) ?>">
+    type="text"
+    name="website_name"
+    class="form-control"
+    value="<?= htmlspecialchars($settings['website_name'] ?? '') ?>">
 
                 </div>
 

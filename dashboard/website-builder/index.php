@@ -64,6 +64,18 @@ Hero Section
 
 <div class="col-md-6">
 
+<div class="mb-3">
+
+    <label>Website Name</label>
+
+    <input
+        type="text"
+        name="website_name"
+        class="form-control"
+        value="<?= htmlspecialchars($website['website_name'] ?? '') ?>">
+
+</div>
+
 <label>Hero Image</label>
 
 <input
