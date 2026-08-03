@@ -31,6 +31,10 @@ $userSite = $stmt->fetch(PDO::FETCH_ASSOC);
 $websiteLink = "http://localhost:8888/jc-barley-website/site.php?owner=" .
 urlencode($userSite['site_slug'] ?? '');
 
+echo "<pre>";
+var_dump($websiteLink);
+echo "</pre>";
+
 // Achievements
 $stmt = $conn->prepare("
     SELECT COUNT(*)
@@ -156,14 +160,14 @@ include '../includes/header.php';
 
 </a>
 
-            <button
-                class="btn btn-outline-primary"
-                onclick="copyWebsiteLink()">
+<button
+    class="btn btn-outline-primary"
+    onclick="copyWebsiteLink()">
 
-                <i class="bi bi-copy me-2"></i>
-                Copy Website
+    <i class="bi bi-copy me-2"></i>
+    Copy Website
 
-            </button>
+</button>
 
         </div>
 
@@ -456,23 +460,13 @@ include '../includes/header.php';
 
 </style>
 
-<script>
+    <script>
+function copyWebsiteLink(){
+    alert("INDEX.PHP FUNCTION");
 
-function copyWebsiteLink() {
+    const text = <?= json_encode($websiteLink) ?>;
 
-    const website = <?= json_encode($websiteLink) ?>;
-
-    navigator.clipboard.writeText(website)
-        .then(() => {
-
-            alert("Website link copied!\n\n" + website);
-
-        })
-        .catch(() => {
-
-            prompt("Copy this link:", website);
-
-        });
+    alert(text);
 
 }
 
