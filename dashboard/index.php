@@ -162,6 +162,7 @@ include '../includes/header.php';
 
 <button
     class="btn btn-outline-primary"
+    type="button"
     onclick="copyWebsiteLink()">
 
     <i class="bi bi-copy me-2"></i>
@@ -461,12 +462,37 @@ include '../includes/header.php';
 </style>
 
     <script>
+
 function copyWebsiteLink(){
-    alert("INDEX.PHP FUNCTION");
+    
 
     const text = <?= json_encode($websiteLink) ?>;
 
-    alert(text);
+    navigator.clipboard.writeText(text)
+    .then(function(){
+
+        alert("Website copied!\n\n" + text);
+
+    })
+    .catch(function(err){
+
+        console.log(err);
+
+        const input = document.createElement("input");
+        input.value = text;
+
+        document.body.appendChild(input);
+
+        input.select();
+        input.setSelectionRange(0,99999);
+
+        document.execCommand("copy");
+
+        document.body.removeChild(input);
+
+        alert("Website copied!\n\n" + text);
+
+    });
 
 }
 
