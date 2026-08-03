@@ -16,6 +16,7 @@ $ownerId = $_SESSION['user_id'];
 |--------------------------------------------------------------------------
 */
 
+$website_name = trim($_POST['website_name']);
 $hero_title        = trim($_POST['hero_title']);
 $hero_description  = trim($_POST['hero_description']);
 $hero_button_text  = trim($_POST['hero_button_text']);
@@ -122,6 +123,8 @@ if (isset($_FILES['about_image']) && $_FILES['about_image']['error'] == 0) {
 $stmt = $conn->prepare("
 UPDATE website_settings SET
 
+website_name = :website_name,
+
 hero_image = :hero_image,
 hero_title = :hero_title,
 hero_description = :hero_description,
@@ -143,6 +146,8 @@ WHERE owner_id = :owner
 ");
 
 $stmt->execute([
+
+    ':website_name' => $website_name,
 
     ':hero_image' => $hero_image,
     ':hero_title' => $hero_title,
