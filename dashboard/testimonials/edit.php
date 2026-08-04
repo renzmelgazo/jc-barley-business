@@ -49,7 +49,7 @@ include '../../includes/navbar.php';
 </h2>
 
 <form
-action="../../auth/update_testimonial.php"
+action="../../auth/update_testimonials.php"
 method="POST"
 enctype="multipart/form-data">
 

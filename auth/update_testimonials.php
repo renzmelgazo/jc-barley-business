@@ -49,15 +49,15 @@ AND owner_id = :owner
 
 $stmt->execute([
 
-':fullname'=>$fullname,
-':position'=>$position,
-':message'=>$message,
-':image'=>$image,
+    ':fullname' => $fullname,
+    ':position' => $position,
+    ':message' => $message,
+    ':image'    => $image,
 
-':id'=>$id,
-':owner'=>$owner
+    ':id'       => $id,
+    ':owner'    => $owner
 
 ]);
 
-header("Location: ../dashboard/testimonials/index.php?success=1");
+header("Location: ../dashboard/testimonials/index.php?updated=1");
 exit;

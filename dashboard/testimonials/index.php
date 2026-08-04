@@ -53,11 +53,17 @@ Add Testimonial
 
 </div>
 
-<?php if(isset($_GET['success'])): ?>
+<?php if(isset($_GET['updated'])): ?>
 
-<div class="alert alert-success">
+<div class="alert alert-success alert-dismissible fade show">
 
-Testimonial saved successfully.
+    Testimonial updated successfully.
+
+    <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="alert">
+    </button>
 
 </div>
 
