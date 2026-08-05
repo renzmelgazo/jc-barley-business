@@ -37,7 +37,7 @@ include '../../includes/navbar.php';
 
 <h2 class="fw-bold">
 
-💬 Testimonials
+Testimonials
 
 </h2>
 
