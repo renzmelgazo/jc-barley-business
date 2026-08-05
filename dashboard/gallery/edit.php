@@ -32,13 +32,14 @@ if (!$gallery) {
 }
 
 include '../../includes/header.php';
-include '../../includes/navbar.php';
-
+include '../../includes/sidebar.php';
 ?>
 
-<div class="d-flex">
+<div class="main-content">
 
-<?php include '../../includes/sidebar.php'; ?>
+<?php include '../../includes/navbar.php'; ?>
+
+<div class="content">
 
 <div class="container-fluid p-4">
 
@@ -142,7 +143,7 @@ Cancel
 
 </form>
 
-</div>
+
 
 </div>
 
