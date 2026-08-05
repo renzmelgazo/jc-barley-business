@@ -1,340 +1,340 @@
-<?php
+    <?php
 
-require '../../config/session.php';
-require '../../config/database.php';
+    require '../../config/session.php';
+    require '../../config/database.php';
 
-if(!isset($_SESSION['user_id'])){
-    header("Location: ../../login.php");
-    exit;
-}
+    if(!isset($_SESSION['user_id'])){
+        header("Location: ../../login.php");
+        exit;
+    }
 
-$stmt = $conn->prepare("
-SELECT *
-FROM website_settings
-WHERE owner_id = :owner
-LIMIT 1
-");
+    $stmt = $conn->prepare("
+    SELECT *
+    FROM website_settings
+    WHERE owner_id = :owner
+    LIMIT 1
+    ");
 
-$stmt->execute([
-    ':owner' => $_SESSION['user_id']
-]);
+    $stmt->execute([
+        ':owner' => $_SESSION['user_id']
+    ]);
 
-$website = $stmt->fetch(PDO::FETCH_ASSOC);
+    $website = $stmt->fetch(PDO::FETCH_ASSOC);
 
-include '../../includes/header.php';
-include '../../includes/sidebar.php';
-include '../../includes/navbar.php';
+    include '../../includes/header.php';
+    include '../../includes/sidebar.php';
+    include '../../includes/navbar.php';
 
-?>
+    ?>
 
-<div class="main-content">
+    <div class="main-content">
 
-<div class="content">
+    <div class="content">
 
-<div class="container-fluid">
+    <div class="container-fluid">
 
-<h2 class="mb-4 fw-bold">
+    <h2 class="mb-4 fw-bold">
 
-🌐 Website Builder
+    🌐 Website Builder
 
-</h2>
+    </h2>
 
-<form
-action="../../auth/save_website_builder.php"
-method="POST"
-enctype="multipart/form-data">
+    <form
+    action="../../auth/save_website_builder.php"
+    method="POST"
+    enctype="multipart/form-data">
 
-<!-- HERO -->
+    <!-- HERO -->
 
-<div class="card shadow mb-4">
+    <div class="card shadow mb-4">
 
-<div class="card-header bg-success text-white">
+    <div class="card-header bg-success text-white">
 
-<h4 class="mb-0">
+    <h4 class="mb-0">
 
-Hero Section
+    Hero Section
 
-</h4>
+    </h4>
 
-</div>
+    </div>
 
-<div class="card-body">
+    <div class="card-body">
 
-<div class="row">
+    <div class="row">
 
-<div class="col-md-6">
+    <div class="col-md-6">
 
-<div class="mb-3">
+    <div class="mb-3">
 
-    <label>Website Name</label>
+        <label>Website Name</label>
+
+        <input
+            type="text"
+            name="website_name"
+            class="form-control"
+            value="<?= htmlspecialchars($website['website_name'] ?? '') ?>">
+
+    </div>
+
+    <label>Hero Image</label>
 
     <input
-        type="text"
-        name="website_name"
-        class="form-control"
-        value="<?= htmlspecialchars($website['website_name'] ?? '') ?>">
+    type="file"
+    name="hero_image"
+    class="form-control">
 
-</div>
+    <?php if(!empty($website['hero_image'])): ?>
 
-<label>Hero Image</label>
+    <img
+    src="../../uploads/website/<?= $website['hero_image']; ?>"
+    class="img-fluid mt-3 rounded">
 
-<input
-type="file"
-name="hero_image"
-class="form-control">
+    <?php endif; ?>
 
-<?php if(!empty($website['hero_image'])): ?>
+    </div>
 
-<img
-src="../../uploads/website/<?= $website['hero_image']; ?>"
-class="img-fluid mt-3 rounded">
+    <div class="col-md-6">
 
-<?php endif; ?>
+    <label>Hero Title</label>
 
-</div>
+    <input
+    type="text"
+    name="hero_title"
+    class="form-control"
+    value="<?= htmlspecialchars($website['hero_title'] ?? '') ?>">
 
-<div class="col-md-6">
+    <br>
 
-<label>Hero Title</label>
+    <label>Hero Description</label>
 
-<input
-type="text"
-name="hero_title"
-class="form-control"
-value="<?= htmlspecialchars($website['hero_title'] ?? '') ?>">
+    <textarea
+    name="hero_description"
+    class="form-control"
+    rows="5"><?= htmlspecialchars($website['hero_description'] ?? '') ?></textarea>
 
-<br>
+    <br>
 
-<label>Hero Description</label>
+    <label>Button Text</label>
 
-<textarea
-name="hero_description"
-class="form-control"
-rows="5"><?= htmlspecialchars($website['hero_description'] ?? '') ?></textarea>
+    <input
+    type="text"
+    name="hero_button_text"
+    class="form-control"
+    value="<?= htmlspecialchars($website['hero_button_text'] ?? '') ?>">
 
-<br>
+    <br>
 
-<label>Button Text</label>
+    <label>Button Link</label>
 
-<input
-type="text"
-name="hero_button_text"
-class="form-control"
-value="<?= htmlspecialchars($website['hero_button_text'] ?? '') ?>">
+    <input
+    type="text"
+    name="hero_button_link"
+    class="form-control"
+    value="<?= htmlspecialchars($website['hero_button_link'] ?? '') ?>">
 
-<br>
+    <br>
 
-<label>Button Link</label>
+    <label>Text Color</label>
 
-<input
-type="text"
-name="hero_button_link"
-class="form-control"
-value="<?= htmlspecialchars($website['hero_button_link'] ?? '') ?>">
+    <input
+    type="color"
+    name="hero_text_color"
+    class="form-control form-control-color"
+    value="<?= $website['hero_text_color'] ?? '#ffffff'; ?>">
 
-<br>
+    </div>
 
-<label>Text Color</label>
+    </div>
 
-<input
-type="color"
-name="hero_text_color"
-class="form-control form-control-color"
-value="<?= $website['hero_text_color'] ?? '#ffffff'; ?>">
+    </div>
 
-</div>
+    </div>
 
-</div>
+    <!-- ABOUT -->
 
-</div>
+    <div class="card shadow">
 
-</div>
+    <div class="card-header bg-primary text-white">
 
-<!-- ABOUT -->
+    <h4 class="mb-0">
 
-<div class="card shadow">
+    <!-- STATISTICS -->
 
-<div class="card-header bg-primary text-white">
+    <div class="card shadow mt-4">
 
-<h4 class="mb-0">
+    <div class="card-header bg-warning text-dark">
 
-<!-- STATISTICS -->
+    <h4 class="mb-0">
+    📊 Statistics
+    </h4>
 
-<div class="card shadow mt-4">
+    </div>
 
-<div class="card-header bg-warning text-dark">
+    <!-- TESTIMONIALS -->
 
-<h4 class="mb-0">
-📊 Statistics
-</h4>
+    <div class="card shadow mt-4">
 
-</div>
+    <div class="card-header bg-info text-white">
 
-<!-- TESTIMONIALS -->
+    <h4 class="mb-0">
+    Testimonials
+    </h4>
 
-<div class="card shadow mt-4">
+    </div>
 
-<div class="card-header bg-info text-white">
+    <div class="card-body">
 
-<h4 class="mb-0">
-💬 Testimonials
-</h4>
+    <p class="text-muted">
 
-</div>
+    Mamaya natin ito gagawing dynamic gamit ang sariling database table.
 
-<div class="card-body">
+    </p>
 
-<p class="text-muted">
+    </div>
 
-Mamaya natin ito gagawing dynamic gamit ang sariling database table.
+    </div>
 
-</p>
+    <div class="card-body">
 
-</div>
+    <div class="row">
 
-</div>
+    <div class="col-md-3">
 
-<div class="card-body">
+    <label>Years in Business</label>
 
-<div class="row">
+    <input
+    type="text"
+    name="stat_years"
+    class="form-control"
+    value="<?= htmlspecialchars($website['stat_years'] ?? '10+') ?>">
 
-<div class="col-md-3">
+    </div>
 
-<label>Years in Business</label>
+    <div class="col-md-3">
 
-<input
-type="text"
-name="stat_years"
-class="form-control"
-value="<?= htmlspecialchars($website['stat_years'] ?? '10+') ?>">
+    <label>Happy Members</label>
 
-</div>
+    <input
+    type="text"
+    name="stat_members"
+    class="form-control"
+    value="<?= htmlspecialchars($website['stat_members'] ?? '5000+') ?>">
 
-<div class="col-md-3">
+    </div>
 
-<label>Happy Members</label>
+    <div class="col-md-3">
 
-<input
-type="text"
-name="stat_members"
-class="form-control"
-value="<?= htmlspecialchars($website['stat_members'] ?? '5000+') ?>">
+    <label>Awards</label>
 
-</div>
+    <input
+    type="text"
+    name="stat_awards"
+    class="form-control"
+    value="<?= htmlspecialchars($website['stat_awards'] ?? '100+') ?>">
 
-<div class="col-md-3">
+    </div>
 
-<label>Awards</label>
+    <div class="col-md-3">
 
-<input
-type="text"
-name="stat_awards"
-class="form-control"
-value="<?= htmlspecialchars($website['stat_awards'] ?? '100+') ?>">
+    <label>Success Stories</label>
 
-</div>
+    <input
+    type="text"
+    name="stat_success"
+    class="form-control"
+    value="<?= htmlspecialchars($website['stat_success'] ?? '1000+') ?>">
 
-<div class="col-md-3">
+    </div>
 
-<label>Success Stories</label>
+    </div>
 
-<input
-type="text"
-name="stat_success"
-class="form-control"
-value="<?= htmlspecialchars($website['stat_success'] ?? '1000+') ?>">
+    </div>
 
-</div>
+    </div>
 
-</div>
+    About Section
 
-</div>
+    </h4>
 
-</div>
+    </div>
 
-About Section
+    <div class="card-body">
 
-</h4>
+    <div class="row">
 
-</div>
+    <div class="col-md-6">
 
-<div class="card-body">
+    <label>About Image</label>
 
-<div class="row">
+    <input
+    type="file"
+    name="about_image"
+    class="form-control">
 
-<div class="col-md-6">
+    <?php if(!empty($website['about_image'])): ?>
 
-<label>About Image</label>
+    <img
+    src="../../uploads/website/<?= $website['about_image']; ?>"
+    class="img-fluid mt-3 rounded">
 
-<input
-type="file"
-name="about_image"
-class="form-control">
+    <?php endif; ?>
 
-<?php if(!empty($website['about_image'])): ?>
+    </div>
 
-<img
-src="../../uploads/website/<?= $website['about_image']; ?>"
-class="img-fluid mt-3 rounded">
+    <div class="col-md-6">
 
-<?php endif; ?>
+    <label>About Title</label>
 
-</div>
+    <input
+    type="text"
+    name="about_title"
+    class="form-control"
+    value="<?= htmlspecialchars($website['about_title'] ?? '') ?>">
 
-<div class="col-md-6">
+    <br>
 
-<label>About Title</label>
+    <label>About Description</label>
 
-<input
-type="text"
-name="about_title"
-class="form-control"
-value="<?= htmlspecialchars($website['about_title'] ?? '') ?>">
+    <textarea
+    name="about_description"
+    class="form-control"
+    rows="5"><?= htmlspecialchars($website['about_description'] ?? '') ?></textarea>
 
-<br>
+    <br>
 
-<label>About Description</label>
+    <label>Text Color</label>
 
-<textarea
-name="about_description"
-class="form-control"
-rows="5"><?= htmlspecialchars($website['about_description'] ?? '') ?></textarea>
+    <input
+    type="color"
+    name="about_text_color"
+    class="form-control form-control-color"
+    value="<?= $website['about_text_color'] ?? '#000000'; ?>">
 
-<br>
+    </div>
 
-<label>Text Color</label>
+    </div>
 
-<input
-type="color"
-name="about_text_color"
-class="form-control form-control-color"
-value="<?= $website['about_text_color'] ?? '#000000'; ?>">
+    </div>
 
-</div>
+    </div>
 
-</div>
+    <div class="mt-4">
 
-</div>
+    <button
+    class="btn btn-success btn-lg">
 
-</div>
+    💾 Save Website
 
-<div class="mt-4">
+    </button>
 
-<button
-class="btn btn-success btn-lg">
+    </div>
 
-💾 Save Website
+    </form>
 
-</button>
+    </div>
 
-</div>
+    </div>
 
-</form>
+    </div>
 
-</div>
-
-</div>
-
-</div>
-
-<?php include '../../includes/footer.php'; ?>
+    <?php include '../../includes/footer.php'; ?>
