@@ -38,7 +38,7 @@ include '../../includes/header.php';
             <div class="d-flex justify-content-between align-items-center mb-4">
 
                 <h2 class="fw-bold mb-0 text-success">
-                    <i class="bi bi-trophy-fill"></i>
+
                     Achievements
                 </h2>
 
@@ -83,7 +83,7 @@ include '../../includes/header.php';
                                         <a href="edit.php?id=<?= $achievement['id']; ?>"
                                            class="btn btn-primary btn-sm">
 
-                                            <i class="bi bi-pencil"></i>
+                                            <i class="bi bi-pencil-square"></i>
                                             Edit
 
                                         </a>

@@ -41,7 +41,7 @@ include '../../includes/header.php';
 
                 <h2 class="fw-bold mb-0">
 
-                    <i class="bi bi-envelope-fill text-success"></i>
+                
 
                     Contact Messages
 

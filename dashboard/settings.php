@@ -75,8 +75,7 @@ include '../includes/sidebar.php';
 
     <h2 class="fw-bold mb-4">
 
-        <i class="bi bi-gear-fill text-success"></i>
-
+        
         Settings
 
     </h2>

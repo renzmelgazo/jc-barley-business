@@ -133,6 +133,7 @@ style="width:70px;height:70px;object-fit:cover;border-radius:10px;">
 href="edit.php?id=<?= $row['id'] ?>"
 class="btn btn-primary btn-sm">
 
+<i class="bi bi-pencil-square"></i>
 Edit
 
 </a>
