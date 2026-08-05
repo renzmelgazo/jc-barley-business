@@ -35,9 +35,9 @@ $stmt->execute([
 ]);
 
 // Update Session
-$_SESSION['fullname'] = $fullname;
-$_SESSION['username'] = $username;
-$_SESSION['email'] = $email;
+$_SESSION['fullname'] = $_POST['fullname'];
+$_SESSION['username'] = $_POST['username'];
+$_SESSION['email']    = $_POST['email'];
 
 $_SESSION['success'] = "Settings updated successfully.";
 
