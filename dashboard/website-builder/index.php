@@ -35,7 +35,7 @@
 
     <h2 class="mb-4 fw-bold">
 
-    🌐 Website Builder
+    Website Builder
 
     </h2>
 
