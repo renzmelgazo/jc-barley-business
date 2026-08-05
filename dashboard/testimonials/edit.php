@@ -45,7 +45,7 @@ include '../../includes/navbar.php';
 <div class="container-fluid">
 
 <h2 class="fw-bold mb-4">
-✏ Edit Testimonial
+Edit Testimonial
 </h2>
 
 <form
