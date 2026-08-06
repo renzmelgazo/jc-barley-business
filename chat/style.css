@@ -169,3 +169,47 @@ cursor:pointer;
 background:#157347;
 
 }
+
+#visitorForm{
+
+padding:15px;
+
+display:flex;
+
+flex-direction:column;
+
+gap:10px;
+
+}
+
+#visitorForm input{
+
+padding:10px;
+
+border:1px solid #ccc;
+
+border-radius:8px;
+
+}
+
+#visitorForm button{
+
+background:#198754;
+
+color:white;
+
+border:none;
+
+padding:12px;
+
+border-radius:8px;
+
+cursor:pointer;
+
+}
+
+#visitorForm button:hover{
+
+background:#157347;
+
+}

@@ -159,3 +159,19 @@ setInterval(function(){
     loadMessages();
 
 },3000);
+
+fetch("chat/get_conversation.php?owner_id="+window.ownerId)
+
+.then(res=>res.text())
+
+.then(id=>{
+
+    if(id!=""){
+
+        conversationId=id;
+
+        loadMessages();
+
+    }
+
+});

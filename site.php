@@ -431,18 +431,46 @@ alt="About">
 
     </div>
 
-    <div class="chat-input">
+    <div id="visitorForm">
 
-        <input
-            type="text"
-            id="message"
-            placeholder="Type your message...">
+    <input
+        type="text"
+        id="visitorName"
+        placeholder="Your Name">
 
-        <button id="sendBtn">
-            Send
-        </button>
+    <input
+        type="text"
+        id="visitorPhone"
+        placeholder="Phone Number">
 
-    </div>
+    <input
+        type="email"
+        id="visitorEmail"
+        placeholder="Email (optional)">
+
+    <button id="startChatBtn">
+        Start Chat
+    </button>
+
+</div>
+
+<div
+id="chatInputArea"
+class="chat-input"
+style="display:none;">
+
+    <input
+        type="text"
+        id="message"
+        placeholder="Type your message...">
+
+    <button id="sendBtn">
+
+        Send
+
+    </button>
+
+</div>
 
 </div>
 
