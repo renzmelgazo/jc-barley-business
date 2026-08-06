@@ -1,122 +1,142 @@
 <?php
 
-session_start();
+header("Content-Type: application/json");
 
-require '../config/database.php';
+require "config.php";
+require "gemini.php";
 
-if (!isset($_SESSION['conversation_id'])) {
-    exit("Conversation not found.");
-}
-
-$conversationId = $_SESSION['conversation_id'];
+$conn = db();
 
 $message = trim($_POST['message'] ?? '');
 
-if ($message == '') {
-    exit("Empty message.");
+$ownerId = intval($_POST['owner_id'] ?? 0);
+
+if($message==""){
+
+    echo json_encode([
+        "success"=>false
+    ]);
+
+    exit;
+
 }
 
 /*
 |--------------------------------------------------------------------------
-| Get Current Visitor Info
+| Find Pending Conversation
 |--------------------------------------------------------------------------
 */
 
 $stmt = $conn->prepare("
-SELECT
-    visitor_name,
-    visitor_phone,
-    visitor_email
-FROM conversations
-WHERE id=:id
+SELECT id
+FROM chat_conversations
+WHERE owner_id=?
+AND visitor_name IS NULL
+ORDER BY id DESC
 LIMIT 1
 ");
 
-$stmt->execute([
-    ":id"=>$conversationId
-]);
+$stmt->execute([$ownerId]);
 
 $conversation = $stmt->fetch(PDO::FETCH_ASSOC);
 
-if(!$conversation){
-    exit;
-}
-
 /*
 |--------------------------------------------------------------------------
-| Auto Save Visitor Information
+| Create Conversation
 |--------------------------------------------------------------------------
 */
 
-if(empty($conversation['visitor_name'])){
+if(!$conversation){
 
-    $stmt=$conn->prepare("
-    UPDATE conversations
-    SET visitor_name=:value
-    WHERE id=:id
+    $stmt = $conn->prepare("
+    INSERT INTO chat_conversations(owner_id)
+    VALUES(?)
     ");
 
-    $stmt->execute([
-        ":value"=>$message,
-        ":id"=>$conversationId
-    ]);
+    $stmt->execute([$ownerId]);
 
-}
-elseif(empty($conversation['visitor_phone'])){
+    $conversationId = $conn->lastInsertId();
 
-    $stmt=$conn->prepare("
-    UPDATE conversations
-    SET visitor_phone=:value
-    WHERE id=:id
-    ");
+}else{
 
-    $stmt->execute([
-        ":value"=>$message,
-        ":id"=>$conversationId
-    ]);
-
-}
-elseif(empty($conversation['visitor_email'])){
-
-    $stmt=$conn->prepare("
-    UPDATE conversations
-    SET visitor_email=:value
-    WHERE id=:id
-    ");
-
-    $stmt->execute([
-        ":value"=>$message,
-        ":id"=>$conversationId
-    ]);
+    $conversationId = $conversation['id'];
 
 }
 
 /*
 |--------------------------------------------------------------------------
-| Save Customer Message
+| Save Visitor Message
 |--------------------------------------------------------------------------
 */
 
 $stmt = $conn->prepare("
-INSERT INTO conversation_messages
-(
+INSERT INTO chat_messages(
+
 conversation_id,
+
 sender,
+
 message
+
 )
-VALUES
-(
-:id,
-'Customer',
-:message
-)
+
+VALUES(?,?,?)
 ");
 
 $stmt->execute([
 
-":id"=>$conversationId,
-":message"=>$message
+$conversationId,
+
+'Visitor',
+
+$message
 
 ]);
 
-echo "OK";
+/*
+|--------------------------------------------------------------------------
+| Ask AI
+|--------------------------------------------------------------------------
+*/
+
+$reply = askGemini($message);
+
+/*
+|--------------------------------------------------------------------------
+| Save AI Reply
+|--------------------------------------------------------------------------
+*/
+
+$stmt = $conn->prepare("
+INSERT INTO chat_messages(
+
+conversation_id,
+
+sender,
+
+message
+
+)
+
+VALUES(?,?,?)
+");
+
+$stmt->execute([
+
+$conversationId,
+
+'AI',
+
+$reply
+
+]);
+
+echo json_encode([
+
+"success"=>true,
+
+"reply"=>$reply,
+
+"conversation_id"=>$conversationId
+
+]);

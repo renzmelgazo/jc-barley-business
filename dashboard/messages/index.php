@@ -41,9 +41,9 @@ include '../../includes/header.php';
 
                 <h2 class="fw-bold mb-0">
 
-                
 
-                    Contact Messages
+
+                    Messages
 
                 </h2>
 
