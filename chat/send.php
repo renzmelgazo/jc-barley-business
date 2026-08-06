@@ -4,15 +4,29 @@ ini_set('display_errors', 1);
 header("Content-Type: application/json");
 
 require "config.php";
-require "gemini.php";
+
 
 $conn = db();
 
 $message = trim($_POST['message'] ?? '');
 
 $ownerId = intval($_POST['owner_id'] ?? 0);
-$visitorToken =
-trim($_POST['visitor_token'] ?? '');
+if(empty($_COOKIE['visitor_token'])){
+
+    $visitorToken = bin2hex(random_bytes(16));
+
+    setcookie(
+        "visitor_token",
+        $visitorToken,
+        time() + (86400 * 365),
+        "/"
+    );
+
+}else{
+
+    $visitorToken = $_COOKIE['visitor_token'];
+
+}
 
 if($message==""){
 
@@ -64,7 +78,9 @@ owner_id,
 
 visitor_token,
 
-status
+status,
+
+last_activity
 
 )
 
@@ -74,16 +90,18 @@ VALUES(
 
 ?,
 
-'Open'
+'Unread',
+
+NOW()
 
 )
     ");
 
     $stmt->execute([
 
-$ownerId,
+    $ownerId,
 
-$visitorToken
+    $visitorToken
 
 ]);
 
@@ -125,50 +143,31 @@ $message
 
 ]);
 
-/*
-|--------------------------------------------------------------------------
-| Ask AI
-|--------------------------------------------------------------------------
-*/
 
-$reply = askGemini($message);
 
-/*
-|--------------------------------------------------------------------------
-| Save AI Reply
-|--------------------------------------------------------------------------
-*/
+
 
 $stmt = $conn->prepare("
-INSERT INTO chat_messages(
+UPDATE chat_conversations
+SET
 
-conversation_id,
+status='Unread',
 
-sender,
+last_activity=NOW()
 
-message
-
-)
-
-VALUES(?,?,?)
+WHERE id=?
 ");
 
 $stmt->execute([
-
-$conversationId,
-
-'AI',
-
-$reply
-
+    $conversationId
 ]);
+
+
 
 echo json_encode([
 
-"success"=>true,
+    "success"=>true,
 
-"reply"=>$reply,
-
-"conversation_id"=>$conversationId
+    "conversation_id"=>$conversationId
 
 ]);

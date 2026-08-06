@@ -57,7 +57,7 @@ include '../../includes/navbar.php';
 
 <h2 class="fw-bold mb-4">
 
-💬 Customer Messages
+Customer Messages
 
 </h2>
 
