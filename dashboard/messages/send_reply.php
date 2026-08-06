@@ -3,54 +3,24 @@
 require '../../config/session.php';
 require '../../config/database.php';
 
-header('Content-Type: application/json');
+header("Content-Type: application/json");
 
 if(!isset($_SESSION['user_id'])){
-    echo json_encode([
-        'success'=>false,
-        'message'=>'Unauthorized'
-    ]);
     exit;
 }
 
 $conversationId = intval($_POST['conversation_id'] ?? 0);
+
 $message = trim($_POST['message'] ?? '');
 
-if($conversationId==0 || $message==''){
+if($conversationId==0 || $message==""){
+
     echo json_encode([
-        'success'=>false,
-        'message'=>'Missing data'
+        "success"=>false
     ]);
+
     exit;
-}
 
-/*
-|--------------------------------------------------------------------------
-| Verify Conversation Belongs To Owner
-|--------------------------------------------------------------------------
-*/
-
-$stmt = $conn->prepare("
-SELECT id
-FROM chat_conversations
-WHERE id = :id
-AND owner_id = :owner
-LIMIT 1
-");
-
-$stmt->execute([
-    ':id'=>$conversationId,
-    ':owner'=>$_SESSION['user_id']
-]);
-
-$exists = $stmt->fetch(PDO::FETCH_ASSOC);
-
-if(!$exists){
-    echo json_encode([
-        'success'=>false,
-        'message'=>'Conversation not found'
-    ]);
-    exit;
 }
 
 /*
@@ -72,9 +42,9 @@ message
 
 VALUES(
 
-:id,
+:conversation,
 
-:sender,
+'Owner',
 
 :message
 
@@ -82,9 +52,11 @@ VALUES(
 ");
 
 $stmt->execute([
-    ':id'=>$conversationId,
-    ':sender'=>'Owner',
-    ':message'=>$message
+
+':conversation'=>$conversationId,
+
+':message'=>$message
+
 ]);
 
 /*
@@ -95,19 +67,24 @@ $stmt->execute([
 
 $stmt = $conn->prepare("
 UPDATE chat_conversations
+
 SET
 
-status = 'Waiting for Visitor',
+status='Replied',
 
-updated_at = NOW()
+last_activity=NOW()
 
-WHERE id = :id
+WHERE id=:id
 ");
 
 $stmt->execute([
-    ':id'=>$conversationId
+
+':id'=>$conversationId
+
 ]);
 
 echo json_encode([
-    'success'=>true
+
+"success"=>true
+
 ]);

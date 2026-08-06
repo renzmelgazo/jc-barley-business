@@ -112,9 +112,9 @@ foreach($messages as $msg){
 
                 <strong>
 
-                    You
+Owner
 
-                </strong>
+</strong>
 
                 <br>
 

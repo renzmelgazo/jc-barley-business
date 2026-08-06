@@ -22,6 +22,8 @@ c.visitor_phone,
 
 c.status,
 
+c.last_activity,
+
 (
 SELECT message
 FROM chat_messages
@@ -34,7 +36,7 @@ FROM chat_conversations c
 
 WHERE c.owner_id=:owner
 
-ORDER BY c.updated_at DESC
+ORDER BY c.last_activity DESC, c.id DESC
 ");
 
 $stmt->execute([
