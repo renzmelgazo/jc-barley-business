@@ -15,8 +15,8 @@ $currentUrl = $_SERVER['REQUEST_URI'];
         </h4>
     </div>
 
-    <a href="<?= DASHBOARD_URL ?>/index.php"
-       class="<?= strpos($currentUrl,'/dashboard/index.php') !== false ? 'active' : '' ?>">
+    <a href="<?= DASHBOARD_URL ?>/messages/index.php"
+       class="<?= basename($_SERVER['PHP_SELF']) == 'messages.php' ? 'active' : '' ?>">
 
         <i class="bi bi-speedometer2"></i>
         <span>Dashboard</span>

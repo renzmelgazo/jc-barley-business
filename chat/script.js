@@ -18,18 +18,17 @@ chatButton.onclick = function () {
 
 };
 
-function appendMessage(sender, text){
+function appendMessage(sender,text){
 
-    const div = document.createElement("div");
+    const div=document.createElement("div");
 
-    div.className = sender;
+    div.className=sender;
 
-    div.innerHTML = text.replace(/\n/g,"<br>");
+    div.innerHTML=text.replace(/\n/g,"<br>");
 
     messages.appendChild(div);
 
-    messages.scrollTop = messages.scrollHeight;
-
+    
 }
 
 sendBtn.onclick = sendMessage;
@@ -75,9 +74,11 @@ function sendMessage(){
 
         if(data.success){
 
-            appendMessage("bot",data.reply);
+    window.conversationId = data.conversation_id;
 
-        }else{
+    appendMessage("bot",data.reply);
+
+}else{
 
             appendMessage("bot","Sorry, something went wrong.");
 
@@ -94,3 +95,41 @@ function sendMessage(){
 }
 
 });
+
+setInterval(function(){
+
+    if(!window.conversationId) return;
+
+    fetch(
+        "chat/load_messages.php?conversation_id="
+        +
+        window.conversationId
+    )
+
+    .then(res=>res.json())
+
+    .then(data=>{
+
+        messages.innerHTML="";
+
+        data.forEach(function(msg){
+
+            if(msg.sender==="Visitor"){
+
+                appendMessage("user",msg.message);
+
+            }else if(msg.sender==="Owner"){
+
+                appendMessage("bot",msg.message);
+
+            }else{
+
+                appendMessage("bot",msg.message);
+
+            }
+
+        });
+
+    });
+
+},2000);
