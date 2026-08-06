@@ -226,7 +226,7 @@ fd.append("message",
 
 document.getElementById("replyMessage").value);
 
-fetch("send_reply.php",{
+fetch("send_reply.php", {
 
 method:"POST",
 
