@@ -166,13 +166,13 @@ background-position:center;
 >
 
         <h1>
-<span style="color:<?= htmlspecialchars($settings['hero_text_color']) ?>">
+<span style="color:<?= htmlspecialchars($settings['hero_title_color'] ?? '#ffffff') ?>">
 <?= htmlspecialchars($settings['hero_title']) ?>
 </span>
 </h1>
 
 
-        <p style="color:<?= htmlspecialchars($settings['hero_text_color']) ?>">
+        <p style="color:<?= htmlspecialchars($settings['hero_description_color'] ?? '#ffffff') ?>">
 
 <?= nl2br(htmlspecialchars($settings['hero_description'])) ?>
 
@@ -198,14 +198,14 @@ class="btn">
         <div class="about-text">
 
         <h2
-style="color:<?= htmlspecialchars($settings['about_text_color'] ?? '#000000') ?>">
+style="color:<?= htmlspecialchars($settings['about_title_color'] ?? '#000000') ?>">
 
 <?= htmlspecialchars($settings['about_title']) ?>
 
 </h2>
 
 <p
-style="color:<?= htmlspecialchars($settings['about_text_color'] ?? '#000000') ?>">
+style="color:<?= htmlspecialchars($settings['about_description_color'] ?? '#000000') ?>">
 
 <?= nl2br(htmlspecialchars($settings['about_description'])) ?>
 

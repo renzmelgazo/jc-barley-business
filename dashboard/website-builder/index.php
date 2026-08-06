@@ -134,13 +134,23 @@
 
     <br>
 
-    <label>Text Color</label>
+    <label>Hero Title Color</label>
 
-    <input
-    type="color"
-    name="hero_text_color"
-    class="form-control form-control-color"
-    value="<?= $website['hero_text_color'] ?? '#ffffff'; ?>">
+<input
+type="color"
+name="hero_title_color"
+class="form-control form-control-color"
+value="<?= $website['hero_title_color'] ?? '#ffffff' ?>">
+
+<br>
+
+<label>Hero Description Color</label>
+
+<input
+type="color"
+name="hero_description_color"
+class="form-control form-control-color"
+value="<?= $website['hero_description_color'] ?? '#ffffff' ?>">
 
     </div>
 
@@ -152,178 +162,163 @@
 
     <!-- ABOUT -->
 
-    <div class="card shadow">
+<div class="card shadow mt-4">
 
     <div class="card-header bg-primary text-white">
 
-    <h4 class="mb-0">
+        <h4 class="mb-0">
+            About Section
+        </h4>
 
-    <!-- STATISTICS -->
+    </div>
 
-    <div class="card shadow mt-4">
+    <div class="card-body">
+
+        <div class="row">
+
+            <div class="col-md-6">
+
+                <label>About Image</label>
+
+                <input
+                    type="file"
+                    name="about_image"
+                    class="form-control">
+
+                <?php if(!empty($website['about_image'])): ?>
+
+                    <img
+                        src="../../uploads/website/<?= $website['about_image']; ?>"
+                        class="img-fluid mt-3 rounded">
+
+                <?php endif; ?>
+
+            </div>
+
+            <div class="col-md-6">
+
+                <label>About Title</label>
+
+                <input
+                    type="text"
+                    name="about_title"
+                    class="form-control"
+                    value="<?= htmlspecialchars($website['about_title'] ?? '') ?>">
+
+                <br>
+
+                <label>About Description</label>
+
+                <textarea
+                    name="about_description"
+                    rows="5"
+                    class="form-control"><?= htmlspecialchars($website['about_description'] ?? '') ?></textarea>
+
+                <br>
+
+                <label>About Title Color</label>
+
+                <input
+                    type="color"
+                    name="about_title_color"
+                    class="form-control form-control-color"
+                    value="<?= $website['about_title_color'] ?? '#000000' ?>">
+
+                <br>
+
+                <label>About Description Color</label>
+
+                <input
+                    type="color"
+                    name="about_description_color"
+                    class="form-control form-control-color"
+                    value="<?= $website['about_description_color'] ?? '#000000' ?>">
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- STATISTICS -->
+
+<div class="card shadow mt-4">
 
     <div class="card-header bg-warning text-dark">
 
-    <h4 class="mb-0">
-    📊 Statistics
-    </h4>
+        <h4 class="mb-0">
+             Statistics
+        </h4>
 
-    </div>
-
-    <!-- TESTIMONIALS -->
-
-    <div class="card shadow mt-4">
-
-    <div class="card-header bg-info text-white">
-
-    <h4 class="mb-0">
-    Testimonials
-    </h4>
-
+        
     </div>
 
     <div class="card-body">
 
-    <p class="text-muted">
+        <div class="row">
 
-    Mamaya natin ito gagawing dynamic gamit ang sariling database table.
+            <div class="col-md-3">
 
-    </p>
+                <label>Years in Business</label>
 
-    </div>
+                <input
+                    type="text"
+                    name="stat_years"
+                    class="form-control"
+                    value="<?= htmlspecialchars($website['stat_years'] ?? '10+') ?>">
 
-    </div>
+            </div>
 
-    <div class="card-body">
+            <div class="col-md-3">
 
-    <div class="row">
+                <label>Happy Members</label>
 
-    <div class="col-md-3">
+                <input
+                    type="text"
+                    name="stat_members"
+                    class="form-control"
+                    value="<?= htmlspecialchars($website['stat_members'] ?? '5000+') ?>">
 
-    <label>Years in Business</label>
+            </div>
 
-    <input
-    type="text"
-    name="stat_years"
-    class="form-control"
-    value="<?= htmlspecialchars($website['stat_years'] ?? '10+') ?>">
+            <div class="col-md-3">
 
-    </div>
+                <label>Awards</label>
 
-    <div class="col-md-3">
+                <input
+                    type="text"
+                    name="stat_awards"
+                    class="form-control"
+                    value="<?= htmlspecialchars($website['stat_awards'] ?? '100+') ?>">
 
-    <label>Happy Members</label>
+            </div>
 
-    <input
-    type="text"
-    name="stat_members"
-    class="form-control"
-    value="<?= htmlspecialchars($website['stat_members'] ?? '5000+') ?>">
+            <div class="col-md-3">
 
-    </div>
+                <label>Success Stories</label>
 
-    <div class="col-md-3">
+                <input
+                    type="text"
+                    name="stat_success"
+                    class="form-control"
+                    value="<?= htmlspecialchars($website['stat_success'] ?? '1000+') ?>">
 
-    <label>Awards</label>
+            </div>
 
-    <input
-    type="text"
-    name="stat_awards"
-    class="form-control"
-    value="<?= htmlspecialchars($website['stat_awards'] ?? '100+') ?>">
-
-    </div>
-
-    <div class="col-md-3">
-
-    <label>Success Stories</label>
-
-    <input
-    type="text"
-    name="stat_success"
-    class="form-control"
-    value="<?= htmlspecialchars($website['stat_success'] ?? '1000+') ?>">
+        </div>
 
     </div>
 
-    </div>
-
-    </div>
-
-    </div>
-
-    About Section
-
-    </h4>
-
-    </div>
-
-    <div class="card-body">
-
-    <div class="row">
-
-    <div class="col-md-6">
-
-    <label>About Image</label>
-
-    <input
-    type="file"
-    name="about_image"
-    class="form-control">
-
-    <?php if(!empty($website['about_image'])): ?>
-
-    <img
-    src="../../uploads/website/<?= $website['about_image']; ?>"
-    class="img-fluid mt-3 rounded">
-
-    <?php endif; ?>
-
-    </div>
-
-    <div class="col-md-6">
-
-    <label>About Title</label>
-
-    <input
-    type="text"
-    name="about_title"
-    class="form-control"
-    value="<?= htmlspecialchars($website['about_title'] ?? '') ?>">
-
-    <br>
-
-    <label>About Description</label>
-
-    <textarea
-    name="about_description"
-    class="form-control"
-    rows="5"><?= htmlspecialchars($website['about_description'] ?? '') ?></textarea>
-
-    <br>
-
-    <label>Text Color</label>
-
-    <input
-    type="color"
-    name="about_text_color"
-    class="form-control form-control-color"
-    value="<?= $website['about_text_color'] ?? '#000000'; ?>">
-
-    </div>
-
-    </div>
-
-    </div>
-
-    </div>
+</div>
 
     <div class="mt-4">
 
     <button
     class="btn btn-success btn-lg">
 
-    💾 Save Website
+     Save Website
 
     </button>
 

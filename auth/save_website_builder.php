@@ -9,6 +9,7 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 $ownerId = $_SESSION['user_id'];
+$website_name = trim($_POST['website_name']);
 
 /*
 |--------------------------------------------------------------------------
@@ -16,12 +17,14 @@ $ownerId = $_SESSION['user_id'];
 |--------------------------------------------------------------------------
 */
 
-$website_name = trim($_POST['website_name']);
+
 $hero_title        = trim($_POST['hero_title']);
 $hero_description  = trim($_POST['hero_description']);
 $hero_button_text  = trim($_POST['hero_button_text']);
 $hero_button_link  = trim($_POST['hero_button_link']);
-$hero_text_color   = trim($_POST['hero_text_color']);
+
+$hero_title_color = trim($_POST['hero_title_color']);
+$hero_description_color = trim($_POST['hero_description_color']);
 
 /*
 |--------------------------------------------------------------------------
@@ -29,10 +32,11 @@ $hero_text_color   = trim($_POST['hero_text_color']);
 |--------------------------------------------------------------------------
 */
 
-$about_title        = trim($_POST['about_title']);
-$about_description  = trim($_POST['about_description']);
-$about_text_color   = trim($_POST['about_text_color']);
+$about_title       = trim($_POST['about_title']);
+$about_description = trim($_POST['about_description']);
 
+$about_title_color = trim($_POST['about_title_color']);
+$about_description_color = trim($_POST['about_description_color']);
 /*
 |--------------------------------------------------------------------------
 | STATISTICS
@@ -130,12 +134,14 @@ hero_title = :hero_title,
 hero_description = :hero_description,
 hero_button_text = :hero_button_text,
 hero_button_link = :hero_button_link,
-hero_text_color = :hero_text_color,
+hero_title_color = :hero_title_color,
+hero_description_color = :hero_description_color,
 
 about_image = :about_image,
 about_title = :about_title,
 about_description = :about_description,
-about_text_color = :about_text_color,
+about_title_color = :about_title_color,
+about_description_color = :about_description_color,
 
 stat_years = :stat_years,
 stat_members = :stat_members,
@@ -150,16 +156,20 @@ $stmt->execute([
     ':website_name' => $website_name,
 
     ':hero_image' => $hero_image,
-    ':hero_title' => $hero_title,
-    ':hero_description' => $hero_description,
-    ':hero_button_text' => $hero_button_text,
-    ':hero_button_link' => $hero_button_link,
-    ':hero_text_color' => $hero_text_color,
+':hero_title' => $hero_title,
+':hero_description' => $hero_description,
+':hero_button_text' => $hero_button_text,
+':hero_button_link' => $hero_button_link,
 
-    ':about_image' => $about_image,
-    ':about_title' => $about_title,
-    ':about_description' => $about_description,
-    ':about_text_color' => $about_text_color,
+':hero_title_color' => $hero_title_color,
+':hero_description_color' => $hero_description_color,
+
+':about_image' => $about_image,
+':about_title' => $about_title,
+':about_description' => $about_description,
+
+':about_title_color' => $about_title_color,
+':about_description_color' => $about_description_color,
 
     ':stat_years' => $stat_years,
     ':stat_members' => $stat_members,
