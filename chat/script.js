@@ -28,7 +28,7 @@ function appendMessage(sender,text){
 
     messages.appendChild(div);
 
-    
+
 }
 
 sendBtn.onclick = sendMessage;
@@ -72,19 +72,19 @@ function sendMessage(){
     .then(res=>res.json())
     .then(data=>{
 
-        if(data.success){
+    if(data.success){
 
-    window.conversationId = data.conversation_id;
+        conversationId = data.conversation_id;
 
-    appendMessage("bot",data.reply);
+        loadMessages();
 
-}else{
+    }else{
 
-            appendMessage("bot","Sorry, something went wrong.");
+        appendMessage("bot","Unable to send message.");
 
-        }
+    }
 
-    })
+})
 
     .catch(()=>{
 
@@ -133,3 +133,29 @@ setInterval(function(){
     });
 
 },2000);
+
+let conversationId = null;
+
+function loadMessages(){
+
+    if(!conversationId) return;
+
+    fetch("chat/load_messages.php?conversation_id=" + conversationId)
+
+    .then(res => res.text())
+
+    .then(html => {
+
+        messages.innerHTML = html;
+
+        messages.scrollTop = messages.scrollHeight;
+
+    });
+
+}
+
+setInterval(function(){
+
+    loadMessages();
+
+},3000);

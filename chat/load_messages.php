@@ -4,7 +4,7 @@ require "config.php";
 
 $conn = db();
 
-$conversationId = intval($_GET['conversation_id'] ?? 0);
+$id = intval($_GET['conversation_id'] ?? 0);
 
 $stmt = $conn->prepare("
 SELECT *
@@ -13,8 +13,18 @@ WHERE conversation_id=?
 ORDER BY id ASC
 ");
 
-$stmt->execute([$conversationId]);
+$stmt->execute([$id]);
 
-$messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
+while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
 
-echo json_encode($messages);
+    if($row['sender']=="Visitor"){
+
+        echo "<div class='user'>".nl2br(htmlspecialchars($row['message']))."</div>";
+
+    }else{
+
+        echo "<div class='bot'>".nl2br(htmlspecialchars($row['message']))."</div>";
+
+    }
+
+}
