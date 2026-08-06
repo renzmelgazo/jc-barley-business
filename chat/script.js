@@ -1,0 +1,96 @@
+document.addEventListener("DOMContentLoaded", function () {
+
+const chatButton = document.getElementById("chat-button");
+const chatBox = document.getElementById("chat-box");
+const sendBtn = document.getElementById("sendBtn");
+const messageInput = document.getElementById("message");
+const messages = document.getElementById("chat-messages");
+
+console.log(chatButton);
+console.log(chatBox);
+console.log(sendBtn);
+console.log(messageInput);
+console.log(messages);
+
+chatButton.onclick = function () {
+
+    chatBox.classList.toggle("show");
+
+};
+
+function appendMessage(sender, text){
+
+    const div = document.createElement("div");
+
+    div.className = sender;
+
+    div.innerHTML = text.replace(/\n/g,"<br>");
+
+    messages.appendChild(div);
+
+    messages.scrollTop = messages.scrollHeight;
+
+}
+
+sendBtn.onclick = sendMessage;
+
+messageInput.addEventListener("keypress",function(e){
+
+    if(e.key==="Enter"){
+
+        sendMessage();
+
+    }
+
+});
+
+function sendMessage(){
+
+    const text = messageInput.value.trim();
+
+    if(text==="") return;
+
+    appendMessage("user",text);
+
+    messageInput.value="";
+
+    const formData = new FormData();
+
+    formData.append("message",text);
+    formData.append("owner_id",window.ownerId);
+    formData.append(
+    "visitor_token",
+    window.visitorToken
+);
+
+    fetch("chat/send.php",{
+
+        method:"POST",
+        body:formData
+
+    })
+
+    .then(res=>res.json())
+    .then(data=>{
+
+        if(data.success){
+
+            appendMessage("bot",data.reply);
+
+        }else{
+
+            appendMessage("bot","Sorry, something went wrong.");
+
+        }
+
+    })
+
+    .catch(()=>{
+
+        appendMessage("bot","Unable to connect.");
+
+    });
+
+}
+
+});

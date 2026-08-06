@@ -452,9 +452,35 @@ alt="About">
 
 window.ownerId = <?= $ownerId ?>;
 
+let token = localStorage.getItem("visitor_token");
+
+if(!token){
+
+    token =
+    "visitor_"
+    +
+    Math.random().toString(36).substring(2)
+    +
+    Date.now();
+
+    localStorage.setItem(
+        "visitor_token",
+        token
+    );
+
+}
+
+window.visitorToken = token;
+
 </script>
 
-<script src="chat/script.js"></script>
+<style>
+#chat-button{
+display:flex !important;
+}
+</style>
+
+<script src="chat/script.js?v=123456"></script>
 
 <!-- Gallery Lightbox -->
 

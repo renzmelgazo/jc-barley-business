@@ -1,5 +1,6 @@
 <?php
-
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 header("Content-Type: application/json");
 
 require "config.php";
@@ -10,6 +11,8 @@ $conn = db();
 $message = trim($_POST['message'] ?? '');
 
 $ownerId = intval($_POST['owner_id'] ?? 0);
+$visitorToken =
+trim($_POST['visitor_token'] ?? '');
 
 if($message==""){
 
@@ -28,15 +31,21 @@ if($message==""){
 */
 
 $stmt = $conn->prepare("
-SELECT id
+SELECT *
+
 FROM chat_conversations
+
 WHERE owner_id=?
-AND visitor_name IS NULL
-ORDER BY id DESC
+
+AND visitor_token=?
+
 LIMIT 1
 ");
 
-$stmt->execute([$ownerId]);
+$stmt->execute([
+    $ownerId,
+    $visitorToken
+]);
 
 $conversation = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -49,11 +58,34 @@ $conversation = $stmt->fetch(PDO::FETCH_ASSOC);
 if(!$conversation){
 
     $stmt = $conn->prepare("
-    INSERT INTO chat_conversations(owner_id)
-    VALUES(?)
+    INSERT INTO chat_conversations(
+
+owner_id,
+
+visitor_token,
+
+status
+
+)
+
+VALUES(
+
+?,
+
+?,
+
+'Open'
+
+)
     ");
 
-    $stmt->execute([$ownerId]);
+    $stmt->execute([
+
+$ownerId,
+
+$visitorToken
+
+]);
 
     $conversationId = $conn->lastInsertId();
 
