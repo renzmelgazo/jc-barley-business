@@ -1,42 +1,44 @@
-#chat-button{
+#chat-button {
 
-position:fixed;
+    position: fixed !important;
 
-bottom:25px;
+    bottom: 25px !important;
+    right: 25px !important;
 
-right:25px;
+    width: 60px !important;
+    height: 60px !important;
 
-width:60px;
+    padding: 0 !important;
+    margin: 0 !important;
 
-height:60px;
+    border: none !important;
+    border-radius: 50% !important;
 
-border-radius:50%;
+    background: #198754 !important;
+    color: #fff !important;
 
-background:#198754;
+    display: flex !important;
 
-color:#fff;
+    align-items: center !important;
+    justify-content: center !important;
 
-display:flex;
+    font-size: 28px !important;
 
-align-items:center;
+    cursor: pointer !important;
 
-justify-content:center;
+    pointer-events: auto !important;
 
-font-size:28px;
+    box-shadow: 0 5px 15px rgba(0,0,0,.3);
 
-cursor:pointer;
+    z-index: 2147483647 !important;
 
-box-shadow:0 5px 15px rgba(0,0,0,.3);
-
-z-index:9999;
-
-transition:.3s;
+    transition: .3s;
 
 }
 
-#chat-button:hover{
+#chat-button:hover {
 
-transform:scale(1.08);
+    transform: scale(1.08);
 
 }
 

@@ -406,52 +406,66 @@ alt="About">
     <script src="assets/js/script.js"></script>
 
 <!-- Chat Button -->
-<div id="chat-button" type="button">
+<button
+    id="chat-button"
+    type="button"
+    onclick="toggleChatBox()"
+    aria-label="Open chat"
+>
+    💬
+</button>
+
+<!-- Chat Button -->
+<div
+    id="chat-button"
+    onclick="toggleChatBox()">
     💬
 </div>
+
 
 <!-- Chat Box -->
 <div id="chat-box">
 
+    <!-- Chat Header -->
     <div class="chat-header">
         JC Barley Chat
     </div>
 
+
+    <!-- Chat Messages -->
     <div id="chat-messages">
 
-    
-    </div>
+        <!-- Start Screen -->
+        <div id="chatStartArea">
 
-    <!-- Start Chat -->
-    <div id="chatStartArea">
+            <button
+                type="button"
+                id="startChatBtn">
+                Start Chat
+            </button>
 
-        <button
-            id="startChatBtn"
-            type="button"
-        >
-            Start Chat
-        </button>
+        </div>
 
     </div>
 
-    <!-- Chat Input -->
+
+    <!-- Message Input -->
     <div
         id="chatInputArea"
         class="chat-input"
-        style="display:none;"
-    >
+        style="display:none;">
 
         <input
             type="text"
             id="message"
             placeholder="Type your message..."
-            autocomplete="off"
-        >
+            autocomplete="off">
 
         <button
-            id="sendBtn"
+
+        
             type="button"
-        >
+            id="sendBtn">
             Send
         </button>
 
@@ -462,13 +476,27 @@ alt="About">
 
 
 <script>
-window.CHAT_OWNER_ID = <?= (int)$ownerId ?>;
 
-let token = localStorage.getItem("jc_barley_visitor_token");
+window.ownerId = <?= (int)$ownerId ?>;
+
+
+/*
+|--------------------------------------------------------------------------
+| Visitor Token
+|--------------------------------------------------------------------------
+*/
+
+let token =
+    localStorage.getItem(
+        "jc_barley_visitor_token"
+    );
 
 if (!token) {
 
-    if (window.crypto && crypto.randomUUID) {
+    if (
+        window.crypto &&
+        crypto.randomUUID
+    ) {
 
         token = crypto.randomUUID();
 
@@ -476,7 +504,9 @@ if (!token) {
 
         token =
             "visitor_" +
-            Math.random().toString(36).substring(2) +
+            Math.random()
+                .toString(36)
+                .substring(2) +
             Date.now();
     }
 
@@ -488,18 +518,53 @@ if (!token) {
 
 }
 
-window.CHAT_VISITOR_TOKEN = token;
+window.visitorToken = token;
+
 </script>
 
-<script src="chat/script.js?v=123456"></script>
 
-<script src="chat/script.js?v=123456"></script>
+<!-- Load chat JavaScript ONLY ONCE -->
+<script src="chat/script.js?v=3001"></script>
+
+
+<script>
+
+function toggleChatBox() {
+
+    const chatBox =
+        document.getElementById("chat-box");
+
+    if (!chatBox) {
+
+        console.error(
+            "chat-box not found"
+        );
+
+        return;
+    }
+
+    chatBox.classList.toggle("show");
+
+}
+
+</script>
+
+
+
+
+
+
+
 
 <!-- Gallery Lightbox -->
 
-<div id="galleryModal" class="gallery-modal">
+<div
+    id="galleryModal"
+    class="gallery-modal">
 
-    <span id="closeGallery">&times;</span>
+    <span id="closeGallery">
+        &times;
+    </span>
 
     <img id="galleryPreview">
 

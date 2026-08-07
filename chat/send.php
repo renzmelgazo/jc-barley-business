@@ -5,110 +5,146 @@ ini_set('display_errors', 1);
 
 header("Content-Type: application/json");
 
-require_once __DIR__ . '/config.php';
+require "config.php";
 
 $conn = db();
 
-$message = trim($_POST['message'] ?? '');
-
-$ownerId = intval($_POST['owner_id'] ?? 0);
-
-$visitorToken = trim($_POST['visitor_token'] ?? '');
-
-$conversationId = intval($_POST['conversation_id'] ?? 0);
-
-
-if ($message === '') {
-
-    echo json_encode([
-        "success" => false,
-        "message" => "Message cannot be empty."
-    ]);
-
-    exit;
-}
-
-
-if ($ownerId <= 0 || $visitorToken === '') {
-
-    echo json_encode([
-        "success" => false,
-        "message" => "Invalid visitor information."
-    ]);
-
-    exit;
-}
-
 
 /*
 |--------------------------------------------------------------------------
-| Find Conversation
+| Receive Data
 |--------------------------------------------------------------------------
 */
 
-if ($conversationId <= 0) {
+$message =
+    trim($_POST['message'] ?? '');
 
-    $stmt = $conn->prepare("
-        SELECT id
-        FROM chat_conversations
-        WHERE owner_id = ?
-        AND visitor_token = ?
-        LIMIT 1
-    ");
+$ownerId =
+    intval($_POST['owner_id'] ?? 0);
 
-    $stmt->execute([
-        $ownerId,
-        $visitorToken
+$visitorToken =
+    trim($_POST['visitor_token'] ?? '');
+
+$visitorName =
+    trim($_POST['visitor_name'] ?? '');
+
+$visitorPhone =
+    trim($_POST['visitor_phone'] ?? '');
+
+
+/*
+|--------------------------------------------------------------------------
+| Validate
+|--------------------------------------------------------------------------
+*/
+
+if (
+    $message === "" ||
+    $ownerId <= 0 ||
+    $visitorToken === ""
+) {
+
+    echo json_encode([
+        "success" => false
     ]);
 
-    $conversation = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if (!$conversation) {
-
-        echo json_encode([
-            "success" => false,
-            "message" => "Conversation not found."
-        ]);
-
-        exit;
-    }
-
-    $conversationId = $conversation['id'];
+    exit;
 }
 
 
 /*
 |--------------------------------------------------------------------------
-| Verify Conversation Belongs To Owner
+| Find Existing Conversation
 |--------------------------------------------------------------------------
 */
 
 $stmt = $conn->prepare("
     SELECT *
     FROM chat_conversations
-    WHERE id = ?
-    AND owner_id = ?
+    WHERE owner_id = ?
     AND visitor_token = ?
     LIMIT 1
 ");
 
 $stmt->execute([
-    $conversationId,
     $ownerId,
     $visitorToken
 ]);
 
-$conversation = $stmt->fetch(PDO::FETCH_ASSOC);
+$conversation =
+    $stmt->fetch(PDO::FETCH_ASSOC);
 
+
+/*
+|--------------------------------------------------------------------------
+| Create Conversation
+|--------------------------------------------------------------------------
+*/
 
 if (!$conversation) {
 
-    echo json_encode([
-        "success" => false,
-        "message" => "Conversation not found."
+    $stmt = $conn->prepare("
+        INSERT INTO chat_conversations
+        (
+            owner_id,
+            visitor_token,
+            visitor_name,
+            visitor_phone,
+            status,
+            last_activity
+        )
+        VALUES
+        (
+            ?,
+            ?,
+            ?,
+            ?,
+            'Unread',
+            NOW()
+        )
+    ");
+
+    $stmt->execute([
+        $ownerId,
+        $visitorToken,
+        $visitorName,
+        $visitorPhone
     ]);
 
-    exit;
+
+    $conversationId =
+        $conn->lastInsertId();
+
+} else {
+
+    $conversationId =
+        $conversation['id'];
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Update Visitor Information
+    |--------------------------------------------------------------------------
+    */
+
+    $stmt = $conn->prepare("
+        UPDATE chat_conversations
+        SET
+            visitor_name = ?,
+            visitor_phone = ?,
+            status = 'Unread',
+            last_activity = NOW()
+        WHERE id = ?
+        AND owner_id = ?
+    ");
+
+    $stmt->execute([
+        $visitorName,
+        $visitorPhone,
+        $conversationId,
+        $ownerId
+    ]);
+
 }
 
 
@@ -141,122 +177,42 @@ $stmt->execute([
 
 /*
 |--------------------------------------------------------------------------
-| Update Conversation
+| Update Conversation Activity
 |--------------------------------------------------------------------------
 */
 
 $stmt = $conn->prepare("
     UPDATE chat_conversations
     SET
+        visitor_name = ?,
+        visitor_phone = ?,
         status = 'Unread',
         last_activity = NOW()
     WHERE id = ?
+    AND owner_id = ?
 ");
 
 $stmt->execute([
-    $conversationId
-]);
-
-
-/*
-|--------------------------------------------------------------------------
-| Automated Responses
-|--------------------------------------------------------------------------
-*/
-
-$text = strtolower($message);
-
-$reply = null;
-
-
-/*
-|--------------------------------------------------------------------------
-| Greeting
-|--------------------------------------------------------------------------
-*/
-
-if (
-    preg_match('/\b(hello|hi|hey|good morning|good afternoon|good evening)\b/i', $text)
-) {
-
-    $reply = "Hello! How may I assist you today?";
-}
-
-
-/*
-|--------------------------------------------------------------------------
-| Thank You
-|--------------------------------------------------------------------------
-*/
-
-elseif (
-    preg_match('/\b(thank you|thanks|thank)\b/i', $text)
-) {
-
-    $reply = "You're welcome! Please let me know if there is anything else I can help you with.";
-}
-
-
-/*
-|--------------------------------------------------------------------------
-| Fallback
-|--------------------------------------------------------------------------
-*/
-
-else {
-
-    $reply = "I’m unable to answer that at the moment. Please wait for the owner to assist you.";
-}
-
-
-/*
-|--------------------------------------------------------------------------
-| Save Automated Reply
-|--------------------------------------------------------------------------
-*/
-
-$stmt = $conn->prepare("
-    INSERT INTO chat_messages
-    (
-        conversation_id,
-        sender,
-        message
-    )
-    VALUES
-    (
-        ?,
-        'AI',
-        ?
-    )
-");
-
-$stmt->execute([
+    $visitorName,
+    $visitorPhone,
     $conversationId,
-    $reply
+    $ownerId
 ]);
 
 
 /*
 |--------------------------------------------------------------------------
-| Update Activity
+| Success
 |--------------------------------------------------------------------------
 */
-
-$stmt = $conn->prepare("
-    UPDATE chat_conversations
-    SET
-        last_activity = NOW()
-    WHERE id = ?
-");
-
-$stmt->execute([
-    $conversationId
-]);
-
-
 
 echo json_encode([
+
     "success" => true,
-    "reply" => $reply,
-    "conversation_id" => $conversationId
+
+    "conversation_id" =>
+        $conversationId
+
 ]);
+
+exit;

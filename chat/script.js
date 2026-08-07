@@ -1,22 +1,10 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const chatButton =
-    document.getElementById("chat-button");
 
-const chatBox =
-    document.getElementById("chat-box");
-
-if (chatButton && chatBox) {
-
-    chatButton.addEventListener(
-        "click",
-        function () {
-
-            chatBox.classList.toggle("show");
-
-        }
-    );
-
-}
+    /*
+    |--------------------------------------------------------------------------
+    | Elements
+    |--------------------------------------------------------------------------
+    */
 
     const startChatBtn =
         document.getElementById("startChatBtn");
@@ -39,28 +27,34 @@ if (chatButton && chatBox) {
 
     /*
     |--------------------------------------------------------------------------
-    | Website Owner
-    |--------------------------------------------------------------------------
-    */
-
-    const ownerId =
-        window.CHAT_OWNER_ID || 0;
-
-
-    /*
-    |--------------------------------------------------------------------------
     | Visitor Token
     |--------------------------------------------------------------------------
     */
 
     let visitorToken =
-        localStorage.getItem("jc_barley_visitor_token");
-
+        localStorage.getItem(
+            "jc_barley_visitor_token"
+        );
 
     if (!visitorToken) {
 
-        visitorToken =
-            crypto.randomUUID();
+        if (
+            window.crypto &&
+            crypto.randomUUID
+        ) {
+
+            visitorToken =
+                crypto.randomUUID();
+
+        } else {
+
+            visitorToken =
+                "visitor_" +
+                Math.random()
+                    .toString(36)
+                    .substring(2) +
+                Date.now();
+        }
 
         localStorage.setItem(
             "jc_barley_visitor_token",
@@ -69,35 +63,8 @@ if (chatButton && chatBox) {
     }
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | Conversation
-    |--------------------------------------------------------------------------
-    */
-
-    let conversationId =
-        parseInt(
-            localStorage.getItem(
-                "jc_barley_conversation_id"
-            ) || "0"
-        );
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Visitor Information
-    |--------------------------------------------------------------------------
-    */
-
-    let visitorName =
-        localStorage.getItem(
-            "jc_barley_visitor_name"
-        ) || "";
-
-    let visitorPhone =
-        localStorage.getItem(
-            "jc_barley_visitor_phone"
-        ) || "";
+    window.visitorToken =
+        visitorToken;
 
 
     /*
@@ -108,26 +75,29 @@ if (chatButton && chatBox) {
 
     let chatStarted = false;
 
-    let waitingForName = false;
+    let contactStep = "waiting_first_message";
 
-    let waitingForPhone = false;
+    let visitorName = "";
+
+    let visitorPhone = "";
+
+    let visitorFirstMessage = "";
+
+    let conversationId = 0;
 
 
     /*
     |--------------------------------------------------------------------------
-    | Add Message
+    | Add Bot Message
     |--------------------------------------------------------------------------
     */
 
-    function appendMessage(sender, message) {
+    function addBotMessage(message) {
 
         const div =
             document.createElement("div");
 
-        div.className =
-            sender === "user"
-                ? "user"
-                : "bot";
+        div.className = "bot";
 
         div.textContent = message;
 
@@ -140,255 +110,137 @@ if (chatButton && chatBox) {
 
     /*
     |--------------------------------------------------------------------------
-    | Start Chat
+    | Add Visitor Message
     |--------------------------------------------------------------------------
     */
 
-    startChatBtn.addEventListener(
-        "click",
-        async function () {
+    function addVisitorMessage(message) {
 
-            chatStartArea.style.display = "none";
+        const div =
+            document.createElement("div");
 
-            chatInputArea.style.display = "flex";
+        div.className = "visitor";
 
-            chatStarted = true;
+        div.textContent = message;
 
+        chatMessages.appendChild(div);
 
-            /*
-            |--------------------------------------------------------------------------
-            | Existing Visitor
-            |--------------------------------------------------------------------------
-            */
-
-            if (
-                conversationId > 0 &&
-                visitorName !== "" &&
-                visitorPhone !== ""
-            ) {
-
-                await loadMessages();
-
-                messageInput.focus();
-
-                return;
-            }
+        chatMessages.scrollTop =
+            chatMessages.scrollHeight;
+    }
 
 
-            /*
-            |--------------------------------------------------------------------------
-            | Create / Find Conversation
-            |--------------------------------------------------------------------------
-            */
+    /*
+    |--------------------------------------------------------------------------
+    | START CHAT
+    |--------------------------------------------------------------------------
+    */
 
-            try {
+    if (startChatBtn) {
 
-                const formData =
-                    new FormData();
+        startChatBtn.addEventListener(
+            "click",
+            function () {
 
-                formData.append(
-                    "action",
-                    "start"
-                );
-
-                formData.append(
-                    "owner_id",
-                    ownerId
-                );
-
-                formData.append(
-                    "visitor_token",
-                    visitorToken
-                );
-
-
-                const response =
-                    await fetch(
-                        "save_contact.php",
-                        {
-                            method: "POST",
-                            body: formData
-                        }
-                    );
-
-
-                const data =
-                    await response.json();
-
-
-                if (!data.success) {
-
-                    appendMessage(
-                        "bot",
-                        "Sorry, we were unable to start the conversation. Please try again."
-                    );
-
+                if (chatStarted) {
                     return;
                 }
 
-
-                conversationId =
-                    parseInt(
-                        data.conversation_id
-                    );
-
-
-                localStorage.setItem(
-                    "jc_barley_conversation_id",
-                    conversationId
-                );
+                chatStarted = true;
 
 
                 /*
-                |--------------------------------------------------------------------------
-                | Existing Contact
-                |--------------------------------------------------------------------------
+                | Hide Start Chat
                 */
 
-                if (
-                    data.visitor_name &&
-                    data.visitor_phone
-                ) {
+                if (chatStartArea) {
 
-                    visitorName =
-                        data.visitor_name;
+                    chatStartArea.style.display =
+                        "none";
 
-                    visitorPhone =
-                        data.visitor_phone;
-
-                    localStorage.setItem(
-                        "jc_barley_visitor_name",
-                        visitorName
-                    );
-
-                    localStorage.setItem(
-                        "jc_barley_visitor_phone",
-                        visitorPhone
-                    );
+                }
 
 
-                    await loadMessages();
+                /*
+                | Show message input
+                */
+
+                if (chatInputArea) {
+
+                    chatInputArea.style.display =
+                        "flex";
+
+                }
+
+
+                /*
+                | Focus message box
+                */
+
+                if (messageInput) {
 
                     messageInput.focus();
 
-                    return;
                 }
 
-
-                /*
-                |--------------------------------------------------------------------------
-                | Ask Name
-                |--------------------------------------------------------------------------
-                */
-
-                waitingForName = true;
-
-                appendMessage(
-                    "bot",
-                    "👋 Hello! Before we proceed, may I know your name and contact number please?"
-                );
-
-
-                messageInput.focus();
-
-            } catch (error) {
-
-                console.error(error);
-
-                appendMessage(
-                    "bot",
-                    "Sorry, we were unable to connect. Please try again."
-                );
             }
+        );
 
-        }
-    );
+    }
 
 
     /*
     |--------------------------------------------------------------------------
-    | Send Message
+    | SEND MESSAGE
     |--------------------------------------------------------------------------
     */
 
-    sendBtn.addEventListener(
-        "click",
-        sendMessage
-    );
+    function sendMessage() {
 
-
-    messageInput.addEventListener(
-        "keydown",
-        function (event) {
-
-            if (event.key === "Enter") {
-
-                event.preventDefault();
-
-                sendMessage();
-
-            }
-
+        if (!chatStarted) {
+            return;
         }
-    );
 
-
-    /*
-    |--------------------------------------------------------------------------
-    | Send Message Function
-    |--------------------------------------------------------------------------
-    */
-
-    async function sendMessage() {
 
         const message =
             messageInput.value.trim();
 
 
-        if (!message) {
+        if (message === "") {
             return;
         }
 
 
-        appendMessage(
-            "user",
-            message
-        );
+        /*
+        | Show Visitor Message
+        */
 
+        addVisitorMessage(message);
 
         messageInput.value = "";
 
 
         /*
         |--------------------------------------------------------------------------
-        | NAME COLLECTION
+        | FIRST MESSAGE
         |--------------------------------------------------------------------------
         */
 
-        if (waitingForName) {
+        if (
+            contactStep ===
+            "waiting_first_message"
+        ) {
 
-            visitorName = message;
+            visitorFirstMessage =
+                message;
 
-            localStorage.setItem(
-                "jc_barley_visitor_name",
-                visitorName
+
+            addBotMessage(
+                "👋 Welcome to JC Barley! Before we proceed, could you please tell us your name?"
             );
 
 
-            waitingForName = false;
-
-            waitingForPhone = true;
-
-
-            appendMessage(
-                "bot",
-                "Thank you, " +
-                visitorName +
-                ". May I have your phone number please?"
-            );
-
-
-            messageInput.focus();
+            contactStep = "waiting_name";
 
             return;
         }
@@ -396,40 +248,55 @@ if (chatButton && chatBox) {
 
         /*
         |--------------------------------------------------------------------------
-        | PHONE COLLECTION
+        | NAME
         |--------------------------------------------------------------------------
         */
 
-        if (waitingForPhone) {
+        if (
+            contactStep ===
+            "waiting_name"
+        ) {
 
-            const phone =
-                message.replace(
-                    /[\s\-\(\)\+]/g,
-                    ""
-                );
+            visitorName =
+                message;
+
+
+            addBotMessage(
+                "Thank you, " +
+                visitorName +
+                "! May we also have your phone number, please?"
+            );
+
+
+            contactStep = "waiting_phone";
+
+            return;
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | PHONE
+        |--------------------------------------------------------------------------
+        */
+
+        if (
+            contactStep ===
+            "waiting_phone"
+        ) {
+
+            visitorPhone =
+                message;
 
 
             /*
-            |--------------------------------------------------------------------------
-            | Validate Phone
-            |--------------------------------------------------------------------------
+            | Save visitor information
             */
 
-            if (!/^\d{7,15}$/.test(phone)) {
-
-                appendMessage(
-                    "bot",
-                    "We cannot proceed with the chat without a valid phone number. Please provide your phone number so the owner can contact you."
-                );
-
-                messageInput.focus();
-
-                return;
-            }
-
-
-            visitorPhone = message;
-
+            localStorage.setItem(
+                "jc_barley_visitor_name",
+                visitorName
+            );
 
             localStorage.setItem(
                 "jc_barley_visitor_phone",
@@ -437,191 +304,37 @@ if (chatButton && chatBox) {
             );
 
 
-            /*
-            |--------------------------------------------------------------------------
-            | Save Contact
-            |--------------------------------------------------------------------------
-            */
-
-            try {
-
-                const formData =
-                    new FormData();
-
-                formData.append(
-                    "action",
-                    "save_contact"
-                );
-
-                formData.append(
-                    "owner_id",
-                    ownerId
-                );
-
-                formData.append(
-                    "visitor_token",
-                    visitorToken
-                );
-
-                formData.append(
-                    "name",
-                    visitorName
-                );
-
-                formData.append(
-                    "phone",
-                    visitorPhone
-                );
+            addBotMessage(
+                "Thank you! How can we help you today?"
+            );
 
 
-                const response =
-                    await fetch(
-                        "save_contact.php",
-                        {
-                            method: "POST",
-                            body: formData
-                        }
-                    );
+            contactStep =
+                "waiting_message";
 
 
-                const data =
-                    await response.json();
-
-
-                if (!data.success) {
-
-                    appendMessage(
-                        "bot",
-                        "Sorry, we could not save your contact information. Please try again."
-                    );
-
-                    return;
-                }
-
-
-                conversationId =
-                    parseInt(
-                        data.conversation_id
-                    );
-
-
-                localStorage.setItem(
-                    "jc_barley_conversation_id",
-                    conversationId
-                );
-
-
-                waitingForPhone = false;
-
-
-                appendMessage(
-                    "bot",
-                    "Thank you! Your contact information has been saved. How may I assist you today?"
-                );
-
-
-                messageInput.focus();
-
-                return;
-
-            } catch (error) {
-
-                console.error(error);
-
-                appendMessage(
-                    "bot",
-                    "Sorry, we could not save your contact information. Please try again."
-                );
-
-                return;
-            }
+            return;
         }
 
 
         /*
         |--------------------------------------------------------------------------
-        | NORMAL CHAT
+        | FINAL VISITOR MESSAGE
         |--------------------------------------------------------------------------
         */
 
-        await sendToServer(message);
+        if (
+            contactStep ===
+            "waiting_message"
+        ) {
 
-    }
+            /*
+            | Save the visitor's actual concern
+            */
 
+            sendVisitorInquiry(message);
 
-    /*
-    |--------------------------------------------------------------------------
-    | Send Normal Message To PHP
-    |--------------------------------------------------------------------------
-    */
-
-    async function sendToServer(message) {
-
-        try {
-
-            const formData =
-                new FormData();
-
-            formData.append(
-                "message",
-                message
-            );
-
-            formData.append(
-                "owner_id",
-                ownerId
-            );
-
-            formData.append(
-                "visitor_token",
-                visitorToken
-            );
-
-            formData.append(
-                "conversation_id",
-                conversationId
-            );
-
-
-            const response =
-                await fetch(
-                    "send.php",
-                    {
-                        method: "POST",
-                        body: formData
-                    }
-                );
-
-
-            const data =
-                await response.json();
-
-
-            if (!data.success) {
-
-                appendMessage(
-                    "bot",
-                    "Sorry, something went wrong. Please try again."
-                );
-
-                return;
-            }
-
-
-            appendMessage(
-                "bot",
-                data.reply
-            );
-
-
-        } catch (error) {
-
-            console.error(error);
-
-            appendMessage(
-                "bot",
-                "I’m unable to answer that at the moment. Please wait for the owner to assist you."
-            );
+            return;
         }
 
     }
@@ -629,61 +342,160 @@ if (chatButton && chatBox) {
 
     /*
     |--------------------------------------------------------------------------
-    | Load Previous Messages
+    | SEND VISITOR INFORMATION + MESSAGE
     |--------------------------------------------------------------------------
     */
 
-    async function loadMessages() {
+    function sendVisitorInquiry(message) {
 
-        try {
-
-            const url =
-                "load_messages.php" +
-                "?owner_id=" +
-                encodeURIComponent(ownerId) +
-                "&visitor_token=" +
-                encodeURIComponent(visitorToken) +
-                "&conversation_id=" +
-                encodeURIComponent(conversationId);
+        const formData =
+            new FormData();
 
 
-            const response =
-                await fetch(url);
+        formData.append(
+            "message",
+            message
+        );
 
 
-            const data =
-                await response.json();
+        formData.append(
+            "owner_id",
+            window.ownerId
+        );
 
+
+        formData.append(
+            "visitor_token",
+            window.visitorToken
+        );
+
+
+        formData.append(
+            "visitor_name",
+            visitorName
+        );
+
+
+        formData.append(
+            "visitor_phone",
+            visitorPhone
+        );
+
+
+        fetch(
+            "chat/send.php",
+            {
+                method: "POST",
+                body: formData
+            }
+        )
+
+        .then(function (response) {
+
+            return response.json();
+
+        })
+
+        .then(function (data) {
 
             if (!data.success) {
+
+                addBotMessage(
+                    "I’m unable to process your message at the moment. Please wait for the owner to assist you."
+                );
+
                 return;
             }
 
 
-            chatMessages.innerHTML = "";
+            conversationId =
+                data.conversation_id || 0;
 
 
-            data.messages.forEach(
-                function (msg) {
+            /*
+            | Final response
+            */
 
-                    appendMessage(
-                        msg.sender === "Visitor"
-                            ? "user"
-                            : "bot",
-                        msg.message
-                    );
+            addBotMessage(
+                "Got it! Please wait for a representative to reach out to you as soon as possible for a smooth discussion."
+            );
+
+
+            /*
+            | Prevent additional messages
+            */
+
+            contactStep =
+                "completed";
+
+
+            /*
+            | Disable input
+            */
+
+            messageInput.disabled =
+                true;
+
+            sendBtn.disabled =
+                true;
+
+        })
+
+        .catch(function (error) {
+
+            console.error(error);
+
+
+            addBotMessage(
+                "I’m unable to process your message at the moment. Please wait for the owner to assist you."
+            );
+
+        });
+
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | SEND BUTTON
+    |--------------------------------------------------------------------------
+    */
+
+    if (sendBtn) {
+
+        sendBtn.addEventListener(
+            "click",
+            sendMessage
+        );
+
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | ENTER KEY
+    |--------------------------------------------------------------------------
+    */
+
+    if (messageInput) {
+
+        messageInput.addEventListener(
+            "keydown",
+            function (event) {
+
+                if (
+                    event.key === "Enter"
+                ) {
+
+                    event.preventDefault();
+
+                    sendMessage();
 
                 }
-            );
 
-
-        } catch (error) {
-
-            console.error(error);
-
-        }
+            }
+        );
 
     }
-
 
 });
