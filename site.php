@@ -405,108 +405,93 @@ alt="About">
 
     <script src="assets/js/script.js"></script>
 
-<!-- AI Chat Button -->
-<div id="chat-button">
+<!-- Chat Button -->
+<div id="chat-button" type="button">
     💬
 </div>
 
-<!-- AI Chat Box -->
+<!-- Chat Box -->
 <div id="chat-box">
 
     <div class="chat-header">
-        JC Barley AI Assistant
+        JC Barley Chat
     </div>
 
     <div id="chat-messages">
 
-        <div class="bot">
-            👋 Hello!
+    
+    </div>
 
-            Welcome to our website.
+    <!-- Start Chat -->
+    <div id="chatStartArea">
 
-            I'm here to answer your questions and help you learn more about our products and services.
-
-            How may I assist you today?
-        </div>
+        <button
+            id="startChatBtn"
+            type="button"
+        >
+            Start Chat
+        </button>
 
     </div>
 
-    <div id="visitorForm">
+    <!-- Chat Input -->
+    <div
+        id="chatInputArea"
+        class="chat-input"
+        style="display:none;"
+    >
 
-    <input
-        type="text"
-        id="visitorName"
-        placeholder="Your Name">
+        <input
+            type="text"
+            id="message"
+            placeholder="Type your message..."
+            autocomplete="off"
+        >
 
-    <input
-        type="text"
-        id="visitorPhone"
-        placeholder="Phone Number">
+        <button
+            id="sendBtn"
+            type="button"
+        >
+            Send
+        </button>
 
-    <input
-        type="email"
-        id="visitorEmail"
-        placeholder="Email (optional)">
-
-    <button id="startChatBtn">
-        Start Chat
-    </button>
-
-</div>
-
-<div
-id="chatInputArea"
-class="chat-input"
-style="display:none;">
-
-    <input
-        type="text"
-        id="message"
-        placeholder="Type your message...">
-
-    <button id="sendBtn">
-
-        Send
-
-    </button>
+    </div>
 
 </div>
 
-</div>
 
-<link rel="stylesheet" href="chat/style.css">
 
 <script>
+window.CHAT_OWNER_ID = <?= (int)$ownerId ?>;
 
-window.ownerId = <?= $ownerId ?>;
+let token = localStorage.getItem("jc_barley_visitor_token");
 
-let token = localStorage.getItem("visitor_token");
+if (!token) {
 
-if(!token){
+    if (window.crypto && crypto.randomUUID) {
 
-    token =
-    "visitor_"
-    +
-    Math.random().toString(36).substring(2)
-    +
-    Date.now();
+        token = crypto.randomUUID();
+
+    } else {
+
+        token =
+            "visitor_" +
+            Math.random().toString(36).substring(2) +
+            Date.now();
+    }
 
     localStorage.setItem(
-        "visitor_token",
+        "jc_barley_visitor_token",
         token
     );
 
+
 }
 
-window.visitorToken = token;
-
+window.CHAT_VISITOR_TOKEN = token;
 </script>
 
-<style>
-#chat-button{
-display:flex !important;
-}
-</style>
+<script src="chat/script.js?v=123456"></script>
 
 <script src="chat/script.js?v=123456"></script>
 

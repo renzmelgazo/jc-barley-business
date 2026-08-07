@@ -74,6 +74,29 @@ display:flex;
 
 }
 
+#chatStartArea {
+    padding: 15px;
+    border-top: 1px solid #ddd;
+}
+
+#startChatBtn {
+    width: 100%;
+    padding: 12px;
+
+    border: none;
+    border-radius: 8px;
+
+    background: #198754;
+    color: #fff;
+
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#startChatBtn:hover {
+    background: #157347;
+}
+
 .chat-header{
 
 background:#198754;
@@ -127,6 +150,8 @@ border-radius:10px;
 margin-bottom:10px;
 
 margin-right:60px;
+
+white-space: pre-line;
 
 }
 

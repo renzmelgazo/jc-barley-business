@@ -1,177 +1,689 @@
 document.addEventListener("DOMContentLoaded", function () {
+    const chatButton =
+    document.getElementById("chat-button");
 
-const chatButton = document.getElementById("chat-button");
-const chatBox = document.getElementById("chat-box");
-const sendBtn = document.getElementById("sendBtn");
-const messageInput = document.getElementById("message");
-const messages = document.getElementById("chat-messages");
+const chatBox =
+    document.getElementById("chat-box");
 
-console.log(chatButton);
-console.log(chatBox);
-console.log(sendBtn);
-console.log(messageInput);
-console.log(messages);
+if (chatButton && chatBox) {
 
-chatButton.onclick = function () {
+    chatButton.addEventListener(
+        "click",
+        function () {
 
-    chatBox.classList.toggle("show");
+            chatBox.classList.toggle("show");
 
-};
-
-function appendMessage(sender,text){
-
-    const div=document.createElement("div");
-
-    div.className=sender;
-
-    div.innerHTML=text.replace(/\n/g,"<br>");
-
-    messages.appendChild(div);
-
+        }
+    );
 
 }
 
-sendBtn.onclick = sendMessage;
+    const startChatBtn =
+        document.getElementById("startChatBtn");
 
-messageInput.addEventListener("keypress",function(e){
+    const chatStartArea =
+        document.getElementById("chatStartArea");
 
-    if(e.key==="Enter"){
+    const chatInputArea =
+        document.getElementById("chatInputArea");
 
-        sendMessage();
+    const messageInput =
+        document.getElementById("message");
 
+    const sendBtn =
+        document.getElementById("sendBtn");
+
+    const chatMessages =
+        document.getElementById("chat-messages");
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Website Owner
+    |--------------------------------------------------------------------------
+    */
+
+    const ownerId =
+        window.CHAT_OWNER_ID || 0;
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Visitor Token
+    |--------------------------------------------------------------------------
+    */
+
+    let visitorToken =
+        localStorage.getItem("jc_barley_visitor_token");
+
+
+    if (!visitorToken) {
+
+        visitorToken =
+            crypto.randomUUID();
+
+        localStorage.setItem(
+            "jc_barley_visitor_token",
+            visitorToken
+        );
     }
 
-});
 
-function sendMessage(){
+    /*
+    |--------------------------------------------------------------------------
+    | Conversation
+    |--------------------------------------------------------------------------
+    */
 
-    const text = messageInput.value.trim();
+    let conversationId =
+        parseInt(
+            localStorage.getItem(
+                "jc_barley_conversation_id"
+            ) || "0"
+        );
 
-    if(text==="") return;
 
-    appendMessage("user",text);
+    /*
+    |--------------------------------------------------------------------------
+    | Visitor Information
+    |--------------------------------------------------------------------------
+    */
 
-    messageInput.value="";
+    let visitorName =
+        localStorage.getItem(
+            "jc_barley_visitor_name"
+        ) || "";
 
-    const formData = new FormData();
+    let visitorPhone =
+        localStorage.getItem(
+            "jc_barley_visitor_phone"
+        ) || "";
 
-    formData.append("message",text);
-    formData.append("owner_id",window.ownerId);
-    formData.append(
-    "visitor_token",
-    window.visitorToken
-);
 
-    fetch("chat/send.php",{
+    /*
+    |--------------------------------------------------------------------------
+    | Chat State
+    |--------------------------------------------------------------------------
+    */
 
-        method:"POST",
-        body:formData
+    let chatStarted = false;
 
-    })
+    let waitingForName = false;
 
-    .then(res=>res.json())
-    .then(data=>{
+    let waitingForPhone = false;
 
-    if(data.success){
 
-        conversationId = data.conversation_id;
+    /*
+    |--------------------------------------------------------------------------
+    | Add Message
+    |--------------------------------------------------------------------------
+    */
 
-        loadMessages();
+    function appendMessage(sender, message) {
 
-    }else{
+        const div =
+            document.createElement("div");
 
-        appendMessage("bot","Unable to send message.");
+        div.className =
+            sender === "user"
+                ? "user"
+                : "bot";
 
+        div.textContent = message;
+
+        chatMessages.appendChild(div);
+
+        chatMessages.scrollTop =
+            chatMessages.scrollHeight;
     }
 
-})
 
-    .catch(()=>{
+    /*
+    |--------------------------------------------------------------------------
+    | Start Chat
+    |--------------------------------------------------------------------------
+    */
 
-        appendMessage("bot","Unable to connect.");
+    startChatBtn.addEventListener(
+        "click",
+        async function () {
 
-    });
+            chatStartArea.style.display = "none";
 
-}
+            chatInputArea.style.display = "flex";
 
-});
+            chatStarted = true;
 
-setInterval(function(){
 
-    if(!window.conversationId) return;
+            /*
+            |--------------------------------------------------------------------------
+            | Existing Visitor
+            |--------------------------------------------------------------------------
+            */
 
-    fetch(
-        "chat/load_messages.php?conversation_id="
-        +
-        window.conversationId
-    )
+            if (
+                conversationId > 0 &&
+                visitorName !== "" &&
+                visitorPhone !== ""
+            ) {
 
-    .then(res=>res.json())
+                await loadMessages();
 
-    .then(data=>{
+                messageInput.focus();
 
-        messages.innerHTML="";
+                return;
+            }
 
-        data.forEach(function(msg){
 
-            if(msg.sender==="Visitor"){
+            /*
+            |--------------------------------------------------------------------------
+            | Create / Find Conversation
+            |--------------------------------------------------------------------------
+            */
 
-                appendMessage("user",msg.message);
+            try {
 
-            }else if(msg.sender==="Owner"){
+                const formData =
+                    new FormData();
 
-                appendMessage("bot",msg.message);
+                formData.append(
+                    "action",
+                    "start"
+                );
 
-            }else{
+                formData.append(
+                    "owner_id",
+                    ownerId
+                );
 
-                appendMessage("bot",msg.message);
+                formData.append(
+                    "visitor_token",
+                    visitorToken
+                );
+
+
+                const response =
+                    await fetch(
+                        "save_contact.php",
+                        {
+                            method: "POST",
+                            body: formData
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!data.success) {
+
+                    appendMessage(
+                        "bot",
+                        "Sorry, we were unable to start the conversation. Please try again."
+                    );
+
+                    return;
+                }
+
+
+                conversationId =
+                    parseInt(
+                        data.conversation_id
+                    );
+
+
+                localStorage.setItem(
+                    "jc_barley_conversation_id",
+                    conversationId
+                );
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | Existing Contact
+                |--------------------------------------------------------------------------
+                */
+
+                if (
+                    data.visitor_name &&
+                    data.visitor_phone
+                ) {
+
+                    visitorName =
+                        data.visitor_name;
+
+                    visitorPhone =
+                        data.visitor_phone;
+
+                    localStorage.setItem(
+                        "jc_barley_visitor_name",
+                        visitorName
+                    );
+
+                    localStorage.setItem(
+                        "jc_barley_visitor_phone",
+                        visitorPhone
+                    );
+
+
+                    await loadMessages();
+
+                    messageInput.focus();
+
+                    return;
+                }
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | Ask Name
+                |--------------------------------------------------------------------------
+                */
+
+                waitingForName = true;
+
+                appendMessage(
+                    "bot",
+                    "👋 Hello! Before we proceed, may I know your name and contact number please?"
+                );
+
+
+                messageInput.focus();
+
+            } catch (error) {
+
+                console.error(error);
+
+                appendMessage(
+                    "bot",
+                    "Sorry, we were unable to connect. Please try again."
+                );
+            }
+
+        }
+    );
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Send Message
+    |--------------------------------------------------------------------------
+    */
+
+    sendBtn.addEventListener(
+        "click",
+        sendMessage
+    );
+
+
+    messageInput.addEventListener(
+        "keydown",
+        function (event) {
+
+            if (event.key === "Enter") {
+
+                event.preventDefault();
+
+                sendMessage();
 
             }
 
-        });
+        }
+    );
 
-    });
 
-},2000);
+    /*
+    |--------------------------------------------------------------------------
+    | Send Message Function
+    |--------------------------------------------------------------------------
+    */
 
-let conversationId = null;
+    async function sendMessage() {
 
-function loadMessages(){
+        const message =
+            messageInput.value.trim();
 
-    if(!conversationId) return;
 
-    fetch("chat/load_messages.php?conversation_id=" + conversationId)
+        if (!message) {
+            return;
+        }
 
-    .then(res => res.text())
 
-    .then(html => {
+        appendMessage(
+            "user",
+            message
+        );
 
-        messages.innerHTML = html;
 
-        messages.scrollTop = messages.scrollHeight;
+        messageInput.value = "";
 
-    });
 
-}
+        /*
+        |--------------------------------------------------------------------------
+        | NAME COLLECTION
+        |--------------------------------------------------------------------------
+        */
 
-setInterval(function(){
+        if (waitingForName) {
 
-    loadMessages();
+            visitorName = message;
 
-},3000);
+            localStorage.setItem(
+                "jc_barley_visitor_name",
+                visitorName
+            );
 
-fetch("chat/get_conversation.php?owner_id="+window.ownerId)
 
-.then(res=>res.text())
+            waitingForName = false;
 
-.then(id=>{
+            waitingForPhone = true;
 
-    if(id!=""){
 
-        conversationId=id;
+            appendMessage(
+                "bot",
+                "Thank you, " +
+                visitorName +
+                ". May I have your phone number please?"
+            );
 
-        loadMessages();
+
+            messageInput.focus();
+
+            return;
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | PHONE COLLECTION
+        |--------------------------------------------------------------------------
+        */
+
+        if (waitingForPhone) {
+
+            const phone =
+                message.replace(
+                    /[\s\-\(\)\+]/g,
+                    ""
+                );
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Validate Phone
+            |--------------------------------------------------------------------------
+            */
+
+            if (!/^\d{7,15}$/.test(phone)) {
+
+                appendMessage(
+                    "bot",
+                    "We cannot proceed with the chat without a valid phone number. Please provide your phone number so the owner can contact you."
+                );
+
+                messageInput.focus();
+
+                return;
+            }
+
+
+            visitorPhone = message;
+
+
+            localStorage.setItem(
+                "jc_barley_visitor_phone",
+                visitorPhone
+            );
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Save Contact
+            |--------------------------------------------------------------------------
+            */
+
+            try {
+
+                const formData =
+                    new FormData();
+
+                formData.append(
+                    "action",
+                    "save_contact"
+                );
+
+                formData.append(
+                    "owner_id",
+                    ownerId
+                );
+
+                formData.append(
+                    "visitor_token",
+                    visitorToken
+                );
+
+                formData.append(
+                    "name",
+                    visitorName
+                );
+
+                formData.append(
+                    "phone",
+                    visitorPhone
+                );
+
+
+                const response =
+                    await fetch(
+                        "save_contact.php",
+                        {
+                            method: "POST",
+                            body: formData
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!data.success) {
+
+                    appendMessage(
+                        "bot",
+                        "Sorry, we could not save your contact information. Please try again."
+                    );
+
+                    return;
+                }
+
+
+                conversationId =
+                    parseInt(
+                        data.conversation_id
+                    );
+
+
+                localStorage.setItem(
+                    "jc_barley_conversation_id",
+                    conversationId
+                );
+
+
+                waitingForPhone = false;
+
+
+                appendMessage(
+                    "bot",
+                    "Thank you! Your contact information has been saved. How may I assist you today?"
+                );
+
+
+                messageInput.focus();
+
+                return;
+
+            } catch (error) {
+
+                console.error(error);
+
+                appendMessage(
+                    "bot",
+                    "Sorry, we could not save your contact information. Please try again."
+                );
+
+                return;
+            }
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | NORMAL CHAT
+        |--------------------------------------------------------------------------
+        */
+
+        await sendToServer(message);
 
     }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Send Normal Message To PHP
+    |--------------------------------------------------------------------------
+    */
+
+    async function sendToServer(message) {
+
+        try {
+
+            const formData =
+                new FormData();
+
+            formData.append(
+                "message",
+                message
+            );
+
+            formData.append(
+                "owner_id",
+                ownerId
+            );
+
+            formData.append(
+                "visitor_token",
+                visitorToken
+            );
+
+            formData.append(
+                "conversation_id",
+                conversationId
+            );
+
+
+            const response =
+                await fetch(
+                    "send.php",
+                    {
+                        method: "POST",
+                        body: formData
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (!data.success) {
+
+                appendMessage(
+                    "bot",
+                    "Sorry, something went wrong. Please try again."
+                );
+
+                return;
+            }
+
+
+            appendMessage(
+                "bot",
+                data.reply
+            );
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            appendMessage(
+                "bot",
+                "I’m unable to answer that at the moment. Please wait for the owner to assist you."
+            );
+        }
+
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Load Previous Messages
+    |--------------------------------------------------------------------------
+    */
+
+    async function loadMessages() {
+
+        try {
+
+            const url =
+                "load_messages.php" +
+                "?owner_id=" +
+                encodeURIComponent(ownerId) +
+                "&visitor_token=" +
+                encodeURIComponent(visitorToken) +
+                "&conversation_id=" +
+                encodeURIComponent(conversationId);
+
+
+            const response =
+                await fetch(url);
+
+
+            const data =
+                await response.json();
+
+
+            if (!data.success) {
+                return;
+            }
+
+
+            chatMessages.innerHTML = "";
+
+
+            data.messages.forEach(
+                function (msg) {
+
+                    appendMessage(
+                        msg.sender === "Visitor"
+                            ? "user"
+                            : "bot",
+                        msg.message
+                    );
+
+                }
+            );
+
+
+        } catch (error) {
+
+            console.error(error);
+
+        }
+
+    }
+
 
 });

@@ -1,30 +1,93 @@
 <?php
 
-require "config.php";
+require_once __DIR__ . '/config.php';
+
+header("Content-Type: application/json");
 
 $conn = db();
 
-$id = intval($_GET['conversation_id'] ?? 0);
+$ownerId = intval($_GET['owner_id'] ?? 0);
+
+$visitorToken = trim($_GET['visitor_token'] ?? '');
+
+$conversationId = intval($_GET['conversation_id'] ?? 0);
+
+
+if (
+    $ownerId <= 0 ||
+    $visitorToken === '' ||
+    $conversationId <= 0
+) {
+
+    echo json_encode([
+        "success" => false,
+        "messages" => []
+    ]);
+
+    exit;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Verify Conversation
+|--------------------------------------------------------------------------
+*/
 
 $stmt = $conn->prepare("
-SELECT *
-FROM chat_messages
-WHERE conversation_id=?
-ORDER BY id ASC
+    SELECT id
+    FROM chat_conversations
+    WHERE id = ?
+    AND owner_id = ?
+    AND visitor_token = ?
+    LIMIT 1
 ");
 
-$stmt->execute([$id]);
+$stmt->execute([
+    $conversationId,
+    $ownerId,
+    $visitorToken
+]);
 
-while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+$conversation = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if($row['sender']=="Visitor"){
 
-        echo "<div class='user'>".nl2br(htmlspecialchars($row['message']))."</div>";
+if (!$conversation) {
 
-    }else{
+    echo json_encode([
+        "success" => false,
+        "messages" => []
+    ]);
 
-        echo "<div class='bot'>".nl2br(htmlspecialchars($row['message']))."</div>";
-
-    }
-
+    exit;
 }
+
+
+/*
+|--------------------------------------------------------------------------
+| Get Messages
+|--------------------------------------------------------------------------
+*/
+
+$stmt = $conn->prepare("
+    SELECT
+        id,
+        sender,
+        message,
+        created_at
+    FROM chat_messages
+    WHERE conversation_id = ?
+    ORDER BY id ASC
+");
+
+$stmt->execute([
+    $conversationId
+]);
+
+$messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
+echo json_encode([
+    "success" => true,
+    "messages" => $messages
+]);
