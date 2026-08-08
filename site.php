@@ -426,27 +426,39 @@ alt="About">
 <!-- Chat Box -->
 <div id="chat-box">
 
-    <!-- Chat Header -->
     <div class="chat-header">
         JC Barley Chat
     </div>
 
+    <div id="chat-messages"></div>
 
-    <!-- Chat Messages -->
-    <div id="chat-messages">
+    <!-- START CHAT: FIXED AT BOTTOM -->
+    <div id="chatStartArea">
+        <button
+            type="button"
+            id="startChatBtn">
+            Start Chat
+        </button>
+    </div>
 
-        <!-- Start Screen -->
-        <div id="chatStartArea">
+    <!-- MESSAGE INPUT: ALSO AT BOTTOM AFTER START -->
+    <div id="chatInputArea">
 
-            <button
-                type="button"
-                id="startChatBtn">
-                Start Chat
-            </button>
+        <input
+            type="text"
+            id="message"
+            placeholder="Type your message..."
+            autocomplete="off">
 
-        </div>
+        <button
+            type="button"
+            id="sendBtn">
+            Send
+        </button>
 
     </div>
+
+</div>
 
 
     <!-- Message Input -->
